@@ -1,0 +1,22 @@
+{
+  "name": "horse-house",
+  "version": "1.0.0",
+  "description": "Projeto educational realizado no terceiro periodo do curso de Sistemas de Informação na PUC-PR",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "build:css": "npx @tailwindcss/cli -i src/styles/input.css -o public/assets/styles/output.css --watch\n≈ tailwindcss v4.0.13"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.0.13",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.13.0",
+    "tailwindcss": "^4.0.13"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
