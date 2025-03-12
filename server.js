@@ -1,19 +1,20 @@
 require("dotenv").config();
 const express = require("express");
-import connection from "./src/scripts/horseDB"
+const connection = require("./src/scripts/horseDB");
+const {join} = require("node:path");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Configuração do banco de dados MySQL
-
-
-// Middleware para permitir JSON no body
 app.use(express.json());
 
+app.use(express.static('pages'));
+
 app.get("/", (req, res) => {
-    res.send("Servidor Express com MySQL!");
+    // Enviando o arquivo HTML com caminho absoluto
+    res.sendFile(join(__dirname, 'src', 'pages', 'index.html'));
 });
+
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
