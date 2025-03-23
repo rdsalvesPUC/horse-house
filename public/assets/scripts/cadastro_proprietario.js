@@ -20,7 +20,16 @@ const traducoes = {
         senha: "Senha",
         senhaConfirmacao: "Confirmar Senha",
         emailInvalido: "Insira um e-mail válido.",
-        telefoneInvalido: "Insira um telefone válido(Deve ter entre 10 e 11 dígitos)."
+        telefoneInvalido: "Insira um telefone válido(Deve ter entre 10 e 11 dígitos).",
+        cpfInvalido: "CPF inválido! Digite um CPF válido.",
+        senhaRequisitos: "A senha deve conter:",
+        senhaMaiuscula: "Pelo menos uma letra maiúscula",
+        senhaNumero: "Pelo menos um número",
+        senhaEspecial: "Pelo menos um caractere especial",
+        senhaMinLength: "Mínimo de 6 caracteres",
+        senhasNaoCoincidem: "As senhas não coincidem",
+        nomeErro: "Insira um nome válido",
+        sobrenomeErro: "Insira um sobrenome válido"
     }, en: {
         titulo: "Registration",
         cpf: "CPF",
@@ -42,7 +51,16 @@ const traducoes = {
         senha: "Password",
         senhaConfirmacao: "Confirm Password",
         emailInvalido: "Please enter a valid e-mail.",
-        telefoneInvalido: "Please enter a valid phone number(Must have between 10 and 11 digits)."
+        telefoneInvalido: "Please enter a valid phone number(Must have between 10 and 11 digits).",
+        cpfInvalido: "Invalid CPF! Please enter a valid CPF.",
+        senhaRequisitos: "Password must contain:",
+        senhaMaiuscula: "At least one uppercase letter",
+        senhaNumero: "At least one number",
+        senhaEspecial: "At least one special character",
+        senhaMinLength: "Minimum 6 characters",
+        senhasNaoCoincidem: "Passwords do not match",
+        nomeErro: "Please enter a valid name",
+        sobrenomeErro: "Please enter a valid last name"
     }
 };
 
@@ -67,13 +85,20 @@ function atualizarIdioma(idioma) {
     document.querySelector('label[for="senha-confirmacao"]').textContent = traducoes[idioma].senhaConfirmacao;
     document.getElementById('email-invalido').textContent = traducoes[idioma].emailInvalido;
     document.getElementById('telefone-invalido').textContent = traducoes[idioma].telefoneInvalido;
+    document.getElementById('cpf-invalido').textContent = traducoes[idioma].cpfInvalido;
+    document.getElementById('senha-requisitos').textContent = traducoes[idioma].senhaRequisitos;
+    document.getElementById('req-maiuscula').textContent = traducoes[idioma].senhaMaiuscula;
+    document.getElementById('req-numero').textContent = traducoes[idioma].senhaNumero;
+    document.getElementById('req-especial').textContent = traducoes[idioma].senhaEspecial;
+    document.getElementById('req-tamanho').textContent = traducoes[idioma].senhaMinLength;
+    document.getElementById('senha-diferente').textContent = traducoes[idioma].senhasNaoCoincidem;
+    document.getElementById('nome-erro').textContent = traducoes[idioma].nomeErro;
+    document.getElementById('sobrenome-erro').textContent = traducoes[idioma].sobrenomeErro;
 
 
 
-    const camposObrigatorios = [{id: 'cpf', campo: traducoes[idioma].cpf}, {
-        id: 'nome', campo: traducoes[idioma].nome
-    }, {id: 'sobrenome', campo: traducoes[idioma].sobrenome
-    }, {id: 'telefone', campo: traducoes[idioma].telefone
+    const camposObrigatorios = [
+        {id: 'telefone', campo: traducoes[idioma].telefone
     }, {id: 'data-nascimento', campo: traducoes[idioma].dataNascimento
     }, {id: 'cep', campo: traducoes[idioma].cep
     }, {id: 'logradouro', campo: traducoes[idioma].rua
@@ -81,9 +106,7 @@ function atualizarIdioma(idioma) {
     }, {id: 'cidade', campo: traducoes[idioma].cidade
     }, {id: 'estado', campo: traducoes[idioma].estado
     }, {id: 'numero', campo: traducoes[idioma].numero
-    }, {id: 'email', campo: traducoes[idioma].email
-    }, {id: 'senha', campo: traducoes[idioma].senha
-    }, {id: 'senha-confirmacao', campo: traducoes[idioma].senhaConfirmacao}
+    }, {id: 'email', campo: traducoes[idioma].email}
     ];
 
     camposObrigatorios.forEach(({id, campo}) => {
@@ -105,7 +128,7 @@ function bloquearCampo(id, valor) {
     const campo = document.getElementById(id);
     if (valor) {
         campo.value = valor;
-        campo.setAttribute('readonly', true);
+        campo.setAttribute('readonly', "true");
     } else {
         campo.value = '';
         campo.removeAttribute('readonly');
@@ -205,6 +228,108 @@ function validarTelefone() {
     return true;
 }
 
+function validarSenha() {
+    const senha = document.getElementById('senha').value;
+    const senhaConfirmacao = document.getElementById('senha-confirmacao').value;
+    let valido = true;
+
+    // Verificar maiúscula
+    const temMaiuscula = /[A-Z]/.test(senha);
+    // document.getElementById('req-maiuscula').classList.toggle('hidden', temMaiuscula);
+    document.getElementById('req-maiuscula').classList.toggle('text-green-500', temMaiuscula);
+    document.getElementById('req-maiuscula').classList.toggle('text-red-500', !temMaiuscula);
+    if (!temMaiuscula) valido = false;
+
+    // Verificar número
+    const temNumero = /\d/.test(senha);
+    // document.getElementById('req-numero').classList.toggle('hidden', temNumero);
+    document.getElementById('req-numero').classList.toggle('text-green-500', temNumero);
+    document.getElementById('req-numero').classList.toggle('text-red-500', !temNumero);
+    if (!temNumero) valido = false;
+
+    // Verificar caractere especial
+    const temEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(senha);
+    // document.getElementById('req-especial').classList.toggle('hidden', temEspecial);
+    document.getElementById('req-especial').classList.toggle('text-green-500', temEspecial);
+    document.getElementById('req-especial').classList.toggle('text-red-500', !temEspecial);
+    if (!temEspecial) valido = false;
+
+    // Verificar tamanho mínimo
+    const temTamanho = senha.length >= 6;
+    // document.getElementById('req-tamanho').classList.toggle('hidden', temTamanho);
+    document.getElementById('req-tamanho').classList.toggle('text-green-500', temTamanho);
+    document.getElementById('req-tamanho').classList.toggle('text-red-500', !temTamanho);
+    if (!temTamanho) valido = false;
+    const senhasIguais = senha === senhaConfirmacao && senha.length >  0;
+    if (!senhasIguais) {
+        valido = false;
+    }
+    document.getElementById('senha-diferente').classList.toggle('hidden', senhasIguais);
+
+    return valido;
+}
+
+function validarNome(){
+
+    document.getElementById('nome').value = document.getElementById('nome').value.replace(/[^a-zA-Záéíóúâêîôûãõç ]/g, '');
+    const nome = document.getElementById('nome').value;
+
+    if(nome.length < 3){
+        document.getElementById('nome-erro').classList.remove('hidden');
+        return false;
+    }
+    document.getElementById('nome-erro').classList.add('hidden');
+    return true;
+}
+
+function validarSobrenome(){
+    document.getElementById('sobrenome').value = document.getElementById('sobrenome').value.replace(/[^a-zA-Záéíóúâêîôûãõç ]/g, '');
+    const sobrenome = document.getElementById('sobrenome').value;
+    if(sobrenome.length < 3){
+        document.getElementById('sobrenome-erro').classList.remove('hidden');
+        return false;
+    }
+    document.getElementById('sobrenome-erro').classList.add('hidden');
+    return true;
+}
+
+function validarCPF() {
+    let cpf = document.getElementById('cpf').value;
+    cpf = cpf.replace(/\D/g, ""); // Remove não números
+
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+        document.getElementById('cpf-invalido').classList.remove('hidden');
+        return false; // Bloqueia CPFs com todos os números iguais (ex: 000.000.000-00)
+    }
+
+    let soma = 0, resto;
+
+    // Valida primeiro dígito
+    for (let i = 1; i <= 9; i++) {
+        soma += parseInt(cpf[i - 1]) * (11 - i);
+    }
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf[9])) {
+        document.getElementById('cpf-invalido').classList.remove('hidden');
+        return false;
+    }
+
+    // Valida segundo dígito
+    soma = 0;
+    for (let i = 1; i <= 10; i++) {
+        soma += parseInt(cpf[i - 1]) * (12 - i);
+    }
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf[10])) {
+        document.getElementById('cpf-invalido').classList.remove('hidden');
+        return false;
+    }
+    document.getElementById('cpf-invalido').classList.add('hidden');
+    return true;
+}
+
 function validarEmail() {
     const email = document.getElementById('email');
     const emailInvalido = document.getElementById('email-invalido');
@@ -236,7 +361,7 @@ document.getElementById('cep').addEventListener('input', function () {
     }
 });
 
-document.getElementById('cep').addEventListener('blur', buscarEndereco);
+document.getElementById('cep').addEventListener('input', buscarEndereco);
 
 document.getElementById('telefone').addEventListener('input', function (e) {
     this.value = this.value.replace(/\D/g, '');
@@ -254,10 +379,32 @@ document.getElementById('telefone').addEventListener('input', function (e) {
     e.target.value = value; // Atualiza o valor do campo
 });
 
+document.getElementById('cpf').addEventListener('input', function () {
+    let value = this.value.replace(/\D/g, ''); // impedir tudo que não for numero
+    if (value.length > 11) value = value.slice(0, 11); // impede mais de 11 caracteres
+
+    let formattedCPF;
+    if (value.length > 9) formattedCPF = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    else if (value.length > 6) formattedCPF = value.replace(/(\d{3})(\d{3})(\d{1,3})/, "$1.$2.$3");
+    else if (value.length > 3) formattedCPF = value.replace(/(\d{3})(\d{1,3})/, "$1.$2");
+    else formattedCPF = value;
+
+    this.value = formattedCPF;
+});
+
+document.getElementById('senha').addEventListener('input', validarSenha);
+document.getElementById('senha-confirmacao').addEventListener('input', validarSenha);
+document.getElementById('nome').addEventListener('input', validarNome);
+document.getElementById('sobrenome').addEventListener('input', validarSobrenome);
+document.getElementById('telefone').addEventListener('input', validarTelefone);
+document.getElementById('email').addEventListener('input', validarEmail);
+document.getElementById('cpf').addEventListener('input', validarCPF);
+
+
 document.getElementById('form-cadastro').addEventListener('submit', function (event) {
     event.preventDefault();
 
-    const camposObrigatorios = ["senha-confirmacao","senha","numero","logradouro", "cidade", "bairro", "estado", "cep","email", "data-nascimento", "telefone", "sobrenome", "nome", "cpf"];
+    const camposObrigatorios = ["numero","logradouro", "cidade", "bairro", "estado", "data-nascimento"];
     let formularioValido = true;
 
     camposObrigatorios.forEach(id => {
@@ -284,6 +431,17 @@ document.getElementById('form-cadastro').addEventListener('submit', function (ev
     }
 
     if (!validarEmail()) {
+        formularioValido = false;
+    }
+    if (!validarCPF()) {
+        formularioValido = false;
+    }
+
+    if (!validarSenha()) {
+        formularioValido = false;
+    }
+
+    if (!validarNome() && !validarSobrenome()){
         formularioValido = false;
     }
 
