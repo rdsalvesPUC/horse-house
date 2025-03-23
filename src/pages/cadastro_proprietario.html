@@ -45,6 +45,7 @@
             <input id="telefone" type="text" name="telefone"
                    class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
             <p id="telefone-erro" class="text-red-500 text-sm mt-1 hidden">O campo Telefone é obrigatório.</p>
+            <span id="telefoneError" class="text-red-500 text-sm hidden">Insira um telefone válido (Deve ter entre 10 e 11 dígitos e não pode conter letras).</span>
         </div>
         <div class="text-left">
             <label for="data-nascimento" class="text-sm text-gray-700">Data de Nascimento</label>
@@ -53,6 +54,12 @@
             <p id="data-nascimento-erro" class="text-red-500 text-sm mt-1 hidden">O campo Data de Nascimento é
                 obrigatório.</p>
             <p id="data-nascimento-invalida" class="text-red-500 text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
+        </div>
+        <div class="text-left">
+            <label class="text-sm text-gray-700">E-mail
+                <input id="email" type="email" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none" required>
+            </label>
+            <span id="emailError" class="text-red-500 text-sm hidden">Insira um e-mail válido.</span>
         </div>
         <div class="text-left">
             <label for="cep" class="text-sm text-gray-700">CEP</label>
@@ -91,12 +98,78 @@
                    class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
             <p id="numero-erro" class="text-red-500 text-sm mt-1 hidden">O campo Número é obrigatório.</p>
         </div>
-
-        <button id="botao-cadastrar"
-                class="w-full md:col-span-2 py-3 text-white bg-[#8B4513] rounded-md transition duration-300 ease-in-out hover:bg-green-400">
+        <div class="text-left">
+            <label class="text-sm text-gray-700">Senha
+                <input type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            </label>
+        </div>
+        <div class="text-left">
+            <label class="text-sm text-gray-700">Confirmação de Senha
+                <input type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            </label>
+        </div>
+        <button id="botao-cadastrar" type="submit" class="w-full md:col-span-2 py-3 text-white bg-[#8B4513] rounded-md transition duration-300 ease-in-out hover:bg-green-400">
             Cadastrar
         </button>
     </form>
 </main>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('signupForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Impede o envio do formulário caso haja erro
+
+            let isValid = true; // Flag para validar os campos
+
+            // Ocultar mensagens de erro ao tentar submeter novamente
+            const errorMessages = document.querySelectorAll('.text-red-500');
+            errorMessages.forEach(error => error.classList.add('hidden'));
+
+            // **1. Validar Telefone**
+            const telefone = document.getElementById('telefone').value;  // Obtendo o valor do telefone
+            const telefoneError = document.getElementById('telefoneError'); // Obtendo o elemento do erro
+
+            // Verifica se o telefone não está vazio
+            if (telefone === "") {
+                telefoneError.textContent = "O campo telefone não pode estar vazio."; // Mensagem de erro
+                telefoneError.classList.remove('hidden'); // Exibe a mensagem de erro
+                isValid = false; // Impede o envio do formulário
+            } else {
+                // Remove todos os caracteres não numéricos
+                const telefoneNumeros = telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+                // Verifica se o telefone tem entre 10 e 11 dígitos após remoção dos não numéricos
+                if (telefoneNumeros.length < 10 || telefoneNumeros.length > 11) {
+                    telefoneError.textContent = "O telefone deve ter entre 10 e 11 dígitos."; // Mensagem de erro
+                    telefoneError.classList.remove('hidden'); // Exibe a mensagem de erro
+                    isValid = false; // Impede o envio do formulário
+                }
+
+                // Verifica se o telefone contém apenas números
+                if (!/^\d+$/.test(telefoneNumeros)) {
+                    telefoneError.textContent = "O telefone deve conter apenas números."; // Mensagem de erro
+                    telefoneError.classList.remove('hidden'); // Exibe a mensagem de erro
+                    isValid = false; // Impede o envio do formulário
+                }
+            }
+
+            // **2. Validar E-mail**
+            const email = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailValue = email.value.trim();
+
+            // Verifica se o e-mail está vazio ou não possui @ e .
+            if (emailValue === "" || emailValue.indexOf("@") === -1 || emailValue.indexOf(".") === -1) {
+                emailError.classList.remove('hidden'); // Exibe a mensagem de erro para o e-mail
+                isValid = false; // Impede o envio do formulário
+            }
+
+            // Se ambos os campos estiverem corretos, exibe mensagem de sucesso
+            if (isValid) {
+                alert("Cadastro realizado com sucesso! 🎉");
+                this.submit(); // Envia o formulário se tudo estiver correto
+            }
+        });
+    });
+    </script>
 </html>
