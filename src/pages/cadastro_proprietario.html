@@ -5,48 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novo Cadastro</title>
     <link rel="stylesheet" href="/assets/styles/output.css">
+    <script defer src="/assets/scripts/cadastro_proprietario.js"></script>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen bg-[#D3D3D3] p-6 md:p-2">
 
 <main class="bg-white p-6 md:p-10 rounded-lg shadow-lg w-full max-w-2xl md:max-w-full md:flex-grow">
-    <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Cadastro</h2>
+    <div class="text-left">
+        <label for="idioma" class="text-sm text-gray-700">Idioma</label>
+        <select id="idioma"
+                class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            <option value="pt">Português</option>
+            <option value="en">English</option>
+        </select>
+    </div>
 
-    <form class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-x-20">
+    <h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Cadastro</h2>
+
+    <form class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-x-20" id="form-cadastro">
         <div class="text-left">
-            <label class="text-sm text-gray-700">CPF
-                <input type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
-            </label>
+            <label for="cpf" class="text-sm text-gray-700">CPF</label>
+            <input id="cpf" type="text" name="cpf"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            <p id="cpf-erro" class="text-red-500 text-sm mt-1 hidden">O campo CPF é obrigatório.</p>
         </div>
         <div class="text-left">
-            <label class="text-sm text-gray-700">Nome
-                <input type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
-            </label>
+            <label for="nome" class="text-sm text-gray-700">Nome</label>
+            <input id="nome" type="text" name="nome"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            <p id="nome-erro" class="text-red-500 text-sm mt-1 hidden">O campo Nome é obrigatório.</p>
         </div>
         <div class="text-left">
-            <label class="text-sm text-gray-700">Sobrenome
-                <input type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
-            </label>
+            <label for="sobrenome" class="text-sm text-gray-700">Sobrenome</label>
+            <input id="sobrenome" type="text" name="sobrenome"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            <p id="sobrenome-erro" class="text-red-500 text-sm mt-1 hidden">O campo Sobrenome é obrigatório.</p>
         </div>
         <div class="text-left">
-            <label class="text-sm text-gray-700">Telefone
-                <input type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
-            </label>
+            <label for="telefone" class="text-sm text-gray-700">Telefone</label>
+            <input id="telefone" type="text" name="telefone"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            <p id="telefone-erro" class="text-red-500 text-sm mt-1 hidden">O campo Telefone é obrigatório.</p>
         </div>
         <div class="text-left">
-            <label class="text-sm text-gray-700">RG
-                <input type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
-            </label>
+            <label for="data-nascimento" class="text-sm text-gray-700">Data de Nascimento</label>
+            <input id="data-nascimento" type="date" name="data-nascimento"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            <p id="data-nascimento-erro" class="text-red-500 text-sm mt-1 hidden">O campo Data de Nascimento é
+                obrigatório.</p>
+            <p id="data-nascimento-invalida" class="text-red-500 text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
         </div>
         <div class="text-left">
-            <label class="text-sm text-gray-700">Data de Nascimento
-                <input type="date" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
-            </label>
+            <label for="cep" class="text-sm text-gray-700">CEP</label>
+            <input id="cep" type="text" name="cep"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none" maxlength="9">
+            <p id="cep-erro" class="text-red-500 text-sm mt-1 hidden">O campo CEP é obrigatório.</p>
+            <p id="cep-invalido" class="text-red-500 text-sm mt-1 hidden">CEP inválido! Digite no formato 00000-000.</p>
         </div>
-        <button class="w-full md:col-span-2 py-3 text-white bg-[#8B4513] rounded-md transition duration-300 ease-in-out hover:bg-[#A52A2A]">
+        <div class="text-left">
+            <label for="estado" class="text-sm text-gray-700">Estado</label>
+            <input id="estado" type="text" name="estado"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            <p id="estado-erro" class="text-red-500 text-sm mt-1 hidden">O campo Estado é obrigatório.</p>
+        </div>
+        <div class="text-left">
+            <label for="bairro" class="text-sm text-gray-700">Bairro</label>
+            <input id="bairro" type="text" name="bairro"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            <p id="bairro-erro" class="text-red-500 text-sm mt-1 hidden">O campo Bairro é obrigatório.</p>
+        </div>
+        <div class="text-left">
+            <label for="cidade" class="text-sm text-gray-700">Cidade</label>
+            <input id="cidade" type="text" name="cidade"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            <p id="cidade-erro" class="text-red-500 text-sm mt-1 hidden">O campo Cidade é obrigatório.</p>
+        </div>
+        <div class="text-left">
+            <label for="logradouro" class="text-sm text-gray-700">Rua</label>
+            <input id="logradouro" type="text" name="logradouro"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            <p id="logradouro-erro" class="text-red-500 text-sm mt-1 hidden">O campo Rua é obrigatório.</p>
+        </div>
+        <div class="text-left">
+            <label for="numero" class="text-sm text-gray-700">Número</label>
+            <input id="numero" type="number" name="numero"
+                   class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#8B4513] outline-none">
+            <p id="numero-erro" class="text-red-500 text-sm mt-1 hidden">O campo Número é obrigatório.</p>
+        </div>
+
+        <button id="botao-cadastrar"
+                class="w-full md:col-span-2 py-3 text-white bg-[#8B4513] rounded-md transition duration-300 ease-in-out hover:bg-green-400">
             Cadastrar
         </button>
     </form>
 </main>
-
 </body>
 </html>

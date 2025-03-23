@@ -7,6 +7,14 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use((req, res, next) => {
+    if (req.url.startsWith("/scripts/")) {
+        return res.status(403).send("Acesso proibido.");
+    }
+    next();
+});
+
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "src", "pages", "index.html"));
 });
@@ -16,4 +24,3 @@ app.get("/register", (req, res) => {
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });
-
