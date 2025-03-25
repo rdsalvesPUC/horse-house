@@ -243,29 +243,29 @@ function validarSenha() {
     // Verificar maiúscula
     const temMaiuscula = /[A-Z]/.test(senha);
     // document.getElementById('req-maiuscula').classList.toggle('hidden', temMaiuscula);
-    document.getElementById('req-maiuscula').classList.toggle('text-green-500', temMaiuscula);
-    document.getElementById('req-maiuscula').classList.toggle('text-red-500', !temMaiuscula);
+    document.getElementById('req-maiuscula').classList.toggle('text-success', temMaiuscula);
+    document.getElementById('req-maiuscula').classList.toggle('text-error', !temMaiuscula);
     if (!temMaiuscula) valido = false;
 
     // Verificar número
     const temNumero = /\d/.test(senha);
     // document.getElementById('req-numero').classList.toggle('hidden', temNumero);
-    document.getElementById('req-numero').classList.toggle('text-green-500', temNumero);
-    document.getElementById('req-numero').classList.toggle('text-red-500', !temNumero);
+    document.getElementById('req-numero').classList.toggle('text-success', temNumero);
+    document.getElementById('req-numero').classList.toggle('text-error', !temNumero);
     if (!temNumero) valido = false;
 
     // Verificar caractere especial
     const temEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(senha);
     // document.getElementById('req-especial').classList.toggle('hidden', temEspecial);
-    document.getElementById('req-especial').classList.toggle('text-green-500', temEspecial);
-    document.getElementById('req-especial').classList.toggle('text-red-500', !temEspecial);
+    document.getElementById('req-especial').classList.toggle('text-success', temEspecial);
+    document.getElementById('req-especial').classList.toggle('text-error', !temEspecial);
     if (!temEspecial) valido = false;
 
     // Verificar tamanho mínimo
     const temTamanho = senha.length >= 6;
     // document.getElementById('req-tamanho').classList.toggle('hidden', temTamanho);
-    document.getElementById('req-tamanho').classList.toggle('text-green-500', temTamanho);
-    document.getElementById('req-tamanho').classList.toggle('text-red-500', !temTamanho);
+    document.getElementById('req-tamanho').classList.toggle('text-success', temTamanho);
+    document.getElementById('req-tamanho').classList.toggle('text-error', !temTamanho);
     if (!temTamanho) valido = false;
     const senhasIguais = senha === senhaConfirmacao && senha.length > 0;
     if (!senhasIguais) {
