@@ -1,112 +1,130 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Novo Cadastro</title>
-		<link rel="stylesheet" href="/assets/styles/output.css" />
-		<script defer src="/assets/scripts/cadastro_proprietario.js"></script>
-	</head>
-	<body class="flex flex-col items-center justify-center min-h-screen bg-[#D3D3D3] p-6 md:p-2">
-		<main class="bg-white p-6 md:p-10 rounded-lg shadow-lg w-full max-w-2xl md:max-w-full md:flex-grow">
-			<div class="text-left">
-				<label for="idioma" class="text-sm text-gray-700">Idioma</label>
-				<select id="idioma" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none">
-					<option value="pt">Português</option>
-					<option value="en">English</option>
-				</select>
-			</div>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Novo Cadastro</title>
+    <link rel="stylesheet" href="/assets/styles/output.css"/>
+    <script defer src="/assets/scripts/cadastro_proprietario.js"></script>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen bg-[#D3D3D3] p-6 md:p-2">
+<main class="bg-white p-6 md:p-10 rounded-lg shadow-lg w-full max-w-2xl md:max-w-full md:flex-grow">
+    <div class="text-left">
+        <label for="idioma" class="text-sm text-gray-700">Idioma</label>
+        <select id="idioma" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none">
+            <option value="pt">Português</option>
+            <option value="en">English</option>
+        </select>
+    </div>
 
-			<h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Cadastro</h2>
+    <h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Cadastro</h2>
 
-			<form class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 md:gap-x-20" id="form-cadastro">
-				<div class="text-left">
-					<label for="cpf" class="text-sm text-gray-700">CPFdasd</label><span style="color: red"> *</span>
-					<input id="cpf" type="text" name="cpf" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="cpf-erro" class="text-red-500 text-sm mt-1 hidden">O CPF é obrigatório.</p>
-					<span id="cpf-invalido" class="text-red-500 text-sm hidden">CPF inválido! Digite um CPF válido.</span>
-				</div>
-				<div class="text-left">
-					<label for="nome" class="text-sm text-gray-700">Nome</label><span style="color: red"> *</span>
-					<input id="nome" type="text" name="nome" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="nome-erro" class="text-red-500 text-sm mt-1 hidden">O Nome é obrigatório.</p>
-				</div>
-				<div class="text-left">
-					<label for="sobrenome" class="text-sm text-gray-700">Sobrenome</label><span style="color: red"> *</span>
-					<input id="sobrenome" type="text" name="sobrenome" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="sobrenome-erro" class="text-red-500 text-sm mt-1 hidden">O Sobrenome é obrigatório.</p>
-				</div>
-				<div class="text-left">
-					<label for="telefone" class="text-sm text-gray-700">Telefone</label><span style="color: red"> *</span>
-					<input id="telefone" type="text" name="telefone" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="telefone-erro" class="text-red-500 text-sm mt-1 hidden">O Telefone é obrigatório.</p>
-					<span id="telefone-invalido" class="text-red-500 text-sm hidden">Insira um telefone válido (Deve ter entre 10 e 11 dígitos e não pode conter letras).</span>
-				</div>
-				<div class="text-left">
-					<label for="data-nascimento" class="text-sm text-gray-700">Data de Nascimento</label><span style="color: red"> *</span>
-					<input id="data-nascimento" type="date" name="data-nascimento" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="data-nascimento-erro" class="text-red-500 text-sm mt-1 hidden">O Data de Nascimento é obrigatório.</p>
-					<p id="data-nascimento-invalida" class="text-red-500 text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
-				</div>
-				<div class="text-left">
-					<label for="email" class="text-sm text-gray-700">E-mail</label><span style="color: red"> *</span>
-					<input id="email" type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="email-erro" class="text-red-500 text-sm mt-1 hidden">O E-mail é obrigatório.</p>
-					<span id="email-invalido" class="text-red-500 text-sm hidden">Insira um e-mail válido.</span>
-				</div>
-				<div class="text-left">
-					<label for="cep" class="text-sm text-gray-700">CEP</label><span style="color: red"> *</span>
-					<input id="cep" type="text" name="cep" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" maxlength="9" />
-					<p id="cep-erro" class="text-red-500 text-sm mt-1 hidden">O CEP é obrigatório.</p>
-					<p id="cep-invalido" class="text-red-500 text-sm mt-1 hidden">CEP inválido! Digite no formato 00000-000.</p>
-				</div>
-				<div class="text-left">
-					<label for="estado" class="text-sm text-gray-700">Estado</label><span class="text-red-500"> *</span>
-					<input id="estado" type="text" name="estado" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="estado-erro" class="text-red-500 text-sm mt-1 hidden">O Estado é obrigatório.</p>
-				</div>
-				<div class="text-left">
-					<label for="bairro" class="text-sm text-gray-700">Bairro</label><span class="text-red-500"> *</span>
-					<input id="bairro" type="text" name="bairro" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="bairro-erro" class="text-red-500 text-sm mt-1 hidden">O Bairro é obrigatório.</p>
-				</div>
-				<div class="text-left">
-					<label for="cidade" class="text-sm text-gray-700">Cidade</label><span class="text-red-500"> *</span>
-					<input id="cidade" type="text" name="cidade" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="cidade-erro" class="text-red-500 text-sm mt-1 hidden">O Cidade é obrigatório.</p>
-				</div>
-				<div class="text-left">
-					<label for="logradouro" class="text-sm text-gray-700">Rua</label><span class="text-red-500"> *</span>
-					<input id="logradouro" type="text" name="logradouro" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="logradouro-erro" class="text-red-500 text-sm mt-1 hidden">O Rua é obrigatório.</p>
-				</div>
-				<div class="text-left">
-					<label for="numero" class="text-sm text-gray-700">Número</label><span class="text-red-500"> *</span>
-					<input id="numero" type="number" name="numero" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="numero-erro" class="text-red-500 text-sm mt-1 hidden">O Número é obrigatório.</p>
-				</div>
-				<div class="text-left">
-					<label for="senha" class="text-sm text-gray-700">Senha</label><span class="text-red-500"> *</span>
-					<input id="senha" type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<p id="senha-erro" class="text-red-500 text-sm mt-1 hidden">A Senha é obrigatória.</p>
-					<div class="text-sm text-gray-600 mt-2">
-						<div id="senha-requisitos" class="font-medium"></div>
-						<ul class="list-disc list-inside">
-							<li id="req-maiuscula" class="text-red-500"></li>
-							<li id="req-numero" class="text-red-500"></li>
-							<li id="req-especial" class="text-red-500"></li>
-							<li id="req-tamanho" class="text-red-500"></li>
-						</ul>
-					</div>
-				</div>
-				<div class="text-left">
-					<label for="senha-confirmacao" class="text-sm text-gray-700">Confirmação de Senha</label><span class="text-red-500"> *</span>
-					<input id="senha-confirmacao" type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" />
-					<span id="senha-diferente" class="text-red-500 text-sm hidden"></span>
-				</div>
+    <form class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 md:gap-x-20" id="form-cadastro">
+        <div class="text-left">
+            <label for="cpf" class="text-sm text-gray-700">CPFdasd</label><span class="text-red-500"> *</span>
+            <input id="cpf" type="text" name="cpf" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+            <p id="cpf-erro" class="text-red-500 text-sm mt-1 hidden">O CPF é obrigatório.</p>
+            <span id="cpf-invalido" class="text-red-500 text-sm hidden">CPF inválido! Digite um CPF válido.</span>
+        </div>
+        <div class="text-left">
+            <label for="nome" class="text-sm text-gray-700">Nome</label><span class="text-red-500"> *</span>
+            <input id="nome" type="text" name="nome" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+            <p id="nome-erro" class="text-red-500 text-sm mt-1 hidden">O Nome é obrigatório.</p>
+        </div>
+        <div class="text-left">
+            <label for="sobrenome" class="text-sm text-gray-700">Sobrenome</label><span class="text-red-500"> *</span>
+            <input id="sobrenome" type="text" name="sobrenome" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+            <p id="sobrenome-erro" class="text-red-500 text-sm mt-1 hidden">O Sobrenome é obrigatório.</p>
+        </div>
+        <div class="text-left">
+            <label for="telefone" class="text-sm text-gray-700">Telefone</label><span class="text-red-500"> *</span>
+            <input id="telefone" type="text" name="telefone" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+            <p id="telefone-erro" class="text-red-500 text-sm mt-1 hidden">O Telefone é obrigatório.</p>
+            <span id="telefone-invalido" class="text-red-500 text-sm hidden">Insira um telefone válido (Deve ter entre 10 e 11 dígitos e não pode conter letras).</span>
+        </div>
+        <div class="text-left">
+            <label for="data-nascimento" class="text-sm text-gray-700">Data de Nascimento</label><span class="text-red-500"> *</span>
+            <input id="data-nascimento" type="date" name="data-nascimento" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+            <p id="data-nascimento-erro" class="text-red-500 text-sm mt-1 hidden">O Data de Nascimento é obrigatório.</p>
+            <p id="data-nascimento-invalida" class="text-red-500 text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
+        </div>
+        <div class="text-left">
+            <label for="email" class="text-sm text-gray-700">E-mail</label><span class="text-red-500"> *</span>
+            <input id="email" type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+            <p id="email-erro" class="text-red-500 text-sm mt-1 hidden">O E-mail é obrigatório.</p>
+            <span id="email-invalido" class="text-red-500 text-sm hidden">Insira um e-mail válido.</span>
+        </div>
+        <div class="text-left">
+            <label for="cep" class="text-sm text-gray-700">CEP</label><span class="text-red-500"> *</span>
+            <input id="cep" type="text" name="cep" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" maxlength="9"/>
+            <p id="cep-erro" class="text-red-500 text-sm mt-1 hidden">O CEP é obrigatório.</p>
+            <p id="cep-invalido" class="text-red-500 text-sm mt-1 hidden">CEP inválido! Digite no formato 00000-000.</p>
+        </div>
+        <div class="text-left">
+            <label for="estado" class="text-sm text-gray-700">Estado</label><span class="text-red-500"> *</span>
+            <input id="estado" type="text" name="estado" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+            <p id="estado-erro" class="text-red-500 text-sm mt-1 hidden">O Estado é obrigatório.</p>
+        </div>
+        <div class="text-left">
+            <label for="bairro" class="text-sm text-gray-700">Bairro</label><span class="text-red-500"> *</span>
+            <input id="bairro" type="text" name="bairro" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+            <p id="bairro-erro" class="text-red-500 text-sm mt-1 hidden">O Bairro é obrigatório.</p>
+        </div>
+        <div class="text-left">
+            <label for="cidade" class="text-sm text-gray-700">Cidade</label><span class="text-red-500"> *</span>
+            <input id="cidade" type="text" name="cidade" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+            <p id="cidade-erro" class="text-red-500 text-sm mt-1 hidden">O Cidade é obrigatório.</p>
+        </div>
+        <div class="text-left">
+            <label for="logradouro" class="text-sm text-gray-700">Rua</label><span class="text-red-500"> *</span>
+            <input id="logradouro" type="text" name="logradouro" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+            <p id="logradouro-erro" class="text-red-500 text-sm mt-1 hidden">O Rua é obrigatório.</p>
+        </div>
+        <div class="text-left">
+            <label for="numero" class="text-sm text-gray-700">Número</label><span class="text-red-500"> *</span>
+            <input id="numero" type="number" name="numero" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+            <p id="numero-erro" class="text-red-500 text-sm mt-1 hidden">O Número é obrigatório.</p>
+        </div>
+        <div class="text-left">
+            <label for="senha" class="text-sm text-gray-700">Senha</label><span class="text-red-500"> *</span>
+            <div class="relative w-full">
+                <input id="senha" type="password" class="relative w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+                <button id="mostrar-senha" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none">
+                    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M1 12C1 12 5 20 12 20C19 20 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="12" r="3" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            <p id="senha-erro" class="text-red-500 text-sm mt-1 hidden">A Senha é obrigatória.</p>
+            <div class="text-sm text-gray-600 mt-2">
+                <div id="senha-requisitos" class="font-medium"></div>
+                <ul class="list-disc list-inside">
+                    <li id="req-maiuscula" class="text-red-500"></li>
+                    <li id="req-numero" class="text-red-500"></li>
+                    <li id="req-especial" class="text-red-500"></li>
+                    <li id="req-tamanho" class="text-red-500"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-left">
+            <label for="senha-confirmacao" class="text-sm text-gray-700">Confirmação de Senha</label><span class="text-red-500"> *</span>
+            <div class="relative w-full">
+                <input id="senha-confirmacao" type="password" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"/>
+                <button id="mostrar-confirmacao-senha" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none">
+                    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M1 12C1 12 5 20 12 20C19 20 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="12" r="3" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            <span id="senha-diferente" class="text-red-500 text-sm hidden"></span>
+        </div>
 
-				<button id="botao-cadastrar" type="submit" class="w-full md:col-span-2 py-3 text-white bg-blue-400 rounded-md transition duration-300 ease-in-out hover:bg-green-400 mt-3">Cadastrar</button>
-			</form>
-		</main>
-	</body>
+        <button id="botao-cadastrar" type="submit" class="w-full md:col-span-2 py-3 text-white bg-blue-400 rounded-md transition duration-300 ease-in-out hover:bg-green-400 mt-3">Cadastrar</button>
+    </form>
+</main>
+</body>
 </html>
