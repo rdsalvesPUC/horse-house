@@ -1,181 +1,135 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Novo Cadastro</title>
-    <link rel="stylesheet" href="/assets/styles/output.css"/>
-    <script defer src="/assets/scripts/cadastro_proprietario.js"></script>
-</head>
-<body class="bg-primary">
-<header class="w-full bg-primary flex -itens-center p-2">
-    <svg class="ml-2 w-[50px] h-[58.75px]" width="2341" height="2707" viewBox="0 0 2341 2707" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g clip-path="url(#clip0_38_1794)">
-            <path d="M2340.97 -0.810059H-1.45999V2706.09H2340.97V-0.810059Z" fill="#222C2D"/>
-            <path d="M1462.05 264.8C1488.11 264.8 1513.22 272.45 1534.67 286.91C1555.35 300.85 1571.49 320.19 1581.42 342.89C1682.75 597.11 1862.08 722.62 1997.24 755.75C2023.13 763.58 2046.43 779.76 2063.02 801.45C2080.46 824.26 2089.68 851.56 2089.68 880.41V1865.51C2089.68 1888.79 2083.49 1911.59 2071.78 1931.45C2060.51 1950.56 2044.48 1966.58 2025.38 1977.83L1239.2 2408.16C1220.13 2418.47 1199.35 2423.7 1177.43 2423.7C1155.51 2423.7 1134.75 2418.48 1115.69 2408.18L329.47 1977.83C310.36 1966.58 294.33 1950.56 283.07 1931.45C271.36 1911.59 265.17 1888.79 265.17 1865.51V880.41C265.17 851.56 274.39 824.26 291.83 801.45C308.42 779.76 331.72 763.58 357.61 755.75C493.07 722.57 672.76 597.81 774.21 345.92C783.86 322.24 800.17 302.04 821.38 287.49C843.02 272.65 868.42 264.8 894.84 264.8H1462.04M1462.05 164.8H894.85C798.34 164.8 715.72 224.19 681.51 308.42C595.24 522.77 445.67 632.15 331.8 659.11C235.59 686.7 165.18 775.33 165.18 880.41V1865.51C165.18 1950.72 211.48 2025.11 280.29 2064.91L1067.86 2496C1100.44 2513.67 1137.76 2523.7 1177.43 2523.7C1217.1 2523.7 1254.42 2513.66 1287 2496L2074.57 2064.91C2143.38 2025.11 2189.68 1950.72 2189.68 1865.51V880.41C2189.68 775.33 2119.27 686.7 2023.06 659.11C1908.58 632.01 1760.75 522.77 1674.3 305.84C1674.16 305.42 1673.98 305.01 1673.98 305.01C1638.94 222.6 1557.25 164.8 1462.05 164.8Z" fill="#BD9E72"/>
-            <path d="M1404.59 466.89C1483.14 679.97 1620.29 798.61 1726.78 861.96C1777.67 892.24 1831.56 916.24 1887.1 933.39V1823.43L1177.44 2211.88L467.78 1823.43V933.39C523.32 916.25 577.21 892.24 628.1 861.96C734.59 798.61 871.74 679.97 950.29 466.89H1404.6M1477.42 366.89H877.44C755.71 807.89 367.77 854.41 367.77 854.41V1882.7L1177.43 2325.88L1987.09 1882.7V854.41C1987.09 854.41 1599.15 807.89 1477.42 366.89Z" fill="#BD9E72"/>
-            <path d="M1325.01 2131.41C1324.74 2131.19 1324.52 2130.91 1324.39 2130.56C1312.15 2097.68 1295.13 2063.75 1263.88 2040.49C1242.88 2024.86 1185.59 1998.19 1162.11 1987.52C1160.02 1986.57 1160.85 1983.43 1163.13 1983.64C1189.03 1985.98 1255.05 1995.74 1313.51 2036.01C1336.99 2052.18 1364.48 2080.85 1389.75 2096.02L1516.29 2026.85C1491.54 2032.05 1452.26 2030.58 1438.01 2000.3C1437.06 1998.27 1439.54 1996.4 1441.21 1997.9C1455.3 2010.62 1465.95 2014.45 1478.65 2014.27C1522.03 2013.63 1532.38 1979.1 1534.44 1969.41C1534.71 1968.13 1533.71 1966.93 1532.4 1966.96C1526.48 1967.1 1511.61 1967.38 1505.89 1966.9C1480.63 1964.76 1411.35 1943.19 1395.4 1934.98C1367.34 1920.53 1345.8 1898.44 1320.73 1880.06C1275.05 1846.55 1202.45 1798.94 1150.25 1778.54C1141.75 1775.22 1112.24 1765.5 1097.47 1760.66C1095.39 1759.98 1095.7 1756.96 1097.87 1756.71C1115.56 1754.65 1155.65 1751.18 1183.23 1757.94C1221.04 1767.22 1237.26 1774.43 1267.19 1789.08C1268.7 1789.82 1270.42 1788.51 1270.09 1786.86L1259.3 1732.11C1258.9 1730.08 1261.42 1728.81 1262.81 1730.35C1266.65 1734.61 1271.83 1740.38 1274.88 1743.92C1326.01 1803.28 1352.32 1838.89 1427.55 1871.25C1469.46 1889.28 1504.09 1898.1 1553.38 1902.13C1555.54 1902.31 1556.45 1899.44 1554.59 1898.34C1460.24 1842.72 1433.81 1818.83 1351.36 1711.42C1314.87 1663.89 1284.9 1509.17 1280.92 1449.87C1280.21 1439.27 1279.31 1383.22 1281.94 1376.93C1283.55 1373.08 1290.21 1367.65 1294.87 1369.81C1297.69 1371.12 1310.47 1388.21 1312.89 1391.89C1328.94 1416.26 1362.7 1430.87 1394 1427C1398.47 1426.45 1562.95 1414.18 1608.42 1426.36C1654.43 1438.69 1693.75 1477.88 1743.53 1454.52C1769.62 1442.28 1799.39 1422.42 1814.54 1397.53C1821.38 1386.3 1847 1324.89 1846.41 1314.38C1845.84 1304.14 1829.62 1270.53 1822.89 1261.89C1799.68 1232.02 1700.5 1189.05 1662.26 1162.52C1612.89 1128.27 1588.68 1095.7 1549.92 1052.86C1516.34 1015.74 1476.34 997.07 1431.76 976.45C1431.15 976.17 1430.72 975.61 1430.6 974.94C1425.7 946.21 1418.75 913.42 1412.09 892.2C1402.75 862.44 1390.55 839.63 1384.24 828.87C1383.26 827.19 1380.7 827.72 1380.47 829.65C1379.73 835.94 1376.68 846.54 1366.88 862.89C1359.84 874.64 1335.52 897.27 1326.6 897.27C1318.68 897.27 1312.25 875.5 1304.33 860.89C1300.44 853.71 1295.69 845.64 1291.77 839.12C1288.54 833.75 1280.6 834.24 1278.05 839.97C1269.03 860.2 1252.3 897.65 1245.45 912.62C1238.03 928.8 1233.08 930.19 1179.78 935.02C1113.79 941 1013.04 988.11 965.92 1004.94C939.22 1014.48 913.85 1020.33 884.86 1019.92C850 1019.43 800.52 980.01 787.9 969.48C786.63 968.42 784.69 969.24 784.57 970.89C782.02 1004.09 782 1037.21 787.86 1072.93C793.81 1109.23 810.02 1151.71 813.89 1161.54C814.33 1162.66 813.71 1163.92 812.54 1164.24C798.04 1168.24 714.9 1191.8 674.27 1217.59C601.04 1264.06 569.89 1330.91 560.23 1378.84C559.81 1380.9 562.43 1382.15 563.79 1380.54C587.05 1352.96 611.83 1327.91 665.63 1302.37C686.21 1292.6 716.17 1286.05 733.86 1282.78C736.19 1282.35 737.24 1285.57 735.12 1286.61C708.29 1299.77 647.09 1332.5 607.47 1374.95C537.04 1450.41 529.34 1553.63 528.51 1572.1C528.45 1573.51 529.8 1574.55 531.15 1574.13C543.8 1570.14 596.92 1553.38 618.95 1546C648.07 1536.24 681.03 1519.04 704.57 1545.68C716.98 1559.72 719.42 1573.14 711.25 1591.7C693.42 1632.21 640.13 1657.58 597.84 1662.9C589.36 1663.97 551.9 1665.12 540.23 1665.45C538.67 1665.5 537.74 1667.2 538.55 1668.53C542.06 1674.32 549.66 1686.88 552.04 1690.74C584.41 1743.16 645.92 1824.41 715.39 1810.45C738.64 1805.78 750.04 1776.81 759.9 1756.96C796.18 1683.99 810.17 1599.73 830.74 1521.8C858.8 1415.52 905.11 1246.59 979.83 1166.89C987.92 1158.26 995.66 1151.53 1005.16 1145.75C1007.09 1144.58 1009.21 1146.95 1007.83 1148.74C992.39 1168.82 982.77 1183.26 972.5 1203.57C897.25 1352.47 881.82 1522.39 851.05 1684.12C841.88 1732.32 835.52 1776.17 815.2 1820.27C804.06 1844.45 790.42 1874.95 765.32 1886.39C687.32 1921.91 586.2 1829.29 526.12 1784.8C524.69 1783.74 522.68 1784.91 522.89 1786.68C524.3 1798.38 527.27 1811.89 528.73 1816.03C534.41 1832.05 548.31 1860.22 561.39 1876.02C561.41 1876.04 561.42 1876.07 561.44 1876.09L1177.24 2212.2L1324.97 2131.44L1325.01 2131.41ZM1343.59 1093.6C1373.71 1060.44 1429.2 1112.32 1389.54 1138.56C1374.22 1148.7 1360.59 1147.9 1346.14 1136.63C1336.42 1129.04 1335.74 1102.24 1343.58 1093.61L1343.59 1093.6Z" fill="#BD9E72"/>
-        </g>
-        <defs>
-            <clipPath id="clip0_38_1794">
-                <rect width="2340.4" height="2706.09" fill="white"/>
-            </clipPath>
-        </defs>
-    </svg>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Novo Cadastro</title>
+		<link rel="stylesheet" href="/styles/output.css" />
+		<script defer src="/scripts/cadastro_proprietario.js"></script>
+	</head>
+	<body class="bg-primary">
+		<header class="w-full bg-primary flex -itens-center p-2">
+			<img src="/assets/images/logo-h-whitebg.svg" alt="" />
+		</header>
+		<main class="flex flex-col items-center justify-center min-h-screen bg-primary pt-0 p-6 md:p-2">
+			<div class="bg-tertiary p-6 md:p-10 rounded-lg shadow-lg w-full max-w-2xl md:max-w-full md:flex-grow">
+				<div class="text-left mb-4">
+					<label for="idioma" class="text-sm text-gray-700">Idioma</label>
+					<select id="idioma" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+						<option value="pt">Português</option>
+						<option value="en">English</option>
+					</select>
+				</div>
 
-</header>
-<main class="flex flex-col items-center justify-center min-h-screen bg-primary pt-0 p-6 md:p-2">
-    <div class="bg-tertiary p-6 md:p-10 rounded-lg shadow-lg w-full max-w-2xl md:max-w-full md:flex-grow">
-        <div class="text-left mb-4">
-            <label for="idioma" class="text-sm text-gray-700">Idioma</label>
-            <select id="idioma"
-                    class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-                <option value="pt">Português</option>
-                <option value="en">English</option>
-            </select>
-        </div>
+				<h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Cadastro</h2>
 
-        <h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Cadastro</h2>
+				<form class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 md:gap-x-20" id="form-cadastro">
+					<div class="text-left">
+						<label for="cpf" class="text-sm text-gray-700">CPF</label><span class="text-error"> *</span>
+						<input id="cpf" type="text" name="cpf" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+						<p id="cpf-erro" class="text-error text-sm mt-1 hidden">O CPF é obrigatório.</p>
+						<span id="cpf-invalido" class="text-error text-sm hidden">CPF inválido! Digite um CPF válido.</span>
+					</div>
+					<div class="text-left">
+						<label for="nome" class="text-sm text-gray-700">Nome</label><span class="text-error"> *</span>
+						<input id="nome" type="text" name="nome" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+						<p id="nome-erro" class="text-error text-sm mt-1 hidden">O Nome é obrigatório.</p>
+					</div>
+					<div class="text-left">
+						<label for="sobrenome" class="text-sm text-gray-700">Sobrenome</label><span class="text-error"> *</span>
+						<input id="sobrenome" type="text" name="sobrenome" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+						<p id="sobrenome-erro" class="text-error text-sm mt-1 hidden">O Sobrenome é obrigatório.</p>
+					</div>
+					<div class="text-left">
+						<label for="telefone" class="text-sm text-gray-700">Telefone</label><span class="text-error"> *</span>
+						<input id="telefone" type="text" name="telefone" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+						<p id="telefone-erro" class="text-error text-sm mt-1 hidden">O Telefone é obrigatório.</p>
+						<span id="telefone-invalido" class="text-error text-sm hidden">Insira um telefone válido (Deve ter entre 10 e 11 dígitos e não pode conter letras).</span>
+					</div>
+					<div class="text-left">
+						<label for="data-nascimento" class="text-sm text-gray-700">Data de Nascimento</label><span class="text-error"> *</span>
+						<input id="data-nascimento" type="date" name="data-nascimento" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+						<p id="data-nascimento-erro" class="text-error text-sm mt-1 hidden">O Data de Nascimento é obrigatório.</p>
+						<p id="data-nascimento-invalida" class="text-error text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
+					</div>
+					<div class="text-left">
+						<label for="email" class="text-sm text-gray-700">E-mail</label><span class="text-error"> *</span>
+						<input id="email" type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+						<p id="email-erro" class="text-error text-sm mt-1 hidden">O E-mail é obrigatório.</p>
+						<span id="email-invalido" class="text-error text-sm hidden">Insira um e-mail válido.</span>
+					</div>
+					<div class="text-left">
+						<label for="cep" class="text-sm text-gray-700">CEP</label><span class="text-error"> *</span>
+						<input id="cep" type="text" name="cep" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" maxlength="9" />
+						<p id="cep-erro" class="text-error text-sm mt-1 hidden">O CEP é obrigatório.</p>
+						<p id="cep-invalido" class="text-error text-sm mt-1 hidden">CEP inválido! Digite no formato 00000-000.</p>
+					</div>
+					<div class="text-left">
+						<label for="estado" class="text-sm text-gray-700">Estado</label><span class="text-error"> *</span>
+						<input id="estado" type="text" name="estado" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+						<p id="estado-erro" class="text-error text-sm mt-1 hidden">O Estado é obrigatório.</p>
+					</div>
+					<div class="text-left">
+						<label for="bairro" class="text-sm text-gray-700">Bairro</label><span class="text-error"> *</span>
+						<input id="bairro" type="text" name="bairro" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+						<p id="bairro-erro" class="text-error text-sm mt-1 hidden">O Bairro é obrigatório.</p>
+					</div>
+					<div class="text-left">
+						<label for="cidade" class="text-sm text-gray-700">Cidade</label><span class="text-error"> *</span>
+						<input id="cidade" type="text" name="cidade" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+						<p id="cidade-erro" class="text-error text-sm mt-1 hidden">O Cidade é obrigatório.</p>
+					</div>
+					<div class="text-left">
+						<label for="logradouro" class="text-sm text-gray-700">Rua</label><span class="text-error"> *</span>
+						<input id="logradouro" type="text" name="logradouro" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+						<p id="logradouro-erro" class="text-error text-sm mt-1 hidden">O Rua é obrigatório.</p>
+					</div>
+					<div class="text-left">
+						<label for="numero" class="text-sm text-gray-700">Número</label><span class="text-error"> *</span>
+						<input id="numero" type="number" name="numero" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+						<p id="numero-erro" class="text-error text-sm mt-1 hidden">O Número é obrigatório.</p>
+					</div>
+					<div class="text-left">
+						<label for="senha" class="text-sm text-gray-700">Senha</label><span class="text-error"> *</span>
+						<div class="relative w-full">
+							<input id="senha" type="password" class="relative w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+							<button id="mostrar-senha" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none">
+								<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+									<path d="M1 12C1 12 5 20 12 20C19 20 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+									<circle cx="12" cy="12" r="3" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+								</svg>
+							</button>
+						</div>
+						<p id="senha-erro" class="text-error text-sm mt-1 hidden">A Senha é obrigatória.</p>
+						<div class="text-sm text-gray-600 mt-2">
+							<div id="senha-requisitos" class="font-medium"></div>
+							<ul class="list-disc list-inside">
+								<li id="req-maiuscula" class="text-error"></li>
+								<li id="req-numero" class="text-error"></li>
+								<li id="req-especial" class="text-error"></li>
+								<li id="req-tamanho" class="text-error"></li>
+							</ul>
+						</div>
+					</div>
+					<div class="text-left">
+						<label for="senha-confirmacao" class="text-sm text-gray-700">Confirmação de Senha</label><span class="text-error"> *</span>
+						<div class="relative w-full">
+							<input id="senha-confirmacao" type="password" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+							<button id="mostrar-confirmacao-senha" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none">
+								<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+									<path d="M1 12C1 12 5 20 12 20C19 20 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+									<circle cx="12" cy="12" r="3" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+								</svg>
+							</button>
+						</div>
+						<span id="senha-diferente" class="text-error text-sm hidden"></span>
+					</div>
 
-        <form class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 md:gap-x-20" id="form-cadastro">
-            <div class="text-left">
-                <label for="cpf" class="text-sm text-gray-700">CPF</label><span class="text-error"> *</span>
-                <input id="cpf" type="text" name="cpf"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                <p id="cpf-erro" class="text-error text-sm mt-1 hidden">O CPF é obrigatório.</p>
-                <span id="cpf-invalido" class="text-error text-sm hidden">CPF inválido! Digite um CPF válido.</span>
-            </div>
-            <div class="text-left">
-                <label for="nome" class="text-sm text-gray-700">Nome</label><span class="text-error"> *</span>
-                <input id="nome" type="text" name="nome"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                <p id="nome-erro" class="text-error text-sm mt-1 hidden">O Nome é obrigatório.</p>
-            </div>
-            <div class="text-left">
-                <label for="sobrenome" class="text-sm text-gray-700">Sobrenome</label><span class="text-error"> *</span>
-                <input id="sobrenome" type="text" name="sobrenome"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                <p id="sobrenome-erro" class="text-error text-sm mt-1 hidden">O Sobrenome é obrigatório.</p>
-            </div>
-            <div class="text-left">
-                <label for="telefone" class="text-sm text-gray-700">Telefone</label><span class="text-error"> *</span>
-                <input id="telefone" type="text" name="telefone"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                <p id="telefone-erro" class="text-error text-sm mt-1 hidden">O Telefone é obrigatório.</p>
-                <span id="telefone-invalido" class="text-error text-sm hidden">Insira um telefone válido (Deve ter entre 10 e 11 dígitos e não pode conter letras).</span>
-            </div>
-            <div class="text-left">
-                <label for="data-nascimento" class="text-sm text-gray-700">Data de Nascimento</label><span
-                    class="text-error"> *</span>
-                <input id="data-nascimento" type="date" name="data-nascimento"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                <p id="data-nascimento-erro" class="text-error text-sm mt-1 hidden">O Data de Nascimento é
-                    obrigatório.</p>
-                <p id="data-nascimento-invalida" class="text-error text-sm mt-1 hidden">Insira uma data de nascimento
-                    válida.</p>
-            </div>
-            <div class="text-left">
-                <label for="email" class="text-sm text-gray-700">E-mail</label><span class="text-error"> *</span>
-                <input id="email" type="text"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                <p id="email-erro" class="text-error text-sm mt-1 hidden">O E-mail é obrigatório.</p>
-                <span id="email-invalido" class="text-error text-sm hidden">Insira um e-mail válido.</span>
-            </div>
-            <div class="text-left">
-                <label for="cep" class="text-sm text-gray-700">CEP</label><span class="text-error"> *</span>
-                <input id="cep" type="text" name="cep"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"
-                       maxlength="9"/>
-                <p id="cep-erro" class="text-error text-sm mt-1 hidden">O CEP é obrigatório.</p>
-                <p id="cep-invalido" class="text-error text-sm mt-1 hidden">CEP inválido! Digite no formato
-                    00000-000.</p>
-            </div>
-            <div class="text-left">
-                <label for="estado" class="text-sm text-gray-700">Estado</label><span class="text-error"> *</span>
-                <input id="estado" type="text" name="estado"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                <p id="estado-erro" class="text-error text-sm mt-1 hidden">O Estado é obrigatório.</p>
-            </div>
-            <div class="text-left">
-                <label for="bairro" class="text-sm text-gray-700">Bairro</label><span class="text-error"> *</span>
-                <input id="bairro" type="text" name="bairro"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                <p id="bairro-erro" class="text-error text-sm mt-1 hidden">O Bairro é obrigatório.</p>
-            </div>
-            <div class="text-left">
-                <label for="cidade" class="text-sm text-gray-700">Cidade</label><span class="text-error"> *</span>
-                <input id="cidade" type="text" name="cidade"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                <p id="cidade-erro" class="text-error text-sm mt-1 hidden">O Cidade é obrigatório.</p>
-            </div>
-            <div class="text-left">
-                <label for="logradouro" class="text-sm text-gray-700">Rua</label><span class="text-error"> *</span>
-                <input id="logradouro" type="text" name="logradouro"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                <p id="logradouro-erro" class="text-error text-sm mt-1 hidden">O Rua é obrigatório.</p>
-            </div>
-            <div class="text-left">
-                <label for="numero" class="text-sm text-gray-700">Número</label><span class="text-error"> *</span>
-                <input id="numero" type="number" name="numero"
-                       class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                <p id="numero-erro" class="text-error text-sm mt-1 hidden">O Número é obrigatório.</p>
-            </div>
-            <div class="text-left">
-                <label for="senha" class="text-sm text-gray-700">Senha</label><span class="text-error"> *</span>
-                <div class="relative w-full">
-                    <input id="senha" type="password"
-                           class="relative w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                    <button id="mostrar-senha" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none">
-                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12" stroke="#000000" stroke-width="2"
-                                  stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M1 12C1 12 5 20 12 20C19 20 23 12 23 12" stroke="#000000" stroke-width="2"
-                                  stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="12" cy="12" r="3" stroke="#000000" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-                <p id="senha-erro" class="text-error text-sm mt-1 hidden">A Senha é obrigatória.</p>
-                <div class="text-sm text-gray-600 mt-2">
-                    <div id="senha-requisitos" class="font-medium"></div>
-                    <ul class="list-disc list-inside">
-                        <li id="req-maiuscula" class="text-error"></li>
-                        <li id="req-numero" class="text-error"></li>
-                        <li id="req-especial" class="text-error"></li>
-                        <li id="req-tamanho" class="text-error"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="text-left">
-                <label for="senha-confirmacao" class="text-sm text-gray-700">Confirmação de Senha</label><span
-                    class="text-error"> *</span>
-                <div class="relative w-full">
-                    <input id="senha-confirmacao" type="password"
-                           class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none"/>
-                    <button id="mostrar-confirmacao-senha"
-                            class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none">
-                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12" stroke="#000000" stroke-width="2"
-                                  stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M1 12C1 12 5 20 12 20C19 20 23 12 23 12" stroke="#000000" stroke-width="2"
-                                  stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="12" cy="12" r="3" stroke="#000000" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-                <span id="senha-diferente" class="text-error text-sm hidden"></span>
-            </div>
-
-            <button id="botao-cadastrar" type="submit"
-                    class="w-full md:col-span-2 py-3 text-white bg-secondary rounded-md transition duration-300 ease-in-out hover:bg-primary mt-3">
-                Cadastrar
-            </button>
-        </form>
-    </div>
-</main>
-</body>
+					<button id="botao-cadastrar" type="submit" class="w-full md:col-span-2 py-3 text-white bg-secondary rounded-md transition duration-300 ease-in-out hover:bg-primary mt-3">Cadastrar</button>
+				</form>
+			</div>
+		</main>
+	</body>
 </html>
