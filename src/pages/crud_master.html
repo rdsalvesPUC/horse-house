@@ -24,7 +24,7 @@
 
 </header>
     <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Crud</h2>
+        <h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Crud Master</h2>
         <form id="userForm" class="space-y-4">
             <div>
                 <label class="block font-medium">Nome:</label>
@@ -33,63 +33,59 @@
             <div>
                 <label class="block font-medium">Email:</label>
                 <input type="email" id="email" class="text-sm text-gray-700 w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+            </div>            
+            <div class="mt-2">
+                <label class="block font-medium">Ações Disponíveis:</label>
+                <select id="tipoAcao" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+                    <option value="">Selecione</option>
+                    <option value="Create">Create</option>
+                </select>
             </div>
-            <div class="mt-2 mb-2">
-                <label class="block font-medium">Tipo:</label>
-                <select id="tipo" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+            <!-- Select de Tipo de Usuário (só aparece se for Create) -->
+            <div id="tipoUsuarioContainer" class="hidden mt-2">
+                <label class="block font-medium">Tipo de Usuário:</label>
+                <select id="tipoUsuario" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+                    <option value="">Selecione</option>
                     <option value="Gerente">Gerente</option>
                     <option value="Treinador">Treinador</option>
-                    <option value="Vet">Vet</option>
+                    <option value="Vet">Veterinário</option>
                     <option value="Tratador">Tratador</option>
                 </select>
             </div>
-            <!-- Campos dinâmicos para cada tipo de usuário -->
-            <div id="camposGerente" class="hidden mt-4 space-y-2">
+            <!-- Campos Específicos -->
+            <div id="camposGerente" class="hidden mt-2 space-y-2">
                 <label class="block font-medium">Campos para Gerente:</label>
-                <input type="text" placeholder="Pin de acesso" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-                <input type="text" placeholder="Setor" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-            </div>
-            
-            <div id="camposTreinador" class="hidden mt-4 space-y-2">
-                <label class="block font-medium">Campos para Treinador:</label>
-                <input type="text" placeholder="Nome" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-                <input type="text" placeholder="Modalidade de Treinamento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-            </div>
-            
-            <div id="camposVet" class="hidden mt-4 space-y-2">
-                <label class="block font-medium">Campos para Veterinário:</label>
-                <input type="text" placeholder="Nome" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
                 <input type="text" placeholder="Especialidade" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+                <input type="text" placeholder="Pin de acesso" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
             </div>
-            
-            <div id="camposTratador" class="hidden mt-4 space-y-2">
+            <div id="camposTreinador" class="hidden mt-2 space-y-2">
+                <label class="block font-medium">Campos para Treinador:</label>
+                <input type="text" placeholder="Especialidade" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+                <input type="text" placeholder="Animal responsável" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+            </div>
+            <div id="camposVet" class="hidden mt-2 space-y-2">
+                <label class="block font-medium">Campos para Veterinário:</label>
+                <input type="text" placeholder="Especialidade" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+                <input type="text" placeholder="CRM" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+            </div>
+            <div id="camposTratador" class="hidden mt-2 space-y-2">
                 <label class="block font-medium">Campos para Tratador:</label>
-                <input type="text" placeholder="Nome" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-                <input type="text" placeholder="Área de Atuação" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-            </div>
-            
-            <div class="mt-2">
-                <label class="block font-medium">Ações Disponíveis:</label>
-                <select id="tipo" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-                    <option value="Create">Create</option>
-                    <option value="Read">Read</option>
-                    <option value="Update">Update</option>
-                    <option value="Delete">Delete</option>
-                </select>
+                <input type="text" placeholder="Especialidade" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+                <input type="text" placeholder="Turno" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
             </div>
             <button id="botao-cadastrar" type="submit"
-            class="w-full md:col-span-2 py-3 text-white bg-secondary rounded-md transition duration-300 ease-in-out hover:bg-primary mt-3">
-        Cadastrar
-    </button>
+            class="w-full md:col-span-2 py-3 text-white bg-secondary rounded-md transition duration-300 ease-in-out hover:bg-primary mt-3"> Cadastrar
+            </button>
         </form>
         <h3 class="text-xl font-bold mt-6">Usuários Cadastrados</h3>
         <table class="w-full mt-4 border-collapse border border-gray-300">
             <thead>
                 <tr class="bg-gray-200">
-                    <th class="border p-2">Nome</th>
+                    <th class="border p-2">Nomer</th>
                     <th class="border p-2">Email</th>
+                    <th class="border p-2">Especialidade</th>
+                    <th class="border p-2">Unico</th>
                     <th class="border p-2">Tipo</th>
-                    <th class="border p-2">Ações</th>
                 </tr>
             </thead>
             <tbody id="userTable"></tbody>
@@ -97,25 +93,85 @@
     </div>
 </body>
 <script>
-    document.getElementById('tipo').addEventListener('change', function () {
-    const tipoSelecionado = this.value;
+    const tipoAcao = document.getElementById('tipoAcao');
+    const tipoUsuario = document.getElementById('tipoUsuario');
+    const tipoUsuarioContainer = document.getElementById('tipoUsuarioContainer');
 
-    // Esconde todos os campos dinâmicos
-    document.getElementById('camposGerente').classList.add('hidden');
-    document.getElementById('camposTreinador').classList.add('hidden');
-    document.getElementById('camposVet').classList.add('hidden');
-    document.getElementById('camposTratador').classList.add('hidden');
+    const campos = {
+        Gerente: document.getElementById('camposGerente'),
+        Treinador: document.getElementById('camposTreinador'),
+        Vet: document.getElementById('camposVet'),
+        Tratador: document.getElementById('camposTratador')
+    };
 
-    // Exibe os campos específicos com base no tipo selecionado
-    if (tipoSelecionado === 'Gerente') {
-        document.getElementById('camposGerente').classList.remove('hidden');
-    } else if (tipoSelecionado === 'Treinador') {
-        document.getElementById('camposTreinador').classList.remove('hidden');
-    } else if (tipoSelecionado === 'Vet') {
-        document.getElementById('camposVet').classList.remove('hidden');
-    } else if (tipoSelecionado === 'Tratador') {
-        document.getElementById('camposTratador').classList.remove('hidden');
+    function esconderTodosCampos() {
+        Object.values(campos).forEach(campo => campo.classList.add('hidden'));
     }
+
+    tipoAcao.addEventListener('change', function () {
+        if (this.value === 'Create') {
+            tipoUsuarioContainer.classList.remove('hidden');
+        } else {
+            tipoUsuarioContainer.classList.add('hidden');
+            tipoUsuario.value = '';
+            esconderTodosCampos();
+        }
+    });
+
+    tipoUsuario.addEventListener('change', function () {
+        esconderTodosCampos();
+        const tipoSelecionado = this.value;
+        if (campos[tipoSelecionado]) {
+            campos[tipoSelecionado].classList.remove('hidden');
+        }
+    });
+    document.getElementById('botao-cadastrar').addEventListener('click', function(event) {
+    event.preventDefault(); // Impede que a página recarregue ao enviar o formulário.
+
+    // Captura os valores do formulário.
+    const nome = document.getElementById('nome').value;
+    const email = document.getElementById('email').value;
+    const tipoUsuario = document.getElementById('tipoUsuario').value;
+
+    // Verifica qual conjunto de campos dinâmicos está visível e captura seus valores.
+    let especialidade = '';
+    let unico = '';
+    if (tipoUsuario === 'Gerente') {
+        especialidade = document.querySelector('#camposGerente input[placeholder="Especialidade"]').value;
+        unico = document.querySelector('#camposGerente input[placeholder="Pin de acesso"]').value;
+    } else if (tipoUsuario === 'Treinador') {
+        especialidade = document.querySelector('#camposTreinador input[placeholder="Especialidade"]').value;
+        unico = document.querySelector('#camposTreinador input[placeholder="Animal responsável"]').value;
+    } else if (tipoUsuario === 'Vet') {
+        especialidade = document.querySelector('#camposVet input[placeholder="Especialidade"]').value;
+        unico = document.querySelector('#camposVet input[placeholder="CRM"]').value;
+    } else if (tipoUsuario === 'Tratador') {
+        especialidade = document.querySelector('#camposTratador input[placeholder="Especialidade"]').value;
+        unico = document.querySelector('#camposTratador input[placeholder="Turno"]').value;
+    }
+
+    // Verifica se os campos obrigatórios foram preenchidos.
+    if (!nome || !email || !tipoUsuario || !especialidade || !unico) {
+        alert('Por favor, preencha todos os campos antes de cadastrar!');
+        return;
+    }
+
+    // Adiciona os valores à tabela de usuários cadastrados.
+    const userTable = document.getElementById('userTable');
+    const novaLinha = document.createElement('tr');
+    novaLinha.innerHTML = `
+        <td class="border p-2">${nome}</td>
+        <td class="border p-2">${email}</td>
+        <td class="border p-2">${especialidade}</td>
+        <td class="border p-2">${unico}</td>
+        <td class="border p-2">${tipoUsuario}</td> <!-- Nova coluna "Tipo" -->
+    `;
+    userTable.appendChild(novaLinha);
+
+    // Limpa o formulário após cadastrar.
+    document.getElementById('userForm').reset();
+    esconderTodosCampos();
+    document.getElementById('tipoUsuarioContainer').classList.add('hidden');
 });
 </script>
 </html>
