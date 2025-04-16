@@ -11,6 +11,13 @@ app.use(express.static(path.join(__dirname, "public")));
 const createProprietarioAPI = require("./src/scripts/api/createProprietario");
 app.use("/api/criarProprietario", createProprietarioAPI);
 
+const loginProprietarioAPI = require("./src/scripts/api/loginProprietario");
+app.use("/api/loginProprietario", loginProprietarioAPI);
+
+const getProprietarioAPI = require("./src/scripts/api/getProprietario");
+app.use("/api/getProprietario", getProprietarioAPI);
+
+
 // Importando e usando a API de cavalos
 const getHorsesAPI = require("./src/scripts/api/apiExample");
 app.use("/api/exemplo", getHorsesAPI);
