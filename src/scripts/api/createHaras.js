@@ -2,7 +2,6 @@ const {autenticar} = require("../utils/autenticar");
 const express = require("express");
 const router = express.Router();
 const connection = require("../horseDB");
-const jwt = require("jsonwebtoken");
 const {verificarOuCadastrarEndereco} = require("../utils/enderecoUtils");
 
 router.post("/", autenticar, async (req, res) => {
