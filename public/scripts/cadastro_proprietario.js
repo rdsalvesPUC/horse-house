@@ -152,53 +152,72 @@ function getDataAtual() {
 
 document.getElementById('data-nascimento').max = getDataAtual();
 
-function buscarEndereco() {
+async function buscarEndereco() {
     const cepInput = document.getElementById('cep');
     const cepInvalido = document.getElementById('cep-invalido');
     let cep = cepInput.value.replace(/\D/g, '');
+    const idioma = document.getElementById('idioma').value;
 
-    if (/^\d{5}-\d{3}$/.test(cepInput.value) || /^\d{8}$/.test(cep)) {
-        cepInvalido.classList.add('hidden');
-        cep = cep.replace(/(\d{5})(\d{3})/, '$1-$2');
-        cepInput.value = cep;
-
-        // Tenta buscar na API local primeiro
-        fetch(`/api/getCep/${cep.replace('-', '')}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("CEP não encontrado na API local.");
-                }
-                return response.json();
-            })
-            .then(data => {
-                bloquearCampo('logradouro', data.logradouro || data.Rua);
-                bloquearCampo('bairro', data.bairro || data.Bairro);
-                bloquearCampo('cidade', data.cidade || data.Cidade);
-                bloquearCampo('estado', data.estado || data.Estado);
-            })
-            .catch(() => {
-                // Caso falhe, tenta a API dos Correios
-                fetch(`https://viacep.com.br/ws/${cep.replace('-', '')}/json/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (!data.erro) {
-                            bloquearCampo('logradouro', data.logradouro);
-                            bloquearCampo('bairro', data.bairro);
-                            bloquearCampo('cidade', data.localidade);
-                            bloquearCampo('estado', data.estado);
-                        } else {
-                            cepInvalido.textContent = traducoes[document.getElementById('idioma').value].cepInvalido;
-                            cepInvalido.classList.remove('hidden');
-                        }
-                    })
-                    .catch(() => {
-                        cepInvalido.textContent = traducoes[document.getElementById('idioma').value].cepInvalido;
-                        cepInvalido.classList.remove('hidden');
-                    });
-            });
-    } else {
+    // Validação inicial do formato do CEP
+    if (!/^\d{8}$/.test(cep)) {
+        cepInvalido.textContent = traducoes[idioma].cepInvalido;
         cepInvalido.classList.remove('hidden');
         limparCamposEndereco();
+        return false;
+    }
+
+    try {
+        // Primeiro tenta buscar na API própria
+        const response = await fetch(`/api/getCep/${cep}`);
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                // Se não encontrou na API própria, tenta ViaCEP
+                return await buscarViaCEP(cep, idioma);
+            }
+            throw new Error('Erro na API');
+        }
+
+        const data = await response.json();
+
+        // Preenche os campos com os dados da API própria
+        bloquearCampo('logradouro', data.logradouro || '');
+        bloquearCampo('bairro', data.bairro || '');
+        bloquearCampo('cidade', data.Cidade);
+        bloquearCampo('estado', data.UF);
+        cepInvalido.classList.add('hidden');
+        return true;
+
+    } catch (error) {
+        // Se falhar na API própria, tenta ViaCEP
+        return await buscarViaCEP(cep, idioma);
+    }
+}
+
+async function buscarViaCEP(cep, idioma) {
+    const cepInvalido = document.getElementById('cep-invalido');
+
+    try {
+        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const data = await response.json();
+
+        if (data.erro) {
+            throw new Error('CEP não encontrado');
+        }
+
+        // Preenche os campos com dados dos Correios
+        bloquearCampo('logradouro', data.logradouro);
+        bloquearCampo('bairro', data.bairro);
+        bloquearCampo('cidade', data.localidade);
+        bloquearCampo('estado', data.uf);
+        cepInvalido.classList.add('hidden');
+        return true;
+
+    } catch (error) {
+        cepInvalido.textContent = traducoes[idioma].cepInvalido;
+        cepInvalido.classList.remove('hidden');
+        limparCamposEndereco();
+        return false;
     }
 }
 
@@ -460,7 +479,7 @@ document.getElementById('email').addEventListener('input', validarEmail);
 document.getElementById('cpf').addEventListener('input', validarCPF);
 
 
-document.getElementById('form-cadastro').addEventListener('submit', function (event) {
+document.getElementById('form-cadastro').addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const camposObrigatorios = ["numero", "logradouro", "cidade", "bairro", "estado", "data-nascimento"];
@@ -481,9 +500,8 @@ document.getElementById('form-cadastro').addEventListener('submit', function (ev
     if (!validarDataNascimento()) {
         formularioValido = false;
     }
-    if (!buscarEndereco()) {
-        formularioValido = false
-    }
+    const cepValido = await buscarEndereco();
+    if (!cepValido) formularioValido = false;
 
     if (!validarTelefone()) {
         formularioValido = false;
