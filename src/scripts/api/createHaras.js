@@ -1,13 +1,12 @@
-const {autenticar} = require("../utils/autenticar");
+const {extrairProprietarioID} = require("../utils/extrairProprietarioID");
 const express = require("express");
 const router = express.Router();
 const connection = require("../horseDB");
 const {verificarOuCadastrarEndereco} = require("../utils/enderecoUtils");
 
-router.post("/", autenticar, async (req, res) => {
-    const { nome, rua, numero, complemento, cnpj, bairro, cep } = req.body;
-
-    if (!nome || !rua || !numero || !complemento || !cnpj || !bairro || !cep) {
+router.post("/", extrairProprietarioID, async (req, res) => {
+    const { nome, rua, numero, complemento, cnpj, bairro, cep, dominio } = req.body;
+    if (!nome || !rua || !numero || !complemento || !cnpj || !bairro || !cep || !dominio) {
         return res.status(400).json({ error: "Todos os campos são obrigatórios." });
     }
     try{
@@ -15,11 +14,12 @@ router.post("/", autenticar, async (req, res) => {
     await verificarOuCadastrarEndereco(cep);
 
     const query = `
-        INSERT INTO haras (Nome, Rua, Numero, Complemento, CNPJ, Bairro, fk_Proprietario_ID, fk_CEP_CEP) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO haras (Nome, Rua, Numero, Complemento, CNPJ, Bairro, Dominio, fk_Proprietario_ID, fk_CEP_CEP) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    connection.query(query, [nome, rua, numero,complemento, cnpj, bairro, req.proprietarioId, cep], (err, results) => {
+    connection.query(query, [nome, rua, numero,complemento, cnpj, bairro, dominio, req.proprietario.id, cep], (err, results) => {
         if (err) {
+            console.log(err)
             return res.status(500).json({ error: "Erro ao inserir dados no banco de dados." });
         }
         res.status(201).json({ message: "Haras cadastrado com sucesso!", id: results.insertId });

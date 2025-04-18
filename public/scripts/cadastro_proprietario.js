@@ -162,32 +162,44 @@ function buscarEndereco() {
         cep = cep.replace(/(\d{5})(\d{3})/, '$1-$2');
         cepInput.value = cep;
 
-        fetch(`https://viacep.com.br/ws/${cep.replace('-', '')}/json/`)
-            .then(response => response.json())
-            .then(data => {
-                if (!data.erro) {
-                    bloquearCampo('logradouro', data.logradouro);
-                    bloquearCampo('bairro', data.bairro);
-                    bloquearCampo('cidade', data.localidade);
-                    bloquearCampo('estado', data.uf);
-                    return true
-                } else {
-                    cepInvalido.textContent = traducoes[document.getElementById('idioma').value].cepInvalido;
-                    cepInvalido.classList.remove('hidden');
-                    return false
+        // Tenta buscar na API local primeiro
+        fetch(`/api/getCep/${cep.replace('-', '')}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("CEP não encontrado na API local.");
                 }
+                return response.json();
+            })
+            .then(data => {
+                bloquearCampo('logradouro', data.logradouro || data.Rua);
+                bloquearCampo('bairro', data.bairro || data.Bairro);
+                bloquearCampo('cidade', data.cidade || data.Cidade);
+                bloquearCampo('estado', data.estado || data.Estado);
             })
             .catch(() => {
-                cepInvalido.textContent = traducoes[document.getElementById('idioma').value].cepInvalido;
-                cepInvalido.classList.remove('hidden');
-                return false
+                // Caso falhe, tenta a API dos Correios
+                fetch(`https://viacep.com.br/ws/${cep.replace('-', '')}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            bloquearCampo('logradouro', data.logradouro);
+                            bloquearCampo('bairro', data.bairro);
+                            bloquearCampo('cidade', data.localidade);
+                            bloquearCampo('estado', data.estado);
+                        } else {
+                            cepInvalido.textContent = traducoes[document.getElementById('idioma').value].cepInvalido;
+                            cepInvalido.classList.remove('hidden');
+                        }
+                    })
+                    .catch(() => {
+                        cepInvalido.textContent = traducoes[document.getElementById('idioma').value].cepInvalido;
+                        cepInvalido.classList.remove('hidden');
+                    });
             });
     } else {
         cepInvalido.classList.remove('hidden');
         limparCamposEndereco();
-        return false
     }
-    return true
 }
 
 function limparCamposEndereco() {
