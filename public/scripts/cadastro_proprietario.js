@@ -246,8 +246,6 @@ function validarDataNascimento() {
 
     dataInvalida.classList.add('hidden');
     return true;
-
-
 }
 
 function validarTelefone() {
