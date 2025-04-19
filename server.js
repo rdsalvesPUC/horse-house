@@ -18,6 +18,9 @@ app.get("/", (req, res) => {
 app.get("/register", (req, res) => {
     res.sendFile(path.join(__dirname, "src", "pages", "cadastro_proprietario.html"));
 })
+app.get("/crud_master", (req, res) => {
+    res.sendFile(path.join(__dirname, "src", "pages", "crud_master.html"));
+})
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });
