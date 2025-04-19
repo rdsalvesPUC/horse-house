@@ -19,12 +19,4 @@ router.use("/api/criarGerente", createGerenteAPI);
 router.use("/api/criarHaras", createHarasAPI);
 router.use("/api/getCep", getCepAPI);
 
-// Rotas de páginas estáticas
-router.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "pages", "index.html"));
-});
-router.get("/register", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "pages", "cadastro_proprietario.html"));
-});
-
 module.exports = router;
