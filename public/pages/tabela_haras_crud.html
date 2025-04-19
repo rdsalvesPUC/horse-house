@@ -16,27 +16,48 @@
   <div class="bg-tertiary p-6 rounded-lg shadow-lg w-full max-w-5xl">
     <h2 class="text-xl font-bold text-black mb-4">Lista de Haras</h2>
 
-    <table class="w-full table-auto text-left rounded overflow-hidden">
-      <thead class="bg-secondary text-white">
-        <tr>
-          <th class="p-3">Nome</th>
-          <th class="p-3">CNPJ</th>
-          <th class="p-3">CEP</th>
-          <th class="p-3">Logradouro</th>
-          <th class="p-3 text-center">Ações</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaHaras" class="bg-white text-gray-800">
-        
-      </tbody>
-    </table>
+    <div class="overflow-auto">
+      <table class="w-full table-auto text-left rounded overflow-hidden">
+        <thead class="bg-secondary text-white">
+          <tr>
+            <th class="p-3">Nome</th>
+            <th class="p-3">CNPJ</th>
+            <th class="p-3">CEP</th>
+            <th class="p-3">Rua</th>
+            <th class="p-3">Número</th>
+            <th class="p-3">Complemento</th>
+            <th class="p-3">Bairro</th>
+            <th class="p-3 text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaHaras" class="bg-white text-gray-800"></tbody>
+      </table>
+    </div>
   </div>
 </main>
 
 <script>
   const harasExemplo = [
-    { id: 1, nome: "Haras Cavalão", cnpj: "12.345.678/0001-90", cep: "12345-678", logradouro: "Rua Principal" },
-    { id: 2, nome: "Cavalinhos", cnpj: "98.765.432/0001-10", cep: "87654-321", logradouro: "Av. Central" },
+    {
+      id: 1,
+      nome: "Haras Cavalão",
+      cnpj: "12.345.678/0001-90",
+      cep: "12345-678",
+      logradouro: "Rua Principal",
+      numero: "100",
+      complemento: "Bloco A",
+      bairro: "Centro"
+    },
+    {
+      id: 2,
+      nome: "Cavalinhos",
+      cnpj: "98.765.432/0001-10",
+      cep: "87654-321",
+      logradouro: "Av. Central",
+      numero: "200",
+      complemento: "",
+      bairro: "Jardins"
+    }
   ];
 
   function carregarTabela() {
@@ -52,9 +73,12 @@
         <td class="p-3">${haras.cnpj}</td>
         <td class="p-3">${haras.cep}</td>
         <td class="p-3">${haras.logradouro}</td>
+        <td class="p-3">${haras.numero}</td>
+        <td class="p-3">${haras.complemento || '-'}</td>
+        <td class="p-3">${haras.bairro}</td>
         <td class="p-3 text-center">
-          <button class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-1 px-3 rounded mr-2" onclick="editarHaras(${haras.id})">Editar</button>
-          <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded" onclick="excluirHaras(${haras.id})">Excluir</button>
+          <button class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-1 px-3 rounded mr-2" onclick="editarHaras(${haras.id})">Editar</button>
+          <button class="bg-red-500 hover:bg-red-600 text-black font-bold py-1 px-3 rounded" onclick="excluirHaras(${haras.id})">Excluir</button>
         </td>
       `;
 
