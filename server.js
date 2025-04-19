@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, "public")));
 const getHorsesAPI = require("./src/scripts/api/apiExample");
 app.use("/api/exemplo", getHorsesAPI);
 
-app.get("/", (req, res) => {
+app.get("/home", (req, res) => {
     res.sendFile(path.join(__dirname, "src", "pages", "index.html"));
 });
 app.get("/register", (req, res) => {
