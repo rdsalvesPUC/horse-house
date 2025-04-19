@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //     next();
 // });
 
-app.get("/", (req, res) => {
+app.get("/home", (req, res) => {
     res.sendFile(path.join(__dirname, "src", "pages", "index.html"));
 });
 app.get("/register", (req, res) => {
