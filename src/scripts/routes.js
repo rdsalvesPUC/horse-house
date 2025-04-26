@@ -11,6 +11,7 @@ const createHarasAPI = require("./api/createHaras");
 const getCepAPI = require("./api/getCep");
 const getUsuarioLogadoAPI = require("./api/getUsuarioLogado");
 
+
 router.use("/api/criarProprietario", createProprietarioAPI);
 router.use("/api/login", loginAPI);
 router.use("/api/exemplo", getHorsesAPI);

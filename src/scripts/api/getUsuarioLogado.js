@@ -10,6 +10,7 @@ router.get("/", extrairUserID, async (req, res) => {
         let query, userId;
 
         // Determina a consulta com base no tipo de usuário
+
         if (userType === "proprietario") {
             query = "SELECT proprietario.nome as nome, sobrenome, email, telefone, estado.Nome as estado, estado.UF as uf, cidade.nome as cidade, cep, Bairro, Rua, Numero, Data_Nascimento, Complemento FROM Proprietario JOIN horse_house.cep cep on cep.CEP = Proprietario.fk_CEP_CEP JOIN horse_house.cidade cidade on cidade.ID = cep.FK_Cidade_ID join estado on cidade.fk_Estado_ID = estado.ID WHERE proprietario.ID = ?";
             userId = req.user.id;

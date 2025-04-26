@@ -32,6 +32,7 @@ async function tryAuthenticate(email, senha, tabela) {
     }
 }
 
+
 router.post("/", async (req, res) => {
     const { email, senha } = req.body;
 
