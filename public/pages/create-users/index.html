@@ -47,7 +47,6 @@
 					<input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
 					<input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
 					<input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" value="Perfil Master" readonly class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none bg-gray-100 text-gray-500 mb-4" />
 				</div>
 				<div id="camposTreinador" class="hidden mt-2 space-y-2">
 					<label class="block font-medium">Campos para Treinador:</label>
@@ -56,7 +55,6 @@
 					<input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
 					<input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
 					<input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" value="Perfil Operação ||" readonly class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none bg-gray-100 text-gray-500 mb-4" />
 				</div>
 				<div id="camposVet" class="hidden mt-2 space-y-2">
 					<label class="block font-medium">Campos para Veterinário:</label>
@@ -66,7 +64,6 @@
 					<input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
 					<input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
 					<input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" value="Perfil Operação ||" readonly class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none bg-gray-100 text-gray-500 mb-4" />
 				</div>
 				<div id="camposTratador" class="hidden mt-2 space-y-2">
 					<label class="block font-medium">Campos para Tratador:</label>
@@ -75,22 +72,9 @@
 					<input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
 					<input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
 					<input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" value="Perfil Operação |" readonly class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none bg-gray-100 text-gray-500 mb-4" />
 				</div>
 				<button id="botao-cadastrar" type="submit" class="w-full md:col-span-2 py-3 text-white bg-secondary rounded-md transition duration-300 ease-in-out hover:bg-primary mt-3 mb-4">Cadastrar</button>
 			</form>
-			<table class="w-full mt-4 border-collapse border border-gray-300">
-				<thead>
-					<tr class="bg-gray-200">
-						<th class="border p-2">Nome</th>
-						<th class="border p-2">Email</th>
-						<th class="border p-2">Especialidade</th>
-						<th class="border p-2">Unico</th>
-						<th class="border p-2">Tipo</th>
-					</tr>
-				</thead>
-				<tbody id="userTable"></tbody>
-			</table>
 		</div>
 	</body>
 	<script>
@@ -138,8 +122,36 @@
 			let especialidade = "";
 			let unico = "";
 			if (tipoUsuario === "Gerente") {
-				especialidade = document.querySelector('#camposGerente input[placeholder="Especialidade"]').value;
-				unico = document.querySelector('#camposGerente input[placeholder="Pin de acesso"]').value;
+				const cpf = document.querySelector('#camposGerente input[placeholder="CPF"]').value;
+				const telefone = document.querySelector('#camposGerente input[placeholder="Telefone"]').value;
+				const dataNascimento = document.querySelector('#camposGerente input[placeholder="Data de Nascimento"]').value;
+				const senha = document.querySelector('#camposGerente input[placeholder="Senha"]').value;
+
+				const dados = {
+				nome,
+				sobrenome: "", // Adicione um campo no formulário se quiser capturar isso
+				email,
+				cpf,
+				telefone,
+				dataNascimento,
+				senha
+			};
+
+			fetch("http://localhost:3000/api/gerente/seu-dominio-aqui", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(dados)
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log("Resposta do servidor:", data);
+				alert("Gerente cadastrado com sucesso!");
+			})
+			.catch(error => {
+				console.error("Erro ao cadastrar gerente:", error);
+			});
 			} else if (tipoUsuario === "Treinador") {
 				especialidade = document.querySelector('#camposTreinador input[placeholder="Especialidade"]').value;
 				unico = document.querySelector('#camposTreinador input[placeholder="Animal responsável"]').value;
