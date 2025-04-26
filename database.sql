@@ -6,9 +6,10 @@ use horse_house;
 
 /* Lógico_1: */
 
+
 CREATE TABLE Proprietario
 (
-    Cpf             VARCHAR(11) NOT NULL,
+    Cpf             VARCHAR(11) NOT NULL UNIQUE,
     Nome            VARCHAR(20) NOT NULL,
     Sobrenome       VARCHAR(50) NOT NULL,
     Telefone        VARCHAR(11),
@@ -30,7 +31,7 @@ CREATE TABLE Haras
     Rua                VARCHAR(50) NOT NULL,
     Numero             INT,
     Complemento        VARCHAR(20),
-    CNPJ               VARCHAR(14) NOT NULL,
+    CNPJ               VARCHAR(14) NOT NULL UNIQUE ,
     Bairro             VARCHAR(50) NOT NULL,
     Dominio           VARCHAR(20) NOT NULL UNIQUE,
     fk_Proprietario_ID INT,
@@ -42,7 +43,7 @@ CREATE TABLE Treinador
     ID              INT PRIMARY KEY AUTO_INCREMENT,
     Nome            VARCHAR(20) NOT NULL,
     Sobrenome       VARCHAR(20) NOT NULL,
-    CPF             VARCHAR(11) NOT NULL,
+    CPF             VARCHAR(11) NOT NULL UNIQUE,
     Telefone        VARCHAR(11),
     Email           VARCHAR(50) NOT NULL,
     Senha           VARCHAR(255) NOT NULL,
@@ -58,7 +59,7 @@ CREATE TABLE Veterinario
     Email           VARCHAR(50) NOT NULL,
     Telefone        VARCHAR(11),
     Data_Nascimento DATE NOT NULL,
-    CPF             VARCHAR(11) NOT NULL,
+    CPF             VARCHAR(11) NOT NULL UNIQUE,
     Sobrenome       VARCHAR(50) NOT NULL,
     CRMV            VARCHAR(20) NOT NULL,
     fk_Haras_ID     INT
@@ -69,7 +70,7 @@ CREATE TABLE Tratador
     ID              INT PRIMARY KEY AUTO_INCREMENT,
     Nome            VARCHAR(20) NOT NULL,
     Sobrenome       VARCHAR(50) NOT NULL,
-    CPF             VARCHAR(11) NOT NULL,
+    CPF             VARCHAR(11) NOT NULL UNIQUE,
     Data_Nascimento DATE NOT NULL,
     Telefone        VARCHAR(11),
     Email           VARCHAR(50) NOT NULL,
@@ -127,7 +128,7 @@ CREATE TABLE Gerente
     ID              INT PRIMARY KEY AUTO_INCREMENT,
     Nome            VARCHAR(20) NOT NULL,
     Sobrenome       VARCHAR(50) NOT NULL,
-    CPF             VARCHAR(11) NOT NULL,
+    CPF             VARCHAR(11) NOT NULL UNIQUE,
     Data_Nascimento DATE NOT NULL,
     Telefone        VARCHAR(11),
     Email           VARCHAR(50) NOT NULL,

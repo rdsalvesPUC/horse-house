@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-function extrairProprietarioID(req, res, next) {
+function extrairUserID(req, res, next) {
     const token = req.headers["authorization"];
     console.log("Token recebido:", token);
 
@@ -12,11 +12,7 @@ function extrairProprietarioID(req, res, next) {
         const decoded = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
         console.log("Token decodificado:", decoded);
 
-        if (decoded.user !== "proprietario") {
-            return res.status(403).json({ error: "Acesso permitido apenas para proprietários." });
-        }
-
-        req.proprietario = decoded;
+        req.user = decoded;
         next();
     } catch (err) {
         console.error("Erro ao verificar o token:", err);
@@ -24,4 +20,4 @@ function extrairProprietarioID(req, res, next) {
     }
 }
 
-module.exports = { extrairProprietarioID };
+module.exports = { extrairUserID };
