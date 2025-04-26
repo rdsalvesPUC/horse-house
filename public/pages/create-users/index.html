@@ -19,7 +19,7 @@
 				</div>
 				<div>
 					<label class="block font-medium">Sobrenome</label>
-					<input type="email" id="email" class="text-sm text-gray-700 w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+					<input type="text" id="Sobrenome" class="text-sm text-gray-700 w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
 				</div>
 				<div class="mt-2">
 					<label class="block font-medium">Ações Disponíveis:</label>
@@ -115,13 +115,12 @@
 
 			// Captura os valores do formulário.
 			const nome = document.getElementById("nome").value;
-			const email = document.getElementById("email").value;
+			const email = document.getElementById("Sobrenome").value;
 			const tipoUsuario = document.getElementById("tipoUsuario").value;
 
 			// Verifica qual conjunto de campos dinâmicos está visível e captura seus valores.
-			let especialidade = "";
-			let unico = "";
 			if (tipoUsuario === "Gerente") {
+				const email = document.querySelector('#camposGerente input[placeholder="Email"]').value;
 				const cpf = document.querySelector('#camposGerente input[placeholder="CPF"]').value;
 				const telefone = document.querySelector('#camposGerente input[placeholder="Telefone"]').value;
 				const dataNascimento = document.querySelector('#camposGerente input[placeholder="Data de Nascimento"]').value;
@@ -137,7 +136,7 @@
 				senha
 			};
 
-			fetch("http://localhost:3000/api/gerente/seu-dominio-aqui", {
+			fetch("http://localhost:3000/api/criarGerente", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
@@ -152,15 +151,6 @@
 			.catch(error => {
 				console.error("Erro ao cadastrar gerente:", error);
 			});
-			} else if (tipoUsuario === "Treinador") {
-				especialidade = document.querySelector('#camposTreinador input[placeholder="Especialidade"]').value;
-				unico = document.querySelector('#camposTreinador input[placeholder="Animal responsável"]').value;
-			} else if (tipoUsuario === "Vet") {
-				especialidade = document.querySelector('#camposVet input[placeholder="Especialidade"]').value;
-				unico = document.querySelector('#camposVet input[placeholder="CRM"]').value;
-			} else if (tipoUsuario === "Tratador") {
-				especialidade = document.querySelector('#camposTratador input[placeholder="Especialidade"]').value;
-				unico = document.querySelector('#camposTratador input[placeholder="Turno"]').value;
 			}
 		});
 	</script>
