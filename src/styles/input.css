@@ -1,7 +1,154 @@
 @import "tailwindcss";
 
-@theme{
-    --color-primary : #222C2D;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+  Heebo
+–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––*/
+@font-face {
+    font-family: 'Heebo';
+    src: url('/assets/fonts/Heebo-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('/assets/fonts/Heebo-ExtraLight.woff2') format('woff2');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('/assets/fonts/Heebo-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('/assets/fonts/Heebo-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('/assets/fonts/Heebo-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('/assets/fonts/Heebo-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('/assets/fonts/Heebo-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('/assets/fonts/Heebo-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('/assets/fonts/Heebo-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+}
+
+/*–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+    Lexend Deca
+  –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––*/
+@font-face {
+    font-family: 'LexendDeca';
+    src: url('/assets/fonts/LexendDeca-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'LexendDeca';
+    src: url('/assets/fonts/LexendDeca-ExtraLight.woff2') format('woff2');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'LexendDeca';
+    src: url('/assets/fonts/LexendDeca-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'LexendDeca';
+    src: url('/assets/fonts/LexendDeca-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'LexendDeca';
+    src: url('/assets/fonts/LexendDeca-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'LexendDeca';
+    src: url('/assets/fonts/LexendDeca-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'LexendDeca';
+    src: url('/assets/fonts/LexendDeca-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'LexendDeca';
+    src: url('/assets/fonts/LexendDeca-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'LexendDeca';
+    src: url('/assets/fonts/LexendDeca-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@layer utilities {
+    .font-heebo {
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .font-lexend {
+        font-family: 'LexendDeca', sans-serif;
+    }
+}
+
+
+@theme {
+    --color-primary: #222C2D;
     --color-secondary: #BD9E72;
     --color-tertiary: #F5F4F3;
 
@@ -11,7 +158,7 @@
     --color-error: #ff4d4f;
 }
 
-@layer components{
+@layer components {
     .img-menu-home-site {
         width: 24px;
         height: 24px;

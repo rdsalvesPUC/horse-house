@@ -1,10 +1,13 @@
 require("dotenv").config();
-const express = require("express");
-const path = require("path");
-const app = express();
-const port = process.env.PORT || 3000;
+const connectLivereload = require('connect-livereload')
+const livereload        = require('livereload')
+const express           = require("express");
+const path              = require("path");
+const app               = express();
+const port              = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(connectLivereload());
 
 // 1) expõe seus componentes em /components/*
 app.use(
@@ -21,7 +24,7 @@ app.use("/assets", express.static(path.join(__dirname, "public", "assets")));
 //    cada pasta pages/slug/index.html vira URL /slug/   
 app.use(
   express.static(path.join(__dirname, "public", "pages"), {
-    extensions: ["html"],   // se alguém pedir /foo, tenta foo.html
+    extensions: ["html"],
   })
 );
 
@@ -32,6 +35,9 @@ app.get("/", (req, res) => {
 // 4) rotas de API
 const routes = require("./src/scripts/routes");
 app.use(routes);
+
+const liveReloadServer = livereload.createServer({ debug: false });
+liveReloadServer.watch(path.join(__dirname, "public"));
 
 // 5) start
 app.listen(port, () =>
