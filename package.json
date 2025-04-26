@@ -4,8 +4,9 @@
   "description": "Projeto educational realizado no terceiro periodo do curso de Sistemas de Informação na PUC-PR",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "build:css": "npx @tailwindcss/cli -i ./src/styles/input.css -o ./public/styles/output.css --watch"
+    "build:css": "npx @tailwindcss/cli -i ./src/styles/input.css -o ./public/styles/output.css --watch",
+    "serve":      "nodemon server.js",
+    "start":      "concurrently \"npm run build:css\" \"npm run serve\" \"npm run livereload\""
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,9 @@
     "tailwindcss": "^4.1.3"
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
+    "connect-livereload": "^0.6.1",
+    "livereload": "^0.9.3",
     "nodemon": "^3.1.9"
   }
 }
