@@ -521,6 +521,55 @@ document.getElementById('form-cadastro').addEventListener('submit', async functi
     }
 
     if (formularioValido) {
-        this.submit();
+        // Captura os valores do formulário.
+        const cpf = document.getElementById("cpf").value.replace(/\D/g, "");
+        const telefone = document.getElementById("telefone").value.replace(/\D/g, "");
+        const nome = document.getElementById("nome").value;
+        const sobrenome = document.getElementById("sobrenome").value;
+        const dataNascimento = document.getElementById("data-nascimento").value;
+        const email = document.getElementById("email").value;
+        const cep = document.getElementById("cep").value.replace(/\D/g, "");
+        const estado = document.getElementById("estado").value;
+        const bairro = document.getElementById("bairro").value;
+        const cidade = document.getElementById("cidade").value;
+        const rua = document.getElementById("logradouro").value;
+        const numero = document.getElementById("numero").value;
+        const senha = document.getElementById("senha").value;
+           
+        
+
+            const dados = {
+            cpf,
+            nome,
+            sobrenome, // Adicione um campo no formulário se quiser capturar isso
+            email,
+            telefone,
+            dataNascimento,
+            senha,
+            cep,
+            estado,
+            bairro,
+            cidade,
+            rua,
+            numero
+        };
+
+        fetch("http://localhost:3000/api/criarProprietario", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dados)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Resposta do servidor:", data);
+            alert("cadastrado com sucesso!");
+        })
+        .catch(error => {
+            console.error("Erro ao cadastrar", error);
+        });
+ 
+    this.submit();
     }
 });
