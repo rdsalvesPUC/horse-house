@@ -6,6 +6,7 @@ use horse_house;
 
 /* Lógico_1: */
 
+
 CREATE TABLE Proprietario
 (
     Cpf             VARCHAR(11) NOT NULL UNIQUE,
