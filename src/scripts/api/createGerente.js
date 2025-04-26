@@ -1,10 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../horseDB");
-const { extrairProprietarioID } = require("../utils/extrairProprietarioID");
+const { extrairUserID } = require("../utils/extrairUserID");
 const bcrypt = require("bcrypt");
-router.post("/:dominio", extrairProprietarioID, async (req, res) => {
+router.post("/:dominio", extrairUserID, async (req, res) => {
     const dominio = req.params.dominio;
+    const userType = req.user.user;
+    if (userType !== "proprietario") {
+        return res.status(403).json({ error: "Acesso negado. Somente proprietários podem cadastrar gerentes." });
+    }
+
     console.log("dominio", dominio);
     const { nome, sobrenome, senha, cpf, dataNascimento, telefone, email } = req.body;
     if (!nome || !sobrenome || !senha || !cpf || !dataNascimento || !email || !telefone) {
@@ -25,7 +30,7 @@ router.post("/:dominio", extrairProprietarioID, async (req, res) => {
 
         const haras = results[0];
 
-        if (haras.fk_Proprietario_ID !== req.proprietario.id) {
+        if (haras.fk_Proprietario_ID !== req.user.id) {
             return res.status(403).json({ error: "Você não tem permissão para cadastrar um gerente neste haras." });
         }
 
