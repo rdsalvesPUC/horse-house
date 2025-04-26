@@ -65,7 +65,7 @@ router.post("/", async (req, res) => {
                 user: usuarioAutenticado.tipo 
             },
             process.env.JWT_SECRET,
-            { expiresIn: "1h" }
+            { expiresIn: "15d" }
         );
 
         res.json({ 
