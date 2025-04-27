@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CRUD Perfil Master</title>
   <link rel="stylesheet" href="/styles/output.css" />
-  <script defer src="/scripts/cadastro_proprietario.js"></script>
 </head>
 <body class="bg-primary">
   <header class="w-full flex items-center p-2">
@@ -15,169 +14,114 @@
   <div class="max-w-4xl mx-auto bg-tertiary p-6 rounded-lg shadow-lg">
     <h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Crud Master</h2>
     <form id="form-cadastro" class="space-y-4">
-      
-      <div class="text-left">
-        <label for="nome" class="block font-medium">Nome:</label><span class="text-error"> *</span>
-        <input type="text" id="nome" name="nome" class="text-sm text-gray-700 w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-        <p id="nome-erro" class="text-error text-sm mt-1 hidden">O Nome é obrigatório.</p>
-      </div>
-      
-      <div class="text-left">
-        <label for="sobrenome" class="block font-medium">Sobrenome</label><span class="text-error"> *</span>
-        <input type="text" id="sobrenome" name="sobrenome" class="text-sm text-gray-700 w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-        <p id="sobrenome-erro" class="text-error text-sm mt-1 hidden">O Sobrenome é obrigatório.</p>
-      </div>
-      
-      <div class="mt-2">
-        <label for="tipo-acao" class="block font-medium">Ações Disponíveis:</label>
-        <select id="tipo-acao" name="tipo-acao" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-          <option value="">Selecione</option>
-          <option value="Create">Create</option>
-        </select>
-        <p id="tipo-acao-erro" class="text-error text-sm mt-1 hidden">Ação é obrigatória.</p>
-      </div>
 
-      <div id="tipo-usuario-container" class="hidden mt-2">
-        <label for="tipo-usuario" class="block font-medium">Tipo de Usuário:</label><span class="text-error"> *</span>
-        <select id="tipo-usuario" name="tipo-usuario" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-          <option value="">Selecione</option>
-          <option value="Gerente">Gerente</option>
-          <option value="Treinador">Treinador</option>
-          <option value="Vet">Veterinário</option>
-          <option value="Tratador">Tratador</option>
-        </select>
-        <p id="tipo-usuario-erro" class="text-error text-sm mt-1 hidden">Selecione um tipo de usuário.</p>
-      </div>
+      <div class="flex flex-col gap-8 p-10">
+        <!-- Campos Nome, Sobrenome, Email, etc. -->
+        <div class="flex flex-col gap-2">
+          <label for="nome" class="font-medium">Nome</label>
+          <input id="nome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu nome" />
+          <span id="erro-nome" class="text-xs text-red-500 hidden">Nome inválido</span>
+        </div>
 
-      <div id="id-haras" class="hidden mt-2">
-        <label for="select-haras" class="block font-medium">Selecione o Haras:</label><span class="text-error"> *</span>
-        <select id="select-haras" name="select-haras" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-          <option value="">Selecione</option>
-        </select>
-        <p id="select-haras-erro" class="text-error text-sm mt-1 hidden">Selecione um Haras.</p>
-      </div>
+        <div class="flex flex-col gap-2">
+          <label for="sobrenome" class="font-medium">Sobrenome</label>
+          <input id="sobrenome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu sobrenome" />
+          <span id="erro-sobrenome" class="text-xs text-red-500 hidden">Sobrenome inválido</span>
+        </div>
 
-      <!-- Campos específicos -->
-      <div id="campos-gerente" class="hidden mt-2 space-y-2">
-        <label class="block font-medium">Campos para Gerente:</label>
-        <input type="text" id="email" name="email" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="email-erro" class="text-error text-sm mt-1 hidden">O Email é obrigatório.</p>
-        <span id="email-invalido" class="text-error text-sm hidden">Insira um e-mail válido.</span>
-        
-        <input type="text" id="cpf" name="cpf" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="cpf-erro" class="text-error text-sm mt-1 hidden">O CPF é obrigatório.</p>
-        <span id="cpf-invalido" class="text-error text-sm hidden">CPF inválido! Digite um CPF válido.</span>
-        
-        <input type="text" id="telefone" name="telefone" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="telefone-erro" class="text-error text-sm mt-1 hidden">O Telefone é obrigatório.</p>
-        <span id="telefone-invalido" class="text-error text-sm hidden">Insira um telefone válido (Deve ter entre 10 e 11 dígitos e não pode conter letras).</span>
-        
-        <input type="date" id="data-nascimento" name="data-nascimento" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="data-nascimento-erro" class="text-error text-sm mt-1 hidden">A Data de Nascimento é obrigatória.</p>
-        <p id="data-nascimento-invalida" class="text-error text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
-        
-        <input type="text" id="senha" name="senha" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="senha-erro" class="text-error text-sm mt-1 hidden">A Senha é obrigatória.</p>
+        <div class="flex flex-col gap-2">
+          <label for="email" class="font-medium">E-mail</label>
+          <input id="email" type="email" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu e-mail" />
+          <span id="erro-email" class="text-xs text-red-500 hidden">E-mail inválido</span>
+        </div>
 
-      </div>
+        <div class="flex flex-col gap-2">
+          <label for="senha" class="font-medium">Senha</label>
+          <input id="senha" type="password" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite sua senha" />
+          <span id="erro-senha" class="text-xs text-red-500 hidden">Senha inválida</span>
+        </div>
 
-      <div id="campos-treinador" class="hidden mt-2 space-y-2">
-        <label class="block font-medium">Campos para Treinador:</label><span class="text-error"> *</span>
-        <input type="text" id="email" name="email" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="email-erro" class="text-error text-sm mt-1 hidden">O Email é obrigatório.</p>
-        <span id="email-invalido" class="text-error text-sm hidden">Insira um e-mail válido.</span>
-      
-        <input type="text" id="cpf-treinador" name="cpf-treinador" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="cpf-erro" class="text-error text-sm mt-1 hidden">O CPF é obrigatório.</p>
-        <span id="cpf-invalido" class="text-error text-sm hidden">CPF inválido! Digite um CPF válido.</span>
+        <div class="flex flex-col gap-2">
+          <label for="telefone" class="font-medium">Telefone</label>
+          <input id="telefone" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu telefone" />
+          <span id="erro-telefone" class="text-xs text-red-500 hidden">Telefone inválido</span>
+        </div>
 
-        <input type="text" id="telefone" name="telefone-treinador" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="telefone-erro" class="text-error text-sm mt-1 hidden">O Telefone é obrigatório.</p>
-        <span id="telefone-invalido" class="text-error text-sm hidden">Insira um telefone válido (Deve ter entre 10 e 11 dígitos e não pode conter letras).</span>
+        <div class="flex flex-col gap-2">
+          <label for="cpf" class="font-medium">CPF</label>
+          <input id="cpf" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu CPF" />
+          <span id="erro-cpf" class="text-xs text-red-500 hidden">CPF inválido</span>
+        </div>
 
-        <input type="date" id="data-nascimento" name="data-nascimento-treinador" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="data-nascimento-erro" class="text-error text-sm mt-1 hidden">A Data de Nascimento é obrigatória.</p>
-        <p id="data-nascimento-invalida" class="text-error text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
+        <div class="flex flex-col gap-2">
+          <label for="dataNascimento" class="font-medium">Data de Nascimento</label>
+          <input id="dataNascimento" type="date" class="rounded-md p-3 text-sm border border-secondary" />
+          <span id="erro-dataNascimento" class="text-xs text-red-500 hidden">Data de nascimento inválida</span>
+        </div>
 
-        <input type="text" id="senha" name="senha-treinador" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="senha-erro" class="text-error text-sm mt-1 hidden">A Senha é obrigatória.</p>
+        <div class="flex flex-col gap-2">
+          <label for="tipoUsuario" class="font-medium">Tipo de Usuário</label>
+          <select id="tipoUsuario" class="rounded-md p-3 text-sm border border-secondary">
+            <option value="">Selecione</option>
+            <option value="Gerente">Gerente</option>
+            <option value="Treinador">Treinador</option>
+            <option value="Tratador">Tratador</option>
+            <option value="Veterinario">Veterinário</option>
+          </select>
+          <span id="erro-tipoUsuario" class="text-xs text-red-500 hidden">Selecione um tipo de usuário</span>
+        </div>
+
+        <!-- NOVO CAMPO (já estava no GitHub, vamos usar corretamente agora) -->
+        <div id="container-haras" class="hidden flex flex-col gap-2">
+          <label for="select-haras" class="font-medium">Selecione o Haras</label>
+          <select id="select-haras" class="rounded-md p-3 text-sm border border-secondary">
+            <option value="">Selecione o Haras</option>
+          </select>
+          <span id="erro-haras" class="text-xs text-red-500 hidden">Selecione um Haras</span>
+        </div>
+
+        <!-- Campos CRMV só para Veterinário -->
+        <div id="campo-crmv" class="hidden flex flex-col gap-2">
+          <label for="crmv" class="font-medium">CRMV</label>
+          <input id="crmv" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite o CRMV" />
+          <span id="erro-crmv" class="text-xs text-red-500 hidden">CRMV inválido</span>
+        </div>
+
+        <button id="botao-cadastrar-user" class="bg-secondary text-white p-3 rounded-md hover:bg-primary transition-all">Cadastrar</button>
       </div>
 
-      <div id="campos-veterianario" class="hidden mt-2 space-y-2">
-        <label class="block font-medium">Campos para Veterinário:</label><span class="text-error"> *</span>
-        <input type="text" id="CRMV" name="CRMV" placeholder="CRMV" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-
-        <input type="text" id="email" name="email" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="email-erro" class="text-error text-sm mt-1 hidden">O Email é obrigatório.</p>
-        <span id="email-invalido" class="text-error text-sm hidden">Insira um e-mail válido.</span>
-      
-        <input type="text" id="cpf-treinador" name="cpf-treinador" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="cpf-erro" class="text-error text-sm mt-1 hidden">O CPF é obrigatório.</p>
-        <span id="cpf-invalido" class="text-error text-sm hidden">CPF inválido! Digite um CPF válido.</span>
-
-        <input type="text" id="telefone" name="telefone-treinador" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="telefone-erro" class="text-error text-sm mt-1 hidden">O Telefone é obrigatório.</p>
-        <span id="telefone-invalido" class="text-error text-sm hidden">Insira um telefone válido (Deve ter entre 10 e 11 dígitos e não pode conter letras).</span>
-
-        <input type="date" id="data-nascimento" name="data-nascimento-treinador" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="data-nascimento-erro" class="text-error text-sm mt-1 hidden">A Data de Nascimento é obrigatória.</p>
-        <p id="data-nascimento-invalida" class="text-error text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
-
-        <input type="text" id="senha" name="senha-treinador" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="senha-erro" class="text-error text-sm mt-1 hidden">A Senha é obrigatória.</p>
-      </div>
-
-      <div id="campos-tratador" class="hidden mt-2 space-y-2">
-        <label class="block font-medium">Campos para Tratador:</label><span class="text-error"> *</span>
-        <input type="text" id="email" name="email" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="email-erro" class="text-error text-sm mt-1 hidden">O Email é obrigatório.</p>
-        <span id="email-invalido" class="text-error text-sm hidden">Insira um e-mail válido.</span>
-      
-        <input type="text" id="cpf-treinador" name="cpf-treinador" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="cpf-erro" class="text-error text-sm mt-1 hidden">O CPF é obrigatório.</p>
-        <span id="cpf-invalido" class="text-error text-sm hidden">CPF inválido! Digite um CPF válido.</span>
-
-        <input type="text" id="telefone" name="telefone-treinador" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="telefone-erro" class="text-error text-sm mt-1 hidden">O Telefone é obrigatório.</p>
-        <span id="telefone-invalido" class="text-error text-sm hidden">Insira um telefone válido (Deve ter entre 10 e 11 dígitos e não pode conter letras).</span>
-
-        <input type="date" id="data-nascimento" name="data-nascimento-treinador" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="data-nascimento-erro" class="text-error text-sm mt-1 hidden">A Data de Nascimento é obrigatória.</p>
-        <p id="data-nascimento-invalida" class="text-error text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
-
-        <input type="text" id="senha" name="senha-treinador" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-        <p id="senha-erro" class="text-error text-sm mt-1 hidden">A Senha é obrigatória.</p>
-      </div>
-
-      <button id="botao-cadastrar" type="submit" class="w-full py-3 text-white bg-secondary rounded-md transition duration-300 ease-in-out hover:bg-primary mt-3">Cadastrar</button>
     </form>
   </div>
 
+  <!-- SCRIPT -->
   <script>
-    const tipoAcao = document.getElementById("tipo-acao");
-    const tipoUsuario = document.getElementById("tipo-usuario");
-    const tipoUsuarioContainer = document.getElementById("tipo-usuario-container");
+    const tipoUsuarioSelect = document.getElementById("tipoUsuario");
+    const containerHaras = document.getElementById("container-haras");
     const selectHaras = document.getElementById("select-haras");
-    const idHaras = document.getElementById("id-haras");
+    const campoCrmv = document.getElementById("campo-crmv");
+    const botaoCadastrar = document.getElementById("botao-cadastrar-user");
   
-    const campos = {
-      Gerente: document.getElementById("campos-gerente"),
-      Treinador: document.getElementById("campos-treinador"),
-      Vet: document.getElementById("campos-veterinario"),
-      Tratador: document.getElementById("campos-tratador"),
-    };
+    // Quando mudar o tipo de usuário
+    tipoUsuarioSelect.addEventListener("change", function () {
+      if (this.value === "Veterinario") {
+        campoCrmv.classList.remove("hidden");
+        containerHaras.classList.add("hidden"); // veterinário não precisa haras
+      } else if (this.value === "Gerente") {
+        campoCrmv.classList.add("hidden");
+        containerHaras.classList.remove("hidden");
+        carregarHaras(); // <-- busca haras da API
+      } else {
+        campoCrmv.classList.add("hidden");
+        containerHaras.classList.add("hidden");
+      }
+    });
   
-    function esconderTodosCampos() {
-      Object.values(campos).forEach((campo) => campo.classList.add("hidden"));
-    }
-  
-    // Função para buscar os haras do proprietário e popular o select
     async function carregarHaras() {
       try {
         const response = await fetch("http://localhost:3000/api/getAllHaras", {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${localStorage.getItem('token')}`, // token JWT
+            "Authorization": `Bearer ${localStorage.getItem('token')}`,
             "Content-Type": "application/json"
           }
         });
@@ -188,120 +132,85 @@
   
         const haras = await response.json();
   
-        // Limpa o select atual
-        selectHaras.innerHTML = '<option value="">Selecione</option>';
-  
-        // Popula o select com os haras recebidos
+        // Limpa e popula o select
+        selectHaras.innerHTML = '<option value="">Selecione o Haras</option>';
         haras.forEach(harasItem => {
           const option = document.createElement("option");
-          option.value = harasItem.id;
+          option.value = harasItem.id; // aqui precisa ser o id do haras
           option.textContent = harasItem.Nome;
           selectHaras.appendChild(option);
         });
       } catch (error) {
-        console.error("Erro ao carregar haras:", error);
+        console.error("Erro ao carregar haras:", error.message);
       }
     }
   
-    tipoAcao.addEventListener("change", function () {
-      if (this.value === "Create") {
-        tipoUsuarioContainer.classList.remove("hidden");
-        idHaras.classList.remove("hidden");
-        carregarHaras(); // <-- aqui chamamos a função
-      } else {
-        tipoUsuarioContainer.classList.add("hidden");
-        tipoUsuario.value = "";
-        esconderTodosCampos();
-      }
-    });
-  
-    tipoUsuario.addEventListener("change", function () {
-      esconderTodosCampos();
-      const tipoSelecionado = this.value;
-      if (campos[tipoSelecionado]) {
-        campos[tipoSelecionado].classList.remove("hidden");
-      }
-    });
-  
-    document.getElementById("botao-cadastrar").addEventListener("click", function (event) {
+    botaoCadastrar.addEventListener("click", async function (event) {
       event.preventDefault();
   
-      const nome = document.getElementById("nome").value;
-      const sobrenome = document.getElementById("sobrenome").value;
-      const tipoUsuarioSelecionado = document.getElementById("tipo-usuario").value;
+      const nome = document.getElementById("nome").value.trim();
+      const sobrenome = document.getElementById("sobrenome").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const senha = document.getElementById("senha").value.trim();
+      const telefone = document.getElementById("telefone").value.trim();
+      const cpf = document.getElementById("cpf").value.trim()
+                .replace(/\D/g, "");          // ← remove tudo que não é dígito
+      const dataNascimento = document.getElementById("dataNascimento").value.trim();
+      const tipoUsuario = document.getElementById("tipoUsuario").value;
+      const crmv = document.getElementById("crmv")?.value.trim();
+      const harasId = document.getElementById("select-haras")?.value;
   
-      if (tipoUsuarioSelecionado === "Gerente") {
-        const email = document.querySelector('#campos-gerente input[placeholder="Email"]').value;
-        const cpf = document.querySelector('#campos-gerente input[placeholder="CPF"]').value;
-        const telefone = document.querySelector('#campos-gerente input[placeholder="Telefone"]').value;
-        const dataNascimento = document.querySelector('#campos-gerente input[placeholder="Data de Nascimento"]').value;
-        const senha = document.querySelector('#campos-gerente input[placeholder="Senha"]').value;
-        const idHarasSelecionado = document.getElementById("select-haras").value;
-  
-        const dados = {
-          nome,
-          sobrenome,
-          email,
-          cpf,
-          telefone,
-          dataNascimento,
-          senha,
-          haras_id: idHarasSelecionado
-        };
-  
-        fetch("http://localhost:3000/api/criarGerente", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify(dados)
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log("Resposta do servidor:", data);
-          alert("Gerente cadastrado com sucesso!");
-        })
-        .catch(error => {
-          console.error("Erro ao cadastrar gerente:", error);
-        });
+      if (!nome || !sobrenome || !email || !senha || !telefone || !cpf || !dataNascimento || !tipoUsuario) {
+        alert("Preencha todos os campos obrigatórios.");
+        return;
       }
   
-      if (tipoUsuarioSelecionado === "Treinador") {
-        const email = document.querySelector('#campos-treinador input[placeholder="Email"]').value;
-        const cpf = document.querySelector('#campos-treinador input[placeholder="CPF"]').value;
-        const telefone = document.querySelector('#campos-treinador input[placeholder="Telefone"]').value;
-        const dataNascimento = document.querySelector('#campos-treinador input[placeholder="Data de Nascimento"]').value;
-        const senha = document.querySelector('#campos-treinador input[placeholder="Senha"]').value;
+      let endpoint = "";
+      let dados = { nome, sobrenome, email, senha, telefone, cpf, dataNascimento };
   
-        const dados = {
-          nome,
-          sobrenome,
-          email,
-          cpf,
-          telefone,
-          dataNascimento,
-          senha
-        };
+      if (tipoUsuario === "Gerente") {
+        endpoint = "criarGerente";
+        if (!harasId) {
+          alert("Selecione o Haras para o Gerente!");
+          return;
+        }
+        dados.haras_id = harasId;
+      } else if (tipoUsuario === "Treinador") {
+        endpoint = "criarTreinador";
+      } else if (tipoUsuario === "Tratador") {
+        endpoint = "criarTratador";
+      } else if (tipoUsuario === "Veterinario") {
+        endpoint = "criarVeterinario";
+        if (!crmv) {
+          alert("Preencha o CRMV para o veterinário.");
+          return;
+        }
+        dados.crmv = crmv;
+      }
   
-        fetch("http://localhost:3000/api/criarTreinador", {
+      try {
+        const response = await fetch(`http://localhost:3000/api/${endpoint}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${localStorage.getItem('token')}`
           },
           body: JSON.stringify(dados)
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log("Resposta do servidor:", data);
-          alert("Treinador cadastrado com sucesso!");
-        })
-        .catch(error => {
-          console.error("Erro ao cadastrar treinador:", error);
         });
+  
+        const result = await response.json();
+  
+        if (!response.ok) {
+          throw new Error(result.error || "Erro ao cadastrar.");
+        }
+  
+        alert(`${tipoUsuario} cadastrado com sucesso!`);
+        window.location.reload();
+      } catch (error) {
+        console.error("Erro:", error.message);
+        alert("Erro ao cadastrar: " + error.message);
       }
     });
-  </script>  
+  </script>
 </body>
 </html>
