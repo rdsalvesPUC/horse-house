@@ -1,157 +1,180 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>CRUD Perfil Master</title>
-		<link rel="stylesheet" href="/styles/output.css" />
-	</head>
-	<body class="bg-primary">
-		<header class="w-full flex items-center p-2">
-			<img src="/assets/images/logo-h-whitebg.svg">
-		</header>
-		<div class="max-w-4xl mx-auto bg-tertiary p-6 rounded-lg shadow-lg">
-			<h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Crud Master</h2>
-			<form id="userForm" class="space-y-4">
-				<div>
-					<label class="block font-medium">Nome:</label>
-					<input type="text" id="nome" class="text-sm text-gray-700 w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-				</div>
-				<div>
-					<label class="block font-medium">Sobrenome</label>
-					<input type="text" id="Sobrenome" class="text-sm text-gray-700 w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-				</div>
-				<div class="mt-2">
-					<label class="block font-medium">Ações Disponíveis:</label>
-					<select id="tipoAcao" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-						<option value="">Selecione</option>
-						<option value="Create">Create</option>
-					</select>
-				</div>
-				<!-- Select de Tipo de Usuário (só aparece se for Create) -->
-				<div id="tipoUsuarioContainer" class="hidden mt-2">
-					<label class="block font-medium">Tipo de Usuário:</label>
-					<select id="tipoUsuario" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-						<option value="">Selecione</option>
-						<option value="Gerente">Gerente</option>
-						<option value="Treinador">Treinador</option>
-						<option value="Vet">Veterinário</option>
-						<option value="Tratador">Tratador</option>
-					</select>
-				</div>
-				<!-- Campos Específicos -->
-				<div id="camposGerente" class="hidden mt-2 space-y-2">
-					<label class="block font-medium">Campos para Gerente:</label>
-					<input type="text" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-				</div>
-				<div id="camposTreinador" class="hidden mt-2 space-y-2">
-					<label class="block font-medium">Campos para Treinador:</label>
-					<input type="text" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-				</div>
-				<div id="camposVet" class="hidden mt-2 space-y-2">
-					<label class="block font-medium">Campos para Veterinário:</label>
-					<input type="text" placeholder="CRMV" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-				</div>
-				<div id="camposTratador" class="hidden mt-2 space-y-2">
-					<label class="block font-medium">Campos para Tratador:</label>
-					<input type="text" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-					<input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
-				</div>
-				<button id="botao-cadastrar" type="submit" class="w-full md:col-span-2 py-3 text-white bg-secondary rounded-md transition duration-300 ease-in-out hover:bg-primary mt-3 mb-4">Cadastrar</button>
-			</form>
-		</div>
-	</body>
-	<script>
-		const tipoAcao = document.getElementById("tipoAcao");
-		const tipoUsuario = document.getElementById("tipoUsuario");
-		const tipoUsuarioContainer = document.getElementById("tipoUsuarioContainer");
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRUD Perfil Master</title>
+  <link rel="stylesheet" href="/styles/output.css" />
+</head>
+<body class="bg-primary">
+  <header class="w-full flex items-center p-2">
+    <img src="/assets/images/logo-h-whitebg.svg">
+  </header>
 
-		const campos = {
-			Gerente: document.getElementById("camposGerente"),
-			Treinador: document.getElementById("camposTreinador"),
-			Vet: document.getElementById("camposVet"),
-			Tratador: document.getElementById("camposTratador"),
-		};
+  <div class="max-w-4xl mx-auto bg-tertiary p-6 rounded-lg shadow-lg">
+    <h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Crud Master</h2>
+    <form id="userForm" class="space-y-4">
+      
+      <div>
+        <label class="block font-medium">Nome:</label>
+        <input type="text" id="nome" class="text-sm text-gray-700 w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+      </div>
+      
+      <div>
+        <label class="block font-medium">Sobrenome</label>
+        <input type="text" id="Sobrenome" class="text-sm text-gray-700 w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+      </div>
+      
+      <div class="mt-2">
+        <label class="block font-medium">Ações Disponíveis:</label>
+        <select id="tipoAcao" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+          <option value="">Selecione</option>
+          <option value="Create">Create</option>
+        </select>
+      </div>
 
-		function esconderTodosCampos() {
-			Object.values(campos).forEach((campo) => campo.classList.add("hidden"));
-		}
+      <div id="tipoUsuarioContainer" class="hidden mt-2">
+        <label class="block font-medium">Tipo de Usuário:</label>
+        <select id="tipoUsuario" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
+          <option value="">Selecione</option>
+          <option value="Gerente">Gerente</option>
+          <option value="Treinador">Treinador</option>
+          <option value="Vet">Veterinário</option>
+          <option value="Tratador">Tratador</option>
+        </select>
+      </div>
 
-		tipoAcao.addEventListener("change", function () {
-			if (this.value === "Create") {
-				tipoUsuarioContainer.classList.remove("hidden");
-			} else {
-				tipoUsuarioContainer.classList.add("hidden");
-				tipoUsuario.value = "";
-				esconderTodosCampos();
-			}
-		});
+      <div id="idHaras" class="hidden mt-2">
+        <label class="block font-medium">Selecione o Haras:</label>
+        <select id="selectHaras" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
 
-		tipoUsuario.addEventListener("change", function () {
-			esconderTodosCampos();
-			const tipoSelecionado = this.value;
-			if (campos[tipoSelecionado]) {
-				campos[tipoSelecionado].classList.remove("hidden");
-			}
-		});
-		document.getElementById("botao-cadastrar").addEventListener("click", function (event) {
-			event.preventDefault(); // Impede que a página recarregue ao enviar o formulário.
+		</select>
+      </div>
 
-			// Captura os valores do formulário.
-			const nome = document.getElementById("nome").value;
-			const email = document.getElementById("Sobrenome").value;
-			const tipoUsuario = document.getElementById("tipoUsuario").value;
+      <!-- Campos específicos -->
+      <div id="camposGerente" class="hidden mt-2 space-y-2">
+        <label class="block font-medium">Campos para Gerente:</label>
+        <input type="text" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+      </div>
 
-			// Verifica qual conjunto de campos dinâmicos está visível e captura seus valores.
-			if (tipoUsuario === "Gerente") {
-				const email = document.querySelector('#camposGerente input[placeholder="Email"]').value;
-				const cpf = document.querySelector('#camposGerente input[placeholder="CPF"]').value;
-				const telefone = document.querySelector('#camposGerente input[placeholder="Telefone"]').value;
-				const dataNascimento = document.querySelector('#camposGerente input[placeholder="Data de Nascimento"]').value;
-				const senha = document.querySelector('#camposGerente input[placeholder="Senha"]').value;
+      <div id="camposTreinador" class="hidden mt-2 space-y-2">
+        <label class="block font-medium">Campos para Treinador:</label>
+        <input type="text" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+      </div>
 
-				const dados = {
-				nome,
-				sobrenome: "", // Adicione um campo no formulário se quiser capturar isso
-				email,
-				cpf,
-				telefone,
-				dataNascimento,
-				senha
-			};
+      <div id="camposVet" class="hidden mt-2 space-y-2">
+        <label class="block font-medium">Campos para Veterinário:</label>
+        <input type="text" placeholder="CRMV" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+      </div>
 
-			fetch("http://localhost:3000/api/criarGerente", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify(dados)
-			})
-			.then(response => response.json())
-			.then(data => {
-				console.log("Resposta do servidor:", data);
-				alert("Gerente cadastrado com sucesso!");
-			})
-			.catch(error => {
-				console.error("Erro ao cadastrar gerente:", error);
-			});
-			}
-		});
-	</script>
+      <div id="camposTratador" class="hidden mt-2 space-y-2">
+        <label class="block font-medium">Campos para Tratador:</label>
+        <input type="text" placeholder="Email" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="CPF" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Telefone" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Data de Nascimento" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+        <input type="text" placeholder="Senha" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none mb-4" />
+      </div>
+
+      <button id="botao-cadastrar" type="button" class="w-full md:col-span-2 py-3 text-white bg-secondary rounded-md transition duration-300 ease-in-out hover:bg-primary mt-3 mb-4">
+        Cadastrar
+      </button>
+
+    </form>
+  </div>
+
+  <script>
+    const tipoAcao = document.getElementById("tipoAcao");
+    const tipoUsuario = document.getElementById("tipoUsuario");
+    const tipoUsuarioContainer = document.getElementById("tipoUsuarioContainer");
+    const selectHaras = document.getElementById("selectHaras");
+    const idHaras = document.getElementById("idHaras");
+
+    const campos = {
+      Gerente: document.getElementById("camposGerente"),
+      Treinador: document.getElementById("camposTreinador"),
+      Vet: document.getElementById("camposVet"),
+      Tratador: document.getElementById("camposTratador"),
+    };
+
+    function esconderTodosCampos() {
+      Object.values(campos).forEach((campo) => campo.classList.add("hidden"));
+    }
+
+    tipoAcao.addEventListener("change", function () {
+      if (this.value === "Create") {
+        tipoUsuarioContainer.classList.remove("hidden");
+        idHaras.classList.remove("hidden");
+      } else {
+        tipoUsuarioContainer.classList.add("hidden");
+        tipoUsuario.value = "";
+        esconderTodosCampos();
+      }
+    });
+
+    tipoUsuario.addEventListener("change", function () {
+      esconderTodosCampos();
+      const tipoSelecionado = this.value;
+      if (campos[tipoSelecionado]) {
+        campos[tipoSelecionado].classList.remove("hidden");
+      }
+    });
+
+    document.getElementById("botao-cadastrar").addEventListener("click", function (event) {
+      event.preventDefault();
+
+      const nome = document.getElementById("nome").value;
+      const sobrenome = document.getElementById("Sobrenome").value;
+      const tipoUsuarioSelecionado = document.getElementById("tipoUsuario").value;
+
+      if (tipoUsuarioSelecionado === "Gerente") {
+        const email = document.querySelector('#camposGerente input[placeholder="Email"]').value;
+        const cpf = document.querySelector('#camposGerente input[placeholder="CPF"]').value;
+        const telefone = document.querySelector('#camposGerente input[placeholder="Telefone"]').value;
+        const dataNascimento = document.querySelector('#camposGerente input[placeholder="Data de Nascimento"]').value;
+        const senha = document.querySelector('#camposGerente input[placeholder="Senha"]').value;
+
+        const dados = {
+          nome,
+          sobrenome,
+          email,
+          cpf,
+          telefone,
+          dataNascimento,
+          senha
+        };
+
+        fetch("http://localhost:3000/api/criarGerente", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dados)
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log("Resposta do servidor:", data);
+          alert("Gerente cadastrado com sucesso!");
+        })
+        .catch(error => {
+          console.error("Erro ao cadastrar gerente:", error);
+        });
+      }
+    });
+  </script>
+
+</body>
 </html>
