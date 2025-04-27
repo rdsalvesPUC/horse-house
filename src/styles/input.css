@@ -146,7 +146,6 @@
     }
 }
 
-
 @theme {
     --color-primary: #222C2D;
     --color-secondary: #BD9E72;
@@ -159,6 +158,22 @@
 }
 
 @layer components {
+    .link-nav {
+        @apply font-heebo font-bold text-sm hover:text-tertiary transition-colors;
+    }
+
+    .link-drawer {
+        @apply hover:text-tertiary transition-colors;
+    }
+
+    .btn-primary {
+        @apply bg-secondary text-white px-5 py-2.5 font-bold hover:bg-tertiary hover:text-secondary transition-colors;
+    }
+
+    .btn-secondary {
+        @apply border border-secondary text-secondary px-5 py-2.5 font-bold hover:bg-secondary hover:text-white transition-colors;
+    }
+
     .img-menu-home-site {
         width: 24px;
         height: 24px;

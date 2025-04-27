@@ -3,9 +3,11 @@ const router = express.Router();
 const connection = require("../horseDB");
 const { extrairUserID } = require("../utils/extrairUserID");
 const bcrypt = require("bcrypt");
+
 router.post("/:dominio", extrairUserID, async (req, res) => {
     const dominio = req.params.dominio;
     const userType = req.user.user;
+    
     if (userType !== "proprietario") {
         return res.status(403).json({ error: "Acesso negado. Somente proprietários podem cadastrar gerentes." });
     }
