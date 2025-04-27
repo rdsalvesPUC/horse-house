@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerentes • CRUD</title>
+
+  <!-- Tailwind compilado do projeto -->
+  <link rel="stylesheet" href="/styles/output.css" />
+</head>
+<body class="bg-primary text-gray-800">
+
+  <!-- Barra superior -->
+  <header class="w-full flex items-center p-2 bg-primary">
+    <img src="/assets/images/logo-h-whitebg.svg" alt="Logo" class="h-10" />
+    <h1 class="ml-4 text-2xl font-semibold text-white">Gerentes – CRUD</h1>
+  </header>
+
+  <!-- Conteúdo principal -->
+  <main class="max-w-6xl mx-auto bg-tertiary mt-6 p-8 rounded-lg shadow-lg">
+
+    <!-- Cabeçalho da página -->
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-3xl font-bold">Lista de Gerentes</h2>
+
+      <!-- Botão opcional para criar novo gerente (pode redirecionar para a página de cadastro) -->
+      <a href="/public/pages/create-users/index.html"
+         class="bg-secondary text-white px-5 py-2 rounded-md transition hover:bg-primary">
+        Add Novo Gerente
+      </a>
+    </div>
+
+    <!-- Tabela de gerentes -->
+    <div class="overflow-x-auto">
+      <table id="tabela-gerentes" class="min-w-full border-collapse border border-gray-300 text-sm">
+        <thead class="bg-gray-200 text-left">
+          <tr>
+            <th class="border p-3">Nome</th>
+            <th class="border p-3">Sobrenome</th>
+            <th class="border p-3">CPF</th>
+            <th class="border p-3">Data de Nascimento</th>
+            <th class="border p-3">Telefone</th>
+            <th class="border p-3">E-mail</th>
+            <th class="border p-3">Haras</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Linhas serão injetadas via JavaScript (fetch à API) -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Modal (oculto) para edição -->
+  <div id="modal-editar"
+       class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
+
+      <h3 class="text-xl font-semibold mb-4">Editar Gerente</h3>
+
+      <!-- Formulário de edição -->
+      <form id="form-editar" class="space-y-4">
+        <input type="hidden" id="editar-id" />
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium">Nome</label>
+            <input id="editar-nome" type="text"
+                   class="w-full p-3 border rounded-md outline-none focus:ring-2 focus:ring-secondary" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium">Sobrenome</label>
+            <input id="editar-sobrenome" type="text"
+                   class="w-full p-3 border rounded-md outline-none focus:ring-2 focus:ring-secondary" />
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium">CPF</label>
+            <input id="editar-cpf" type="text"
+                   class="w-full p-3 border rounded-md outline-none focus:ring-2 focus:ring-secondary" />
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium">Data de Nascimento</label>
+            <input id="editar-data-nascimento" type="text"
+                   class="w-full p-3 border rounded-md outline-none focus:ring-2 focus:ring-secondary" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Telefone</label>
+            <input id="editar-telefone" type="text"
+                   class="w-full p-3 border rounded-md outline-none focus:ring-2 focus:ring-secondary" />
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium">E-mail</label>
+            <input id="editar-email" type="email"
+                   class="w-full p-3 border rounded-md outline-none focus:ring-2 focus:ring-secondary" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium">Haras</label>
+            <select id="editar-haras"
+                    class="w-full p-3 border rounded-md outline-none focus:ring-2 focus:ring-secondary">
+              <!-- opções carregadas via JS -->
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" id="cancelar-edicao"
+                  class="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400">
+            Cancelar
+          </button>
+          <button type="submit"
+                  class="px-4 py-2 rounded-md bg-secondary text-white hover:bg-primary">
+            Salvar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts de CRUD serão adicionados na próxima etapa -->
+  <script src="/scripts/gerentes-crud.js"></script>
+</body>
+</html>
