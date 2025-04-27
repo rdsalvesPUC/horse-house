@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "build:css": "npx @tailwindcss/cli -i ./src/styles/input.css -o ./public/styles/output.css --watch",
-    "serve":      "nodemon server.js",
-    "start":      "concurrently \"npm run build:css\" \"npm run serve\" \"npm run livereload\""
+    "serve": "nodemon server.js",
+    "start": "concurrently \"npm run build:css\" \"npm run serve\" \"npm run livereload\""
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +17,8 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.13.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "tailwindcss": "^4.1.3"
   },
   "devDependencies": {
