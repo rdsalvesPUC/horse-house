@@ -153,7 +153,7 @@
 
 @layer components {
     .link-nav {
-        @apply font-heebo font-bold text-sm hover:text-tertiary transition-colors;
+        @apply font-heebo font-bold text-base hover:text-tertiary transition-colors;
     }
 
     .link-drawer {
