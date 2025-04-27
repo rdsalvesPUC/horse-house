@@ -114,16 +114,49 @@
       Object.values(campos).forEach((campo) => campo.classList.add("hidden"));
     }
 
-    tipoAcao.addEventListener("change", function () {
-      if (this.value === "Create") {
-        tipoUsuarioContainer.classList.remove("hidden");
-        idHaras.classList.remove("hidden");
-      } else {
-        tipoUsuarioContainer.classList.add("hidden");
-        tipoUsuario.value = "";
-        esconderTodosCampos();
-      }
-    });
+// Função para buscar os haras do proprietário e popular o select
+    async function carregarHaras() {
+        try {
+            const response = await fetch("http://localhost:3000/api/getAllHaras", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`, // token JWT
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao buscar haras");
+            }
+
+            const haras = await response.json();
+
+            // Limpa o select atual
+            selectHaras.innerHTML = '<option value="">Selecione</option>';
+
+            // Popula o select com os haras recebidos
+            haras.forEach(harasItem => {
+                const option = document.createElement("option");
+                option.value = harasItem.id;
+                option.textContent = harasItem.Nome;
+                selectHaras.appendChild(option);
+            });
+        } catch (error) {
+            console.error("Erro ao carregar haras:", error);
+        }
+    }
+
+      tipoAcao.addEventListener("change", function () {
+          if (this.value === "Create") {
+              tipoUsuarioContainer.classList.remove("hidden");
+              idHaras.classList.remove("hidden");
+              carregarHaras(); // <-- aqui chamamos a função
+          } else {
+              tipoUsuarioContainer.classList.add("hidden");
+              tipoUsuario.value = "";
+              esconderTodosCampos();
+          }
+      });
 
     tipoUsuario.addEventListener("change", function () {
       esconderTodosCampos();
