@@ -1,60 +1,45 @@
 <header class="bg-primary text-white">
-	<div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-		<!-- LOGO -->
-		<a href="/" class="flex items-center gap-2">
-			<img src="/assets/images/logo-h-whitebg.svg" alt="Horse House logo" class="h-10 w-10" />
-		</a>
+	<div class="max-w-[1440px] mx-auto flex justify-between gap-10 items-center text-base whitespace-nowrap px-1 py-8 lg:px-16 xl:px-8">
+		<img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9c527533c498196dcb1cc98de5b03210dc2282f9?placeholderIfAbsent=true" class="aspect-[4.59] object-contain w-[250px] md:w-[350px] lg:w-[390px] self-stretch my-auto" alt="Horse House Logo" />
 
-		<!-- NAV DESKTOP/TABLET (>= md) -->
-		<nav class="hidden md:flex items-center gap-10">
-			<a href="/home/" class="link-nav">HOME</a>
-			<a href="/sobre/" class="link-nav">SOBRE</a>
-			<a href="/precos/" class="link-nav">PREÇOS</a>
-			<a href="/servicos/" class="link-nav">SERVIÇOS</a>
-			<a href="/blog/" class="link-nav">BLOG</a>
-			<a href="/contato/" class="link-nav">CONTATO</a>
+		<!-- <button class="text-white">
+		  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+			<line x1="4" x2="20" y1="12" y2="12"></line>
+			<line x1="4" x2="20" y1="6" y2="6"></line>
+			<line x1="4" x2="20" y1="18" y2="18"></line>
+		  </svg>
+		</button> -->
 
-			<a href="/login/" class="btn-secondary">LOGIN</a>
-			<a href="/register/" class="btn-primary">CADASTRAR</a>
+		<nav class="flex text-white flex-wrap my-auto max-md:max-w-full">
+			<ul class="flex list-none m-0 p-0 justify-between gap-8 font-heebo text-base font-bold">
+				<li>
+					<a href="/" class="hover:text-secondary transition-colors">HOME</a>
+				</li>
+				<li>
+					<a href="/sobre" class="hover:text-secondary transition-colors">SOBRE</a>
+				</li>
+				<li>
+					<a href="/precos" class="hover:text-secondary transition-colors">PREÇOS</a>
+				</li>
+				<li>
+					<a href="/servicos" class="hover:text-secondary transition-colors">SERVIÇOS</a>
+				</li>
+				<li>
+					<a href="/blog" class="hover:text-secondary transition-colors">BLOG</a>
+				</li>
+				<li>
+					<a href="/contato" class="hover:text-secondary transition-colors">CONTATO</a>
+				</li>
+			</ul>
 		</nav>
 
-		<!-- HAMBURGER (mobile) -->
-		<button id="burgerBtn" class="md:hidden inline-flex h-10 w-10 items-center justify-center rounded bg-secondary/80 hover:bg-secondary transition-colors">
-			<!-- ícone hambúrguer -->
-			<svg class="h-5 w-5 fill-white" viewBox="0 0 24 24">
-				<path d="M4 6h16M4 12h16M4 18h16" />
-			</svg>
-		</button>
-	</div>
-
-	<!-- DRAWER -->
-	<div id="drawer" <!-- wrapper -->
-		class="fixed inset-0 z-50 hidden">
-		<!-- clique fora do painel fecha -->
-		<div id="backdrop" class="absolute inset-0 bg-black/60 opacity-0 transition-opacity"></div>
-
-		<!-- painel -->
-		<aside id="panel" class="absolute top-0 left-0 h-full w-64 -translate-x-full bg-primary p-6 flex flex-col gap-8 transition-transform">
-			<!-- header do drawer -->
-			<div class="flex items-center justify-between">
-				<span class="font-heebo text-lg font-semibold">Menu</span>
-				<button id="closeBtn" class="h-8 w-8 rounded bg-tertiary text-secondary font-bold">×</button>
-			</div>
-
-			<nav class="flex flex-col gap-4 text-base font-bold">
-				<a href="/home/" class="link-drawer">HOME</a>
-				<a href="/sobre/" class="link-drawer">SOBRE</a>
-				<a href="/precos/" class="link-drawer">PREÇOS</a>
-				<a href="/servicos/" class="link-drawer">SERVIÇOS</a>
-				<a href="/blog/" class="link-drawer">BLOG</a>
-				<a href="/contato/" class="link-drawer">CONTATO</a>
-			</nav>
-
-			<div class="mt-auto flex flex-col gap-4">
-				<a href="/login/" class="btn-secondary w-full text-center">LOGIN</a>
-				<a href="/register/" class="btn-primary w-full text-center">CADASTRAR</a>
-			</div>
-		</aside>
+		<div class="flex items-center gap-4">
+			<button class="flex items-center gap-2.5 text-secondary justify-center py-2.5 hover:opacity-80 transition-opacity font-heebo text-base font-bold">
+				<span>LOGAR</span>
+				<img src="https://cdn.builder.io/api/v1/image/assets/TEMP/950a8c4d65f8f422828d353479f336c3912d9335?placeholderIfAbsent=true" class="aspect-[1] object-contain w-5 stroke-[2px] stroke-secondary" alt="Login icon" />
+			</button>
+			<button class="bg-secondary text-white px-5 py-2.5 hover:bg-secondary/80 transition-colors font-heebo text-base font-bold">CADASTRAR</button>
+		</div>
 	</div>
 </header>
 <script src="/scripts/mobile-menu.js"></script>
