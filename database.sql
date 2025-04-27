@@ -17,7 +17,7 @@ CREATE TABLE Proprietario
     Email           VARCHAR(50) NOT NULL,
     Rua             VARCHAR(50) NOT NULL,
     Numero          INT,
-    Senha           VARCHAR(255) NOT NULL,
+    Senha           VARCHAR(256) NOT NULL,
     Complemento     VARCHAR(20),
     ID              INT PRIMARY KEY AUTO_INCREMENT,
     Bairro          VARCHAR(50) NOT NULL,
@@ -46,14 +46,14 @@ CREATE TABLE Treinador
     CPF             VARCHAR(11) NOT NULL UNIQUE,
     Telefone        VARCHAR(11),
     Email           VARCHAR(50) NOT NULL,
-    Senha           VARCHAR(255) NOT NULL,
+    Senha           VARCHAR(256) NOT NULL,
     Data_Nascimento DATE,
     fk_Haras_ID     INT
 );
 
 CREATE TABLE Veterinario
 (
-    Senha           VARCHAR(255) NOT NULL,
+    Senha           VARCHAR(256) NOT NULL,
     Nome            VARCHAR(20) NOT NULL,
     ID              INT PRIMARY KEY AUTO_INCREMENT,
     Email           VARCHAR(50) NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE Tratador
     Data_Nascimento DATE NOT NULL,
     Telefone        VARCHAR(11),
     Email           VARCHAR(50) NOT NULL,
-    Senha           VARCHAR(255) NOT NULL,
+    Senha           VARCHAR(256) NOT NULL,
     fk_Haras_ID     INT
 );
 
@@ -124,7 +124,7 @@ CREATE TABLE Pais
 
 CREATE TABLE Gerente
 (
-    Senha           VARCHAR(255) NOT NULL,
+    Senha           VARCHAR(256) NOT NULL,
     ID              INT PRIMARY KEY AUTO_INCREMENT,
     Nome            VARCHAR(20) NOT NULL,
     Sobrenome       VARCHAR(50) NOT NULL,

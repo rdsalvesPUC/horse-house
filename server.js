@@ -16,9 +16,9 @@ app.use(
 );
 
 // 2) expõe assets estáticos (CSS, JS, imagens…)  
-app.use("/styles", express.static(path.join(__dirname, "public", "styles")));
+app.use("/styles",  express.static(path.join(__dirname, "public", "styles")));
 app.use("/scripts", express.static(path.join(__dirname, "public", "scripts")));
-app.use("/assets", express.static(path.join(__dirname, "public", "assets")));
+app.use("/assets",  express.static(path.join(__dirname, "public", "assets")));
 
 // 3) agora expõe as páginas “limpas” em /*  
 //    cada pasta pages/slug/index.html vira URL /slug/   
