@@ -12,6 +12,7 @@ const getCepAPI = require("./api/getCep");
 const getUsuarioLogadoAPI = require("./api/getUsuarioLogado");
 const deleteFuncionarioAPI = require("./api/deleteFuncionario");
 const getAllHarasAPI = require("./api/GetAllHaras");
+const loginExpiradoAPI = require("./api/loginExpirado");
 
 router.use("/api/criarProprietario", createProprietarioAPI);
 router.use("/api/login", loginAPI);
@@ -22,5 +23,6 @@ router.use("/api/getCep", getCepAPI);
 router.use("/api/getUsuarioLogado", getUsuarioLogadoAPI);
 router.use("/api/deletarFuncionario", deleteFuncionarioAPI);
 router.use("/api/getAllHaras", getAllHarasAPI);
+router.use("/api/loginExpirado", loginExpiradoAPI);
 
 module.exports = router;
