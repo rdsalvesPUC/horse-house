@@ -1,8 +1,11 @@
+import { initDrawer } from "/scripts/mobile-menu.js";
+
 document.addEventListener('DOMContentLoaded', () => {    
     fetch("/components/header.html")
         .then((response) => response.text())
         .then((data) => {
             document.getElementById("header-container").innerHTML = data;
+            initDrawer();
         });
     
     fetch("/components/hero.html")
