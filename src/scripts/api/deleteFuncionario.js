@@ -3,6 +3,95 @@ const router = express.Router();
 const connection = require("../horseDB");
 const {extrairUserID} = require("../utils/extrairUserID");
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     DeleteFuncionarioResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: Mensagem de sucesso
+ *       example:
+ *         message: Funcionário excluído com sucesso!
+ */
+
+/**
+ * @swagger
+ * /api/deletarFuncionario/{tipo}/{id}:
+ *   delete:
+ *     summary: Exclui um funcionário
+ *     tags: [Funcionários]
+ *     description: Exclui um funcionário (gerente, treinador, veterinário ou tratador) do sistema
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: tipo
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [gerente, treinador, veterinario, tratador]
+ *         description: Tipo de funcionário
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID do funcionário
+ *     responses:
+ *       200:
+ *         description: Funcionário excluído com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DeleteFuncionarioResponse'
+ *       400:
+ *         description: Tipo de funcionário inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: Tipo de funcionário inválido.
+ *       403:
+ *         description: Acesso negado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: Acesso negado. Somente proprietários podem excluir funcionários.
+ *       404:
+ *         description: Funcionário não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: Funcionário não encontrado.
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: Erro ao excluir funcionário.
+ */
 router.delete("/:tipo/:id", extrairUserID, async (req, res) => {
     const {tipo, id} = req.params;
     const userType = req.user.user;
