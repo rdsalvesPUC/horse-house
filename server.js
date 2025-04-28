@@ -5,6 +5,7 @@ const express           = require("express");
 const path              = require("path");
 const app               = express();
 const port              = process.env.PORT || 3000;
+const { setupSwagger }  = require("./src/scripts/swagger");
 
 app.use(express.json());
 app.use(connectLivereload());
@@ -16,9 +17,9 @@ app.use(
 );
 
 // 2) expõe assets estáticos (CSS, JS, imagens…)  
-app.use("/styles", express.static(path.join(__dirname, "public", "styles")));
+app.use("/styles",  express.static(path.join(__dirname, "public", "styles")));
 app.use("/scripts", express.static(path.join(__dirname, "public", "scripts")));
-app.use("/assets", express.static(path.join(__dirname, "public", "assets")));
+app.use("/assets",  express.static(path.join(__dirname, "public", "assets")));
 
 // 3) agora expõe as páginas “limpas” em /*  
 //    cada pasta pages/slug/index.html vira URL /slug/   
@@ -35,6 +36,9 @@ app.get("/", (req, res) => {
 // 4) rotas de API
 const routes = require("./src/scripts/routes");
 app.use(routes);
+
+// Setup Swagger documentation
+setupSwagger(app);
 
 const liveReloadServer = livereload.createServer({ debug: false });
 liveReloadServer.watch(path.join(__dirname, "public"));

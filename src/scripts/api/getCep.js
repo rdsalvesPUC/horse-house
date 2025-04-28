@@ -2,6 +2,87 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../horseDB");
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     CepResponse:
+ *       type: object
+ *       properties:
+ *         CEP:
+ *           type: string
+ *           description: CEP (código postal)
+ *         Cidade:
+ *           type: string
+ *           description: Nome da cidade
+ *         Estado:
+ *           type: string
+ *           description: Nome do estado
+ *         UF:
+ *           type: string
+ *           description: Sigla do estado (UF)
+ *       example:
+ *         CEP: "01234567"
+ *         Cidade: "São Paulo"
+ *         Estado: "São Paulo"
+ *         UF: "SP"
+ */
+
+/**
+ * @swagger
+ * /api/getCep/{cep}:
+ *   get:
+ *     summary: Consulta informações de um CEP
+ *     tags: [Utilitários]
+ *     description: Retorna informações sobre um CEP, incluindo cidade, estado e UF
+ *     parameters:
+ *       - in: path
+ *         name: cep
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: CEP a ser consultado (8 dígitos numéricos)
+ *     responses:
+ *       200:
+ *         description: Informações do CEP retornadas com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CepResponse'
+ *       400:
+ *         description: CEP inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: CEP inválido. Deve conter 8 dígitos numéricos.
+ *       404:
+ *         description: CEP não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: CEP não encontrado no banco de dados.
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: Erro ao processar a solicitação.
+ */
 router.get("/:cep", async (req, res) => {
     const { cep } = req.params;
     // Validação básica do CEP
