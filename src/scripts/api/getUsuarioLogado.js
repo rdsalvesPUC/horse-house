@@ -3,6 +3,153 @@ const router = express.Router();
 const connection = require("../horseDB");
 const { extrairUserID } = require("../utils/extrairUserID");
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     ProprietarioResponse:
+ *       type: object
+ *       properties:
+ *         nome:
+ *           type: string
+ *           description: Nome do proprietário
+ *         sobrenome:
+ *           type: string
+ *           description: Sobrenome do proprietário
+ *         email:
+ *           type: string
+ *           description: Email do proprietário
+ *         telefone:
+ *           type: string
+ *           description: Telefone do proprietário
+ *         estado:
+ *           type: string
+ *           description: Estado onde o proprietário reside
+ *         uf:
+ *           type: string
+ *           description: UF do estado
+ *         cidade:
+ *           type: string
+ *           description: Cidade onde o proprietário reside
+ *         cep:
+ *           type: string
+ *           description: CEP do endereço
+ *         Bairro:
+ *           type: string
+ *           description: Bairro do endereço
+ *         Rua:
+ *           type: string
+ *           description: Rua do endereço
+ *         Numero:
+ *           type: integer
+ *           description: Número do endereço
+ *         Data_Nascimento:
+ *           type: string
+ *           format: date
+ *           description: Data de nascimento do proprietário
+ *         Complemento:
+ *           type: string
+ *           description: Complemento do endereço
+ *         userType:
+ *           type: string
+ *           description: Tipo de usuário (proprietario)
+ *       example:
+ *         nome: Carlos
+ *         sobrenome: Oliveira
+ *         email: carlos.oliveira@exemplo.com
+ *         telefone: "11987654321"
+ *         estado: São Paulo
+ *         uf: SP
+ *         cidade: São Paulo
+ *         cep: "01234567"
+ *         Bairro: Bela Vista
+ *         Rua: Avenida Paulista
+ *         Numero: 1000
+ *         Data_Nascimento: "1985-05-15"
+ *         Complemento: Apto 123
+ *         userType: proprietario
+ *     
+ *     GerenteResponse:
+ *       type: object
+ *       properties:
+ *         Nome:
+ *           type: string
+ *           description: Nome do gerente
+ *         Sobrenome:
+ *           type: string
+ *           description: Sobrenome do gerente
+ *         CPF:
+ *           type: string
+ *           description: CPF do gerente
+ *         Data_Nascimento:
+ *           type: string
+ *           format: date
+ *           description: Data de nascimento do gerente
+ *         Telefone:
+ *           type: string
+ *           description: Telefone do gerente
+ *         Email:
+ *           type: string
+ *           description: Email do gerente
+ *         userType:
+ *           type: string
+ *           description: Tipo de usuário (gerente)
+ *       example:
+ *         Nome: João
+ *         Sobrenome: Silva
+ *         CPF: "12345678901"
+ *         Data_Nascimento: "1990-01-01"
+ *         Telefone: "11987654321"
+ *         Email: joao.silva@exemplo.com
+ *         userType: gerente
+ *     
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Mensagem de erro
+ *       example:
+ *         error: Erro ao buscar os dados do usuário.
+ */
+
+/**
+ * @swagger
+ * /api/getUsuarioLogado:
+ *   get:
+ *     summary: Obtém os dados do usuário logado
+ *     tags: [Usuários]
+ *     description: Retorna os dados do usuário autenticado com base no token JWT
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dados do usuário retornados com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               oneOf:
+ *                 - $ref: '#/components/schemas/ProprietarioResponse'
+ *                 - $ref: '#/components/schemas/GerenteResponse'
+ *       403:
+ *         description: Tipo de usuário não suportado ou acesso negado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Usuário não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 // Rota para buscar os dados do usuário logado (todos os tipos de usuário)
 router.get("/", extrairUserID, async (req, res) => {
     try {

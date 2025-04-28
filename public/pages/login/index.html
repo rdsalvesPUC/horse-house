@@ -25,4 +25,42 @@
 			</form>
 		</div>
 	</body>
+	<script>
+		document.getElementById("userForm").addEventListener("submit", function(event) {
+			event.preventDefault(); // Impede o reload da página
+		
+			const email = document.getElementById("Email").value;
+			const senha = document.getElementById("Senha").value;
+		
+			fetch("http://localhost:3000/api/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({ email, senha })
+			})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Login inválido");
+				}
+				return response.json();
+			})
+			.then(data => {
+				console.log("Login bem-sucedido:", data);
+				alert("Login realizado com sucesso!");
+		
+				// Salva o token e o tipo de usuário no localStorage
+				localStorage.setItem("token", data.token);
+				localStorage.setItem("userType", data.userType);
+		
+				// Redireciona para a página do painel
+				window.location.href = "/create-users";
+			})
+			.catch(error => {
+				console.error("Erro no login:", error);
+				alert("Email ou senha incorretos.");
+			});
+		});
+		</script>
+				
 </html>
