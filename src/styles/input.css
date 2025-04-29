@@ -153,19 +153,19 @@
 
 @layer components {
     .link-nav {
-        @apply font-heebo font-bold text-base hover:text-tertiary transition-colors;
+        @apply font-heebo text-base font-bold text-tertiary hover:text-secondary transition-colors;
     }
 
     .link-drawer {
-        @apply font-heebo hover:text-tertiary transition-colors;
+        @apply font-heebo text-base font-bold text-tertiary hover:text-secondary transition-colors;
     }
 
     .btn-primary {
-        @apply font-heebo bg-secondary text-white px-5 py-2.5 font-bold hover:bg-tertiary hover:text-secondary transition-colors;
+        @apply font-heebo bg-secondary text-tertiary px-5 py-2.5 font-bold hover:bg-tertiary hover:text-secondary transition-colors;
     }
 
     .btn-secondary {
-        @apply font-heebo border border-secondary text-secondary px-5 py-2.5 font-bold hover:bg-secondary hover:text-white transition-colors;
+        @apply font-heebo border border-secondary text-secondary px-5 py-2.5 font-bold hover:bg-secondary hover:text-tertiary transition-colors;
     }
 
     .img-menu-home-site {
