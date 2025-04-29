@@ -623,12 +623,6 @@
   .bg-\[\#222C2D\] {
     background-color: #222C2D;
   }
-  .bg-\[\#BD9E72\] {
-    background-color: #BD9E72;
-  }
-  .bg-\[\#F5F4F3\] {
-    background-color: #F5F4F3;
-  }
   .bg-black\/50 {
     background-color: color-mix(in srgb, #000 50%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -840,12 +834,6 @@
   .whitespace-nowrap {
     white-space: nowrap;
   }
-  .text-\[\#222C2D\] {
-    color: #222C2D;
-  }
-  .text-\[\#BD9E72\] {
-    color: #BD9E72;
-  }
   .text-black {
     color: var(--color-black);
   }
@@ -863,6 +851,9 @@
   }
   .text-gray-800 {
     color: var(--color-gray-800);
+  }
+  .text-primary {
+    color: var(--color-primary);
   }
   .text-red-500 {
     color: var(--color-red-500);
