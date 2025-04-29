@@ -1,216 +1,213 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CRUD Perfil Master</title>
-  <link rel="stylesheet" href="/styles/output.css" />
-</head>
-<body class="bg-primary">
-  <header class="w-full flex items-center p-2">
-    <img src="/assets/images/logo-h-whitebg.svg">
-  </header>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>CRUD Perfil Master</title>
+		<link rel="stylesheet" href="/styles/output.css" />
+	</head>
+	<body class="bg-primary">
+		<header class="w-full flex items-center p-2">
+			<img src="/assets/images/logo-h-whitebg.svg" />
+		</header>
 
-  <div class="max-w-4xl mx-auto bg-tertiary p-6 rounded-lg shadow-lg">
-    <h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Crud Master</h2>
-    <form id="form-cadastro" class="space-y-4">
+		<div class="max-w-4xl mx-auto bg-tertiary p-6 rounded-lg shadow-lg">
+			<h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Crud Master</h2>
+			<form id="form-cadastro" class="space-y-4">
+				<div class="flex flex-col gap-8 p-10">
+					<!-- Campos Nome, Sobrenome, Email, etc. -->
+					<div class="flex flex-col gap-2">
+						<label for="nome" class="font-medium">Nome</label>
+						<input id="nome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu nome" />
+						<span id="erro-nome" class="text-xs text-red-500 hidden">Nome inválido</span>
+					</div>
 
-      <div class="flex flex-col gap-8 p-10">
-        <!-- Campos Nome, Sobrenome, Email, etc. -->
-        <div class="flex flex-col gap-2">
-          <label for="nome" class="font-medium">Nome</label>
-          <input id="nome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu nome" />
-          <span id="erro-nome" class="text-xs text-red-500 hidden">Nome inválido</span>
-        </div>
+					<div class="flex flex-col gap-2">
+						<label for="sobrenome" class="font-medium">Sobrenome</label>
+						<input id="sobrenome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu sobrenome" />
+						<span id="erro-sobrenome" class="text-xs text-red-500 hidden">Sobrenome inválido</span>
+					</div>
 
-        <div class="flex flex-col gap-2">
-          <label for="sobrenome" class="font-medium">Sobrenome</label>
-          <input id="sobrenome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu sobrenome" />
-          <span id="erro-sobrenome" class="text-xs text-red-500 hidden">Sobrenome inválido</span>
-        </div>
+					<div class="flex flex-col gap-2">
+						<label for="email" class="font-medium">E-mail</label>
+						<input id="email" type="email" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu e-mail" />
+						<span id="erro-email" class="text-xs text-red-500 hidden">E-mail inválido</span>
+					</div>
 
-        <div class="flex flex-col gap-2">
-          <label for="email" class="font-medium">E-mail</label>
-          <input id="email" type="email" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu e-mail" />
-          <span id="erro-email" class="text-xs text-red-500 hidden">E-mail inválido</span>
-        </div>
+					<div class="flex flex-col gap-2">
+						<label for="senha" class="font-medium">Senha</label>
+						<input id="senha" type="password" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite sua senha" />
+						<span id="erro-senha" class="text-xs text-red-500 hidden">Senha inválida</span>
+					</div>
 
-        <div class="flex flex-col gap-2">
-          <label for="senha" class="font-medium">Senha</label>
-          <input id="senha" type="password" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite sua senha" />
-          <span id="erro-senha" class="text-xs text-red-500 hidden">Senha inválida</span>
-        </div>
+					<div class="flex flex-col gap-2">
+						<label for="telefone" class="font-medium">Telefone</label>
+						<input id="telefone" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu telefone" />
+						<span id="erro-telefone" class="text-xs text-red-500 hidden">Telefone inválido</span>
+					</div>
 
-        <div class="flex flex-col gap-2">
-          <label for="telefone" class="font-medium">Telefone</label>
-          <input id="telefone" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu telefone" />
-          <span id="erro-telefone" class="text-xs text-red-500 hidden">Telefone inválido</span>
-        </div>
+					<div class="flex flex-col gap-2">
+						<label for="cpf" class="font-medium">CPF</label>
+						<input id="cpf" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu CPF" />
+						<span id="erro-cpf" class="text-xs text-red-500 hidden">CPF inválido</span>
+					</div>
 
-        <div class="flex flex-col gap-2">
-          <label for="cpf" class="font-medium">CPF</label>
-          <input id="cpf" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu CPF" />
-          <span id="erro-cpf" class="text-xs text-red-500 hidden">CPF inválido</span>
-        </div>
+					<div class="flex flex-col gap-2">
+						<label for="dataNascimento" class="font-medium">Data de Nascimento</label>
+						<input id="dataNascimento" type="date" class="rounded-md p-3 text-sm border border-secondary" />
+						<span id="erro-dataNascimento" class="text-xs text-red-500 hidden">Data de nascimento inválida</span>
+					</div>
 
-        <div class="flex flex-col gap-2">
-          <label for="dataNascimento" class="font-medium">Data de Nascimento</label>
-          <input id="dataNascimento" type="date" class="rounded-md p-3 text-sm border border-secondary" />
-          <span id="erro-dataNascimento" class="text-xs text-red-500 hidden">Data de nascimento inválida</span>
-        </div>
+					<div class="flex flex-col gap-2">
+						<label for="tipoUsuario" class="font-medium">Tipo de Usuário</label>
+						<select id="tipoUsuario" class="rounded-md p-3 text-sm border border-secondary">
+							<option value="">Selecione</option>
+							<option value="Gerente">Gerente</option>
+							<option value="Treinador">Treinador</option>
+							<option value="Tratador">Tratador</option>
+							<option value="Veterinario">Veterinário</option>
+						</select>
+						<span id="erro-tipoUsuario" class="text-xs text-red-500 hidden">Selecione um tipo de usuário</span>
+					</div>
 
-        <div class="flex flex-col gap-2">
-          <label for="tipoUsuario" class="font-medium">Tipo de Usuário</label>
-          <select id="tipoUsuario" class="rounded-md p-3 text-sm border border-secondary">
-            <option value="">Selecione</option>
-            <option value="Gerente">Gerente</option>
-            <option value="Treinador">Treinador</option>
-            <option value="Tratador">Tratador</option>
-            <option value="Veterinario">Veterinário</option>
-          </select>
-          <span id="erro-tipoUsuario" class="text-xs text-red-500 hidden">Selecione um tipo de usuário</span>
-        </div>
+					<!-- NOVO CAMPO (já estava no GitHub, vamos usar corretamente agora) -->
+					<div id="container-haras" class="hidden flex flex-col gap-2">
+						<label for="select-haras" class="font-medium">Selecione o Haras</label>
+						<select id="select-haras" class="rounded-md p-3 text-sm border border-secondary">
+							<option value="">Selecione o Haras</option>
+						</select>
+						<span id="erro-haras" class="text-xs text-red-500 hidden">Selecione um Haras</span>
+					</div>
 
-        <!-- NOVO CAMPO (já estava no GitHub, vamos usar corretamente agora) -->
-        <div id="container-haras" class="hidden flex flex-col gap-2">
-          <label for="select-haras" class="font-medium">Selecione o Haras</label>
-          <select id="select-haras" class="rounded-md p-3 text-sm border border-secondary">
-            <option value="">Selecione o Haras</option>
-          </select>
-          <span id="erro-haras" class="text-xs text-red-500 hidden">Selecione um Haras</span>
-        </div>
+					<!-- Campos CRMV só para Veterinário -->
+					<div id="campo-crmv" class="hidden flex flex-col gap-2">
+						<label for="crmv" class="font-medium">CRMV</label>
+						<input id="crmv" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite o CRMV" />
+						<span id="erro-crmv" class="text-xs text-red-500 hidden">CRMV inválido</span>
+					</div>
 
-        <!-- Campos CRMV só para Veterinário -->
-        <div id="campo-crmv" class="hidden flex flex-col gap-2">
-          <label for="crmv" class="font-medium">CRMV</label>
-          <input id="crmv" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite o CRMV" />
-          <span id="erro-crmv" class="text-xs text-red-500 hidden">CRMV inválido</span>
-        </div>
+					<button id="botao-cadastrar-user" class="bg-secondary text-tertiary p-3 rounded-md hover:bg-primary transition-all">Cadastrar</button>
+				</div>
+			</form>
+		</div>
 
-        <button id="botao-cadastrar-user" class="bg-secondary text-white p-3 rounded-md hover:bg-primary transition-all">Cadastrar</button>
-      </div>
+		<!-- SCRIPT -->
+		<script>
+			const tipoUsuarioSelect = document.getElementById("tipoUsuario");
+			const containerHaras = document.getElementById("container-haras");
+			const selectHaras = document.getElementById("select-haras");
+			const campoCrmv = document.getElementById("campo-crmv");
+			const botaoCadastrar = document.getElementById("botao-cadastrar-user");
 
-    </form>
-  </div>
+			// Quando mudar o tipo de usuário
+			tipoUsuarioSelect.addEventListener("change", function () {
+				if (this.value === "Veterinario") {
+					campoCrmv.classList.remove("hidden");
+					containerHaras.classList.add("hidden"); // veterinário não precisa haras
+				} else if (this.value === "Gerente") {
+					campoCrmv.classList.add("hidden");
+					containerHaras.classList.remove("hidden");
+					carregarHaras(); // <-- busca haras da API
+				} else {
+					campoCrmv.classList.add("hidden");
+					containerHaras.classList.add("hidden");
+				}
+			});
 
-  <!-- SCRIPT -->
-  <script>
-    const tipoUsuarioSelect = document.getElementById("tipoUsuario");
-    const containerHaras = document.getElementById("container-haras");
-    const selectHaras = document.getElementById("select-haras");
-    const campoCrmv = document.getElementById("campo-crmv");
-    const botaoCadastrar = document.getElementById("botao-cadastrar-user");
-  
-    // Quando mudar o tipo de usuário
-    tipoUsuarioSelect.addEventListener("change", function () {
-      if (this.value === "Veterinario") {
-        campoCrmv.classList.remove("hidden");
-        containerHaras.classList.add("hidden"); // veterinário não precisa haras
-      } else if (this.value === "Gerente") {
-        campoCrmv.classList.add("hidden");
-        containerHaras.classList.remove("hidden");
-        carregarHaras(); // <-- busca haras da API
-      } else {
-        campoCrmv.classList.add("hidden");
-        containerHaras.classList.add("hidden");
-      }
-    });
-  
-    async function carregarHaras() {
-      try {
-        const response = await fetch("http://localhost:3000/api/getAllHaras", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${localStorage.getItem('token')}`,
-            "Content-Type": "application/json"
-          }
-        });
-  
-        if (!response.ok) {
-          throw new Error("Erro ao buscar haras");
-        }
-  
-        const haras = await response.json();
-  
-        // Limpa e popula o select
-        selectHaras.innerHTML = '<option value="">Selecione o Haras</option>';
-        haras.forEach(harasItem => {
-          const option = document.createElement("option");
-          option.value = harasItem.id; // aqui precisa ser o id do haras
-          option.textContent = harasItem.Nome;
-          selectHaras.appendChild(option);
-        });
-      } catch (error) {
-        console.error("Erro ao carregar haras:", error.message);
-      }
-    }
-  
-    botaoCadastrar.addEventListener("click", async function (event) {
-      event.preventDefault();
-  
-      const nome = document.getElementById("nome").value.trim();
-      const sobrenome = document.getElementById("sobrenome").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const senha = document.getElementById("senha").value.trim();
-      const telefone = document.getElementById("telefone").value.trim();
-      const cpf = document.getElementById("cpf").value.trim()
-                .replace(/\D/g, "");          // ← remove tudo que não é dígito
-      const dataNascimento = document.getElementById("dataNascimento").value.trim();
-      const tipoUsuario = document.getElementById("tipoUsuario").value;
-      const crmv = document.getElementById("crmv")?.value.trim();
-      const harasId = document.getElementById("select-haras")?.value;
-  
-      if (!nome || !sobrenome || !email || !senha || !telefone || !cpf || !dataNascimento || !tipoUsuario) {
-        alert("Preencha todos os campos obrigatórios.");
-        return;
-      }
-  
-      let endpoint = "";
-      let dados = { nome, sobrenome, email, senha, telefone, cpf, dataNascimento };
-  
-      if (tipoUsuario === "Gerente") {
-        endpoint = "criarGerente";
-        if (!harasId) {
-          alert("Selecione o Haras para o Gerente!");
-          return;
-        }
-        dados.haras_id = harasId;
-      } else if (tipoUsuario === "Treinador") {
-        endpoint = "criarTreinador";
-      } else if (tipoUsuario === "Tratador") {
-        endpoint = "criarTratador";
-      } else if (tipoUsuario === "Veterinario") {
-        endpoint = "criarVeterinario";
-        if (!crmv) {
-          alert("Preencha o CRMV para o veterinário.");
-          return;
-        }
-        dados.crmv = crmv;
-      }
-  
-      try {
-        const response = await fetch(`http://localhost:3000/api/${endpoint}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify(dados)
-        });
-  
-        const result = await response.json();
-  
-        if (!response.ok) {
-          throw new Error(result.error || "Erro ao cadastrar.");
-        }
-  
-        alert(`${tipoUsuario} cadastrado com sucesso!`);
-        window.location.reload();
-      } catch (error) {
-        console.error("Erro:", error.message);
-        alert("Erro ao cadastrar: " + error.message);
-      }
-    });
-  </script>
-</body>
+			async function carregarHaras() {
+				try {
+					const response = await fetch("http://localhost:3000/api/getAllHaras", {
+						method: "GET",
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json",
+						},
+					});
+
+					if (!response.ok) {
+						throw new Error("Erro ao buscar haras");
+					}
+
+					const haras = await response.json();
+
+					// Limpa e popula o select
+					selectHaras.innerHTML = '<option value="">Selecione o Haras</option>';
+					haras.forEach((harasItem) => {
+						const option = document.createElement("option");
+						option.value = harasItem.id; // aqui precisa ser o id do haras
+						option.textContent = harasItem.Nome;
+						selectHaras.appendChild(option);
+					});
+				} catch (error) {
+					console.error("Erro ao carregar haras:", error.message);
+				}
+			}
+
+			botaoCadastrar.addEventListener("click", async function (event) {
+				event.preventDefault();
+
+				const nome = document.getElementById("nome").value.trim();
+				const sobrenome = document.getElementById("sobrenome").value.trim();
+				const email = document.getElementById("email").value.trim();
+				const senha = document.getElementById("senha").value.trim();
+				const telefone = document.getElementById("telefone").value.trim();
+				const cpf = document.getElementById("cpf").value.trim().replace(/\D/g, ""); // ← remove tudo que não é dígito
+				const dataNascimento = document.getElementById("dataNascimento").value.trim();
+				const tipoUsuario = document.getElementById("tipoUsuario").value;
+				const crmv = document.getElementById("crmv")?.value.trim();
+				const harasId = document.getElementById("select-haras")?.value;
+
+				if (!nome || !sobrenome || !email || !senha || !telefone || !cpf || !dataNascimento || !tipoUsuario) {
+					alert("Preencha todos os campos obrigatórios.");
+					return;
+				}
+
+				let endpoint = "";
+				let dados = { nome, sobrenome, email, senha, telefone, cpf, dataNascimento };
+
+				if (tipoUsuario === "Gerente") {
+					endpoint = "criarGerente";
+					if (!harasId) {
+						alert("Selecione o Haras para o Gerente!");
+						return;
+					}
+					dados.haras_id = harasId;
+				} else if (tipoUsuario === "Treinador") {
+					endpoint = "criarTreinador";
+				} else if (tipoUsuario === "Tratador") {
+					endpoint = "criarTratador";
+				} else if (tipoUsuario === "Veterinario") {
+					endpoint = "criarVeterinario";
+					if (!crmv) {
+						alert("Preencha o CRMV para o veterinário.");
+						return;
+					}
+					dados.crmv = crmv;
+				}
+
+				try {
+					const response = await fetch(`http://localhost:3000/api/${endpoint}`, {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
+						body: JSON.stringify(dados),
+					});
+
+					const result = await response.json();
+
+					if (!response.ok) {
+						throw new Error(result.error || "Erro ao cadastrar.");
+					}
+
+					alert(`${tipoUsuario} cadastrado com sucesso!`);
+					window.location.reload();
+				} catch (error) {
+					console.error("Erro:", error.message);
+					alert("Erro ao cadastrar: " + error.message);
+				}
+			});
+		</script>
+	</body>
 </html>

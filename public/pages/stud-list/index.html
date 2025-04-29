@@ -8,7 +8,7 @@
 	</head>
 	<body class="bg-primary">
 		<header class="w-full bg-primary flex items-center p-4">
-			<h1 class="text-white text-2xl font-bold">Seus Haras</h1>
+			<h1 class="text-tertiary text-2xl font-bold">Seus Haras</h1>
 		</header>
 
 		<main class="flex flex-col items-center justify-start min-h-screen p-6 md:p-10">
@@ -16,7 +16,7 @@
 				<h2 class="text-xl font-bold text-black mb-4">Lista de Haras</h2>
 
 				<table class="w-full table-auto text-left rounded overflow-hidden">
-					<thead class="bg-secondary text-white">
+					<thead class="bg-secondary text-tertiary">
 						<tr>
 							<th class="p-3">Nome</th>
 							<th class="p-3">CNPJ</th>
@@ -50,8 +50,8 @@
         <td class="p-3">${haras.cep}</td>
         <td class="p-3">${haras.logradouro}</td>
         <td class="p-3 text-center">
-          <button class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-1 px-3 rounded mr-2" onclick="editarHaras(${haras.id})">Editar</button>
-          <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded" onclick="excluirHaras(${haras.id})">Excluir</button>
+          <button class="bg-yellow-400 hover:bg-yellow-500 text-tertiary font-bold py-1 px-3 rounded mr-2" onclick="editarHaras(${haras.id})">Editar</button>
+          <button class="bg-red-500 hover:bg-red-600 text-tertiary font-bold py-1 px-3 rounded" onclick="excluirHaras(${haras.id})">Excluir</button>
         </td>
       `;
 

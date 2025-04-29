@@ -6,61 +6,81 @@
 		<title>Login</title>
 		<link rel="stylesheet" href="/styles/output.css" />
 	</head>
-	<body class="bg-primary">
-		<header class="w-full flex items-center p-2">
-			<img src="/assets/images/logo-h-whitebg.svg">
+	<body>
+		<header class="relative justify-between items-center bg-primary flex w-full gap-[40px_100px] flex-wrap p-8 max-md:max-w-full max-md:px-5">
+			<a href="/">
+				<img src="/assets/images/logo-h-whitebg.svg" alt="Logo" class="aspect-[4.59] object-contain w-[202px] self-stretch shrink-0 my-auto" />
+			</a>
+			<div class="self-stretch flex items-center gap-4 my-auto">
+				<div class="hidden xl:block text-tertiary text-[19px] font-semibold self-stretch my-auto font-lexend text-base font-semibold">Não tem uma conta?</div>
+				<a href="/register" class="self-stretch bg-secondary hover:bg-tertiary gap-2.5 text-tertiary hover:text-secondary font-heebo text-base font-bold my-auto px-5 py-2.5">SIGN UP</a>
+			</div>
 		</header>
-		<div class="max-w-4xl mx-auto bg-tertiary p-6 rounded-lg shadow-lg">
-			<h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Login</h2>
-			<form id="userForm" class="space-y-4">
-				<div>
-					<label class="block font-medium">Email</label>
-					<input type="text" id="Email" class="text-sm text-gray-700 w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+
+		<div class="bg-white overflow-hidden min-h-screen">
+			<div class="flex flex-col relative w-full items-stretch min-h-screen">
+				<img src="https://cdn.builder.io/api/v1/image/assets/8ea5dbf6a370489c8fd763d9f3b9e8ba/168904c8239fa44af974c7b239e83926232da7e8?placeholderIfAbsent=true" alt="Background" class="absolute h-full w-full object-cover inset-0" />
+				<div class="relative shadow-[0px_6px_16px_0px_rgba(0,0,0,0.08),0px_3px_6px_-4px_rgba(0,0,0,0.12),0px_9px_28px_8px_rgba(0,0,0,0.05)] bg-tertiary self-center w-[408px] max-w-full mt-[88px] px-12 py-8 rounded-xl max-md:mt-10 max-md:px-5">
+					<!-- Cabeçalho -->
+					<div class="w-full">
+						<h2 class="w-full text-2xl text-primary font-semibold text-center">Bem-vindo de volta!</h2>
+						<div class="w-full mt-4">
+							<img src="https://cdn.builder.io/api/v1/image/assets/8ea5dbf6a370489c8fd763d9f3b9e8ba/348cd1d3551a6d06b4955a5a8d189b08311d7047?placeholderIfAbsent=true" alt="Divider" class="aspect-[333.33] object-contain w-full stroke-[1px] stroke-[rgba(0,0,0,0.06)]" />
+						</div>
+					</div>
+
+					<!-- Formulário -->
+					<form id="loginForm" class="w-full">
+						<!-- Campo E-mail -->
+						<div class="flex w-full flex-col items-stretch mt-6 font-normal">
+							<div class="flex items-center min-h-8 gap-1 text-sm leading-loose h-8">
+								<label for="email" class="text-primary self-stretch my-auto text-right"> E-mail de acesso </label>
+								<span class="text-primary self-stretch my-auto">:</span>
+							</div>
+							<div class="flex items-center w-full gap-2.5 bg-white overflow-hidden text-base text-black whitespace-nowrap rounded-lg border border-gray-200">
+								<div class="flex items-center flex-1 gap-2.5 px-3 py-2">
+									<img src="https://cdn.builder.io/api/v1/image/assets/8ea5dbf6a370489c8fd763d9f3b9e8ba/2bc836582946e005acb4a38bc41dc15f910aa9f3?placeholderIfAbsent=true" alt="Email icon" class="w-4 aspect-[1] object-contain shrink-0" />
+									<input type="email" id="Email" name="email" placeholder="Digite seu email de acesso" class="flex-1 bg-transparent outline-none text-ellipsis" />
+								</div>
+							</div>
+							<span id="emailError" class="hidden text-red-500 text-sm mt-1"></span>
+						</div>
+
+						<!-- Campo Senha -->
+						<div class="flex w-full flex-col items-stretch mt-6 whitespace-nowrap font-normal">
+							<div class="flex items-center min-h-8 gap-1 text-sm leading-loose h-8">
+								<label for="password" class="text-primary self-stretch my-auto text-right"> Senha </label>
+								<span class="text-primary self-stretch my-auto">:</span>
+							</div>
+							<div class="flex items-center w-full gap-2.5 bg-white overflow-hidden text-base text-black rounded-lg border border-gray-200">
+								<div class="flex items-center flex-1 gap-2.5 px-3 py-2">
+									<img src="https://cdn.builder.io/api/v1/image/assets/8ea5dbf6a370489c8fd763d9f3b9e8ba/1f79f80415cefd3f72e1e6db3daf4843140f8bb1?placeholderIfAbsent=true" alt="Password icon" class="w-4 aspect-[1] object-contain shrink-0" />
+									<input type="password" id="Senha" name="password" placeholder="Insira sua senha" class="flex-1 bg-transparent outline-none text-ellipsis" />
+									<button type="button" id="togglePassword" class="focus:outline-none">
+										<img src="https://cdn.builder.io/api/v1/image/assets/8ea5dbf6a370489c8fd763d9f3b9e8ba/fd806d53e7b917f2b4fbfbf9ec18ecf2d5f21062?placeholderIfAbsent=true" alt="Alternar visibilidade da senha" class="w-4 aspect-[1] object-contain shrink-0" />
+									</button>
+								</div>
+							</div>
+							<span id="passwordError" class="hidden text-red-500 text-sm mt-1"></span>
+						</div>
+
+						<!-- Botão Entrar -->
+						<div class="w-full mt-6">
+							<button type="submit" id="botao-cadastrar" class="flex w-full h-10 items-center justify-center bg-secondary shadow-[0px_2px_0px_0px_rgba(5,145,255,0.10)] text-base text-white font-normal whitespace-nowrap rounded-lg">Entrar</button>
+
+							<div class="w-full mt-4">
+								<img src="https://cdn.builder.io/api/v1/image/assets/8ea5dbf6a370489c8fd763d9f3b9e8ba/348cd1d3551a6d06b4955a5a8d189b08311d7047?placeholderIfAbsent=true" alt="Divider" class="aspect-[333.33] object-contain w-full stroke-[1px] stroke-[rgba(0,0,0,0.06)]" />
+							</div>
+
+							<div class="flex w-full items-center gap-1 justify-center mt-4 text-base font-normal">
+								<div class="flex items-center self-stretch min-h-10 text-primary">Ainda não tem conta?</div>
+								<a href="/register" class="px-2 whitespace-nowrap text-secondary font-bold"> Cadastre-se </a>
+							</div>
+						</div>
+					</form>
 				</div>
-				<div>
-					<label class="block font-medium">Senha</label>
-					<input type="password" id="Senha" class="text-sm text-gray-700 w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-				</div>
-				<button id="botao-cadastrar" type="submit" class="w-full md:col-span-2 py-3 text-white bg-secondary rounded-md transition duration-300 ease-in-out hover:bg-primary mt-3 mb-4">Logar</button>
-			</form>
+			</div>
 		</div>
 	</body>
-	<script>
-		document.getElementById("userForm").addEventListener("submit", function(event) {
-			event.preventDefault(); // Impede o reload da página
-		
-			const email = document.getElementById("Email").value;
-			const senha = document.getElementById("Senha").value;
-		
-			fetch("http://localhost:3000/api/login", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({ email, senha })
-			})
-			.then(response => {
-				if (!response.ok) {
-					throw new Error("Login inválido");
-				}
-				return response.json();
-			})
-			.then(data => {
-				console.log("Login bem-sucedido:", data);
-				alert("Login realizado com sucesso!");
-		
-				// Salva o token e o tipo de usuário no localStorage
-				localStorage.setItem("token", data.token);
-				localStorage.setItem("userType", data.userType);
-		
-				// Redireciona para a página do painel
-				window.location.href = "/create-users";
-			})
-			.catch(error => {
-				console.error("Erro no login:", error);
-				alert("Email ou senha incorretos.");
-			});
-		});
-		</script>
-				
+	<script src="/scripts/login.js"></script>
 </html>
