@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../horseDB");
+const {validarCEP} = require("../utils/validations");
 
 /**
  * @swagger
@@ -26,6 +27,15 @@ const connection = require("../horseDB");
  *         Cidade: "São Paulo"
  *         Estado: "São Paulo"
  *         UF: "SP"
+ *     
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Mensagem de erro
+ *       example:
+ *         error: Erro ao processar a solicitação
  */
 
 /**
@@ -54,39 +64,25 @@ const connection = require("../horseDB");
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: CEP inválido. Deve conter 8 dígitos numéricos.
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: CEP não encontrado
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: CEP não encontrado no banco de dados.
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: Erro ao processar a solicitação.
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/:cep", async (req, res) => {
     const { cep } = req.params;
-    // Validação básica do CEP
-    if (!/^\d{8}$/.test(cep)) {
+    
+    // Validação do CEP
+    if (!validarCEP(cep)) {
         return res.status(400).json({ error: "CEP inválido. Deve conter 8 dígitos numéricos." });
     }
 

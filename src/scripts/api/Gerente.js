@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../horseDB");
-const {extrairUserID} = require("../utils/extrairUserID");
+const {extractUserID, requireProprietario} = require("../middleware/auth");
 const bcrypt = require("bcrypt");
+const {validarCPF, validarEmail, validarTelefone} = require("../utils/validations");
 
 /**
  * @swagger
@@ -31,17 +32,23 @@ const bcrypt = require("bcrypt");
  *           description: Senha do gerente
  *         cpf:
  *           type: string
- *           description: CPF do gerente (11 dígitos)
+ *           description: CPF do gerente (11 dígitos numéricos, válido)
+ *           pattern: '^\d{11}$'
+ *           example: "12345678901"
  *         dataNascimento:
  *           type: string
  *           format: date
  *           description: Data de nascimento do gerente
  *         telefone:
  *           type: string
- *           description: Telefone do gerente
+ *           description: Telefone do gerente (10 ou 11 dígitos numéricos, com DDD válido)
+ *           pattern: '^\d{10,11}$'
+ *           example: "11987654321"
  *         email:
  *           type: string
- *           description: Email do gerente
+ *           format: email
+ *           description: Email do gerente (formato válido)
+ *           example: "joao.silva@exemplo.com"
  *         haras_id:
  *           type: integer
  *           description: ID do haras ao qual o gerente será vinculado
@@ -69,17 +76,23 @@ const bcrypt = require("bcrypt");
  *           description: Senha do gerente
  *         cpf:
  *           type: string
- *           description: CPF do gerente (11 dígitos)
+ *           description: CPF do gerente (11 dígitos numéricos, válido)
+ *           pattern: '^\d{11}$'
+ *           example: "12345678901"
  *         dataNascimento:
  *           type: string
  *           format: date
  *           description: Data de nascimento do gerente
  *         telefone:
  *           type: string
- *           description: Telefone do gerente
+ *           description: Telefone do gerente (10 ou 11 dígitos numéricos, com DDD válido)
+ *           pattern: '^\d{10,11}$'
+ *           example: "11987654321"
  *         email:
  *           type: string
- *           description: Email do gerente
+ *           format: email
+ *           description: Email do gerente (formato válido)
+ *           example: "joao.atualizado@exemplo.com"
  *       example:
  *         nome: João Atualizado
  *         sobrenome: Silva Santos
@@ -158,6 +171,24 @@ const bcrypt = require("bcrypt");
  *           description: Mensagem de erro
  *       example:
  *         error: Erro ao processar a solicitação.
+ *
+ *     UnauthorizedError:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Mensagem de erro de autenticação
+ *       example:
+ *         error: Token de autenticação inválido ou expirado
+ *
+ *     ForbiddenError:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Mensagem de erro de autorização
+ *       example:
+ *         error: Acesso negado. Você não tem permissão para realizar esta ação
  */
 
 /**
@@ -188,12 +219,18 @@ const bcrypt = require("bcrypt");
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
  *       403:
  *         description: Acesso negado
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *               $ref: '#/components/schemas/ForbiddenError'
  *       409:
  *         description: Dados duplicados
  *         content:
@@ -207,17 +244,25 @@ const bcrypt = require("bcrypt");
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/criarGerente", extrairUserID, async (req, res) => {
+router.post("/criarGerente", [extractUserID, requireProprietario], async (req, res) => {
     try {
-        const userType = req.user.user;
-        if (userType !== "proprietario") {
-            return res.status(403).json({error: "Acesso negado. Somente proprietários podem cadastrar gerentes."});
-        }
-
         const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, haras_id} = req.body;
 
         if (!nome || !sobrenome || !senha || !cpf || !dataNascimento || !email || !telefone || !haras_id) {
             return res.status(400).json({error: "Todos os campos são obrigatórios."});
+        }
+
+        // Validações adicionais
+        if (!validarCPF(cpf)) {
+            return res.status(400).json({error: "CPF inválido."});
+        }
+
+        if (!validarEmail(email)) {
+            return res.status(400).json({error: "Email inválido."});
+        }
+
+        if (!validarTelefone(telefone)) {
+            return res.status(400).json({error: "Telefone inválido."});
         }
 
         // Verificar se o haras pertence ao proprietário logado
@@ -240,11 +285,17 @@ router.post("/criarGerente", extrairUserID, async (req, res) => {
 
         res.status(201).json({message: "Gerente cadastrado com sucesso!", id: results.insertId});
     } catch (err) {
-        console.error("Erro ao cadastrar gerente:", err);
+        console.error(err);
         if (err.code === 'ER_DUP_ENTRY') {
-            return res.status(409).json({error: "dados duplicados."});
+            if (err.message.includes('CPF')) {
+                return res.status(409).json({ error: "Este CPF já está cadastrado no sistema." });
+            } else if (err.message.includes('Email')) {
+                return res.status(409).json({ error: "Este email já está cadastrado no sistema." });
+            } else {
+                return res.status(409).json({ error: "Dados duplicados. Verifique se o CPF ou email já não estão cadastrados." });
+            }
         }
-        return res.status(500).json({error: "Erro ao processar a solicitação."});
+        res.status(500).json({ error: "Erro ao processar a solicitação." });
     }
 });
 
@@ -283,12 +334,18 @@ router.post("/criarGerente", extrairUserID, async (req, res) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
  *       403:
  *         description: Acesso negado
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *               $ref: '#/components/schemas/ForbiddenError'
  *       404:
  *         description: Gerente não encontrado
  *         content:
@@ -308,7 +365,7 @@ router.post("/criarGerente", extrairUserID, async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.put("/editarGerente/:id", extrairUserID, async (req, res) => {
+router.put("/editarGerente/:id", extractUserID, async (req, res) => {
     try {
         const userType = req.user.user;
         if (userType !== "proprietario") {
@@ -321,6 +378,19 @@ router.put("/editarGerente/:id", extrairUserID, async (req, res) => {
         // Verificar se pelo menos um campo para atualização foi fornecido
         if (!nome && !sobrenome && !senha && !cpf && !dataNascimento && !telefone && !email) {
             return res.status(400).json({error: "Pelo menos um campo deve ser fornecido para atualização."});
+        }
+
+        // Validações adicionais para campos fornecidos
+        if (cpf && !validarCPF(cpf)) {
+            return res.status(400).json({error: "CPF inválido."});
+        }
+
+        if (email && !validarEmail(email)) {
+            return res.status(400).json({error: "Email inválido."});
+        }
+
+        if (telefone && !validarTelefone(telefone)) {
+            return res.status(400).json({error: "Telefone inválido."});
         }
 
         // Verificar se o gerente existe
@@ -423,12 +493,18 @@ router.put("/editarGerente/:id", extrairUserID, async (req, res) => {
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/GerenteResponse'
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
  *       403:
  *         description: Acesso negado
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *               $ref: '#/components/schemas/ForbiddenError'
  *       500:
  *         description: Erro interno do servidor
  *         content:
@@ -437,7 +513,7 @@ router.put("/editarGerente/:id", extrairUserID, async (req, res) => {
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 // Rota para obter todos os gerentes de um haras
-router.get("/gerentes/haras/:harasId", extrairUserID, async (req, res) => {
+router.get("/gerentes/haras/:harasId", extractUserID, async (req, res) => {
     try {
         const userType = req.user.user;
         const harasId = req.params.harasId;
@@ -493,12 +569,18 @@ router.get("/gerentes/haras/:harasId", extrairUserID, async (req, res) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GerenteResponse'
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
  *       403:
  *         description: Acesso negado
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *               $ref: '#/components/schemas/ForbiddenError'
  *       404:
  *         description: Gerente não encontrado
  *         content:
@@ -513,7 +595,7 @@ router.get("/gerentes/haras/:harasId", extrairUserID, async (req, res) => {
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 // Rota para obter um gerente pelo ID
-router.get("/gerente/:id", extrairUserID, async (req, res) => {
+router.get("/gerente/:id", extractUserID, async (req, res) => {
     try {
         const userType = req.user.user;
         const gerenteId = req.params.id;

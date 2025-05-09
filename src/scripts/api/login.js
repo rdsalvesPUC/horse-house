@@ -2,6 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const connection = require("../horseDB");
+const {validarEmail} = require("../utils/validations");
 
 const router = express.Router();
 
@@ -41,6 +42,24 @@ const router = express.Router();
  *         message: Login realizado com sucesso!
  *         token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *         userType: proprietario
+ *     
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Mensagem de erro
+ *       example:
+ *         error: Erro ao processar a solicitação
+ *     
+ *     UnauthorizedError:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Mensagem de erro de autenticação
+ *       example:
+ *         error: E-mail ou senha inválidos
  */
 
 /**
@@ -68,34 +87,19 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: E-mail e senha são obrigatórios.
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
  *         description: Credenciais inválidas
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: E-mail ou senha inválidos.
+ *               $ref: '#/components/schemas/UnauthorizedError'
  *       500:
  *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: Erro ao processar a solicitação.
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 
 async function tryAuthenticate(email, senha, tabela) {
@@ -133,11 +137,15 @@ router.post("/", async (req, res) => {
         return res.status(400).json({ error: "E-mail e senha são obrigatórios." });
     }
 
+    // Validação do email
+    if (!validarEmail(email)) {
+        return res.status(400).json({ error: "Email inválido." });
+    }
+
     try {
         const tiposUsuarios = ["Proprietario", "Treinador", "Veterinario", "Tratador", "Gerente"];
 
         let usuarioAutenticado = null;
-
 
         for (const tipo of tiposUsuarios) {
             const resultado = await tryAuthenticate(email, senha, tipo);

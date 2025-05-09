@@ -286,3 +286,5 @@ ALTER TABLE Treina
         FOREIGN KEY (fk_Treinador_ID)
             REFERENCES Treinador (ID)
             ON DELETE CASCADE;
+INSERT INTO Pais (Nome) VALUES
+('Brasil');

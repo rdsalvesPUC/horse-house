@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 // Rotas de API
-const createProprietarioAPI = require("./api/createProprietario");
+const ProprietarioAPI = require("./api/Proprietario");
 const loginAPI = require("./api/login");
 const getHorsesAPI = require("./api/apiExample");
 const GerenteAPI = require("./api/Gerente");
@@ -13,7 +13,7 @@ const deleteFuncionarioAPI = require("./api/deleteFuncionario");
 const getAllHarasAPI = require("./api/GetAllHaras");
 const loginExpiradoAPI = require("./api/loginExpirado");
 
-router.use("/api/criarProprietario", createProprietarioAPI);
+router.use("/api", ProprietarioAPI);
 router.use("/api/login", loginAPI);
 router.use("/api/exemplo", getHorsesAPI);
 router.use("/api", GerenteAPI);

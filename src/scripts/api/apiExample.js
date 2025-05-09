@@ -64,6 +64,15 @@ const connection = require("../horseDB");
  *         CERT: "CERT456"
  *         IMP: "IMP789"
  *         fk_Proprietario_ID: 1
+ *     
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Mensagem de erro
+ *       example:
+ *         error: Erro ao processar a solicitação
  */
 
 /**
@@ -87,12 +96,7 @@ const connection = require("../horseDB");
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: Erro ao buscar dados do banco de dados.
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 // Rota para listar todos os cavalos
 router.get("/", (req, res) => {
