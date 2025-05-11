@@ -565,6 +565,7 @@ document.getElementById('form-cadastro').addEventListener('submit', async functi
         .then(data => {
             console.log("Resposta do servidor:", data);
             alert("cadastrado com sucesso!");
+            window.location.href = "/home";
         })
         .catch(error => {
             console.error("Erro ao cadastrar", error);
