@@ -6,7 +6,7 @@
 		<title>Login</title>
 		<link rel="stylesheet" href="/styles/output.css" />
 	</head>
-	<body>
+	<body class="flex flex-col h-screen min-h-[768px]">
 		<header class="relative justify-between items-center bg-primary flex w-full gap-[40px_100px] flex-wrap p-8 max-md:max-w-full max-md:px-5">
 			<a href="/">
 				<img src="/assets/images/logo-h-whitebg.svg" alt="Logo" class="aspect-[4.59] object-contain w-[202px] self-stretch shrink-0 my-auto" />
@@ -17,71 +17,72 @@
 			</div>
 		</header>
 
-		<div class="bg-white overflow-hidden min-h-screen">
-			<div class="flex flex-col relative w-full items-stretch min-h-screen">
-				<img src="/assets/images/hero.jpg" alt="Background" class="absolute h-full w-full object-cover inset-0" />
-				<div class="absolute inset-0" style="background: var(--Overlay, rgba(34, 44, 45, 0.8))"></div>
-				<div class="relative shadow-[0px_6px_16px_0px_rgba(0,0,0,0.08),0px_3px_6px_-4px_rgba(0,0,0,0.12),0px_9px_28px_8px_rgba(0,0,0,0.05)] bg-tertiary self-center w-[408px] max-w-full mt-[88px] px-12 py-8 rounded-xl max-md:mt-10 max-md:px-5">
-					<!-- Cabeçalho -->
-					<div class="w-full">
-						<h2 class="w-full text-2xl text-primary font-semibold text-center">Bem-vindo de volta!</h2>
+		<main class="relative flex flex-col items-center flex-1 overflow-hidden">
+			<img src="/assets/images/hero.jpg" alt="Background" class="absolute h-full w-full object-cover inset-0" />
+			<div class="absolute inset-0" style="background: var(--Overlay, rgba(34, 44, 45, 0.8))"></div>
+			<div class="relative z-10 self-center w-[408px] max-w-full mt-[88px] px-12 py-8 bg-tertiary rounded-xl shadow-[0px_6px_16px_rgba(0,0,0,0.08),…] max-md:mt-10 max-md:px-5">
+				<!-- Cabeçalho -->
+				<div class="w-full">
+					<h2 class="w-full text-2xl text-primary font-semibold text-center">Bem-vindo de volta!</h2>
+					<div class="w-full mt-4">
+						<img src="/assets/icons/divider-horizontal.svg" alt="Divider" class="aspect-[333.33] object-contain w-full stroke-[1px] stroke-[rgba(0,0,0,0.06)]" />
+					</div>
+				</div>
+
+				<!-- Formulário -->
+				<form id="loginForm" class="w-full">
+					<!-- Campo E-mail -->
+					<div class="flex w-full flex-col items-stretch mt-6 font-normal">
+						<div class="flex items-center min-h-8 gap-1 text-sm leading-loose h-8">
+							<label for="email" class="text-primary self-stretch my-auto text-right"> E-mail de acesso </label>
+							<span class="text-primary self-stretch my-auto">:</span>
+						</div>
+						<div class="flex items-center w-full gap-2.5 bg-white overflow-hidden text-base text-black whitespace-nowrap rounded-lg border border-gray-200">
+							<div class="flex items-center flex-1 gap-2.5 px-3 py-2">
+								<img src="/assets/icons/email.svg" alt="Email icon" class="w-4 aspect-[1] object-contain shrink-0" />
+								<input type="email" id="Email" name="email" placeholder="Digite seu email de acesso" class="flex-1 bg-transparent outline-none text-ellipsis" />
+							</div>
+						</div>
+						<span id="emailError" class="hidden text-red-500 text-sm mt-1"></span>
+					</div>
+
+					<!-- Campo Senha -->
+					<div class="flex w-full flex-col items-stretch mt-6 whitespace-nowrap font-normal">
+						<div class="flex items-center min-h-8 gap-1 text-sm leading-loose h-8">
+							<label for="password" class="text-primary self-stretch my-auto text-right"> Senha </label>
+							<span class="text-primary self-stretch my-auto">:</span>
+						</div>
+						<div class="flex items-center w-full gap-2.5 bg-white overflow-hidden text-base text-black rounded-lg border border-gray-200">
+							<div class="flex items-center flex-1 gap-2.5 px-3 py-2">
+								<img src="/assets/icons/password.svg" alt="Password icon" class="w-4 aspect-[1] object-contain shrink-0" />
+								<input type="password" id="Senha" name="password" placeholder="Insira sua senha" class="flex-1 bg-transparent outline-none text-ellipsis" />
+								<button type="button" id="togglePassword" class="focus:outline-none">
+									<img src="/assets/icons/show-password.svg" alt="Alternar visibilidade da senha" class="w-4 aspect-[1] object-contain shrink-0" />
+								</button>
+							</div>
+						</div>
+						<span id="passwordError" class="hidden text-red-500 text-sm mt-1"></span>
+					</div>
+
+					<!-- Botão Entrar -->
+					<div class="w-full mt-6">
+						<button type="submit" id="botao-cadastrar" class="flex w-full h-10 items-center justify-center bg-secondary shadow-[0px_2px_0px_0px_rgba(5,145,255,0.10)] text-base text-white font-normal whitespace-nowrap rounded-lg">Entrar</button>
+
 						<div class="w-full mt-4">
 							<img src="/assets/icons/divider-horizontal.svg" alt="Divider" class="aspect-[333.33] object-contain w-full stroke-[1px] stroke-[rgba(0,0,0,0.06)]" />
 						</div>
+
+						<div class="flex w-full items-center gap-1 justify-center mt-4 text-base font-normal">
+							<div class="flex items-center self-stretch min-h-10 text-primary">Ainda não tem conta?</div>
+							<a href="/register" class="px-2 whitespace-nowrap text-secondary font-bold"> Cadastre-se </a>
+						</div>
 					</div>
-
-					<!-- Formulário -->
-					<form id="loginForm" class="w-full">
-						<!-- Campo E-mail -->
-						<div class="flex w-full flex-col items-stretch mt-6 font-normal">
-							<div class="flex items-center min-h-8 gap-1 text-sm leading-loose h-8">
-								<label for="email" class="text-primary self-stretch my-auto text-right"> E-mail de acesso </label>
-								<span class="text-primary self-stretch my-auto">:</span>
-							</div>
-							<div class="flex items-center w-full gap-2.5 bg-white overflow-hidden text-base text-black whitespace-nowrap rounded-lg border border-gray-200">
-								<div class="flex items-center flex-1 gap-2.5 px-3 py-2">
-									<img src="/assets/icons/email.svg" alt="Email icon" class="w-4 aspect-[1] object-contain shrink-0" />
-									<input type="email" id="Email" name="email" placeholder="Digite seu email de acesso" class="flex-1 bg-transparent outline-none text-ellipsis" />
-								</div>
-							</div>
-							<span id="emailError" class="hidden text-red-500 text-sm mt-1"></span>
-						</div>
-
-						<!-- Campo Senha -->
-						<div class="flex w-full flex-col items-stretch mt-6 whitespace-nowrap font-normal">
-							<div class="flex items-center min-h-8 gap-1 text-sm leading-loose h-8">
-								<label for="password" class="text-primary self-stretch my-auto text-right"> Senha </label>
-								<span class="text-primary self-stretch my-auto">:</span>
-							</div>
-							<div class="flex items-center w-full gap-2.5 bg-white overflow-hidden text-base text-black rounded-lg border border-gray-200">
-								<div class="flex items-center flex-1 gap-2.5 px-3 py-2">
-									<img src="/assets/icons/password.svg" alt="Password icon" class="w-4 aspect-[1] object-contain shrink-0" />
-									<input type="password" id="Senha" name="password" placeholder="Insira sua senha" class="flex-1 bg-transparent outline-none text-ellipsis" />
-									<button type="button" id="togglePassword" class="focus:outline-none">
-										<img src="/assets/icons/show-password.svg" alt="Alternar visibilidade da senha" class="w-4 aspect-[1] object-contain shrink-0" />
-									</button>
-								</div>
-							</div>
-							<span id="passwordError" class="hidden text-red-500 text-sm mt-1"></span>
-						</div>
-
-						<!-- Botão Entrar -->
-						<div class="w-full mt-6">
-							<button type="submit" id="botao-cadastrar" class="flex w-full h-10 items-center justify-center bg-secondary shadow-[0px_2px_0px_0px_rgba(5,145,255,0.10)] text-base text-white font-normal whitespace-nowrap rounded-lg">Entrar</button>
-
-							<div class="w-full mt-4">
-								<img src="/assets/icons/divider-horizontal.svg" alt="Divider" class="aspect-[333.33] object-contain w-full stroke-[1px] stroke-[rgba(0,0,0,0.06)]" />
-							</div>
-
-							<div class="flex w-full items-center gap-1 justify-center mt-4 text-base font-normal">
-								<div class="flex items-center self-stretch min-h-10 text-primary">Ainda não tem conta?</div>
-								<a href="/register" class="px-2 whitespace-nowrap text-secondary font-bold"> Cadastre-se </a>
-							</div>
-						</div>
-					</form>
-				</div>
+				</form>
 			</div>
-		</div>
+		</main>
+		<footer class="bg-primary text-tertiary py-4 text-center text-sm">
+			<div class="container mx-auto">&copy; 2025 HorseHouse. Todos os direitos reservados.</div>
+		</footer>
 	</body>
 	<script src="/scripts/login.js"></script>
 </html>
