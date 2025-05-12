@@ -275,14 +275,13 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
 
         const saltRounds = parseInt(process.env.SALT);
         const senhaHash = await bcrypt.hash(senha, saltRounds);
-
+        let results;
         if(foto){
             const queryGerente = `
             INSERT INTO gerente (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_haras_id, foto)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-
-            const [results] = await connection.promise().query(queryGerente, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id, foto]);
+            [results] = await connection.promise().query(queryGerente, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id, foto]);
         }
         else{
             const queryGerente = `
@@ -290,7 +289,7 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
-            const [results] = await connection.promise().query(queryGerente, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id]);
+            [results] = await connection.promise().query(queryGerente, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id]);
         }
 
         res.status(201).json({message: "Gerente cadastrado com sucesso!", id: results.insertId});
@@ -375,16 +374,11 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/editarGerente/:id", extractUserID, async (req, res) => {
+router.put("/editarGerente/:id", extractUserID, async (req, res) => {
     try {
         const userType = req.user.user;
-        const userId = parseInt(req.user.id); // ID do usuário logado
-        const gerenteId = parseInt(req.params.id);
-
-        // Verificar se o ID do gerente é válido
-        if (isNaN(gerenteId)) {
-            return res.status(400).json({ error: "ID do gerente inválido." });
-        }
+        const userId =req.user.id; // ID do usuário logado
+        const gerenteId = req.params.id;
 
         const { nome, sobrenome, senha, cpf, dataNascimento, telefone, email, foto } = req.body;
 
@@ -414,7 +408,7 @@ router.post("/editarGerente/:id", extractUserID, async (req, res) => {
             WHERE gerente.ID = ?
         `;
         const [gerenteResults] = await connection.promise().query(queryVerificaGerente, [gerenteId]);
-
+        console.log(gerenteResults);
         if (gerenteResults.length === 0) {
             return res.status(404).json({ error: "Gerente não encontrado." });
         }
@@ -424,9 +418,11 @@ router.post("/editarGerente/:id", extractUserID, async (req, res) => {
         // Verificar permissões
         if (userType === "proprietario") {
             // Proprietário só pode editar gerentes de seus próprios haras
-            const harasId = gerente.fk_haras_id;
+            const harasId = gerente.fk_Haras_ID;
             const queryVerificaHaras = `SELECT COUNT(*) as count FROM haras WHERE id = ? AND fk_Proprietario_ID = ?`;
             const [verificaHarasResults] = await connection.promise().query(queryVerificaHaras, [harasId, userId]);
+            console.log(queryVerificaHaras, harasId, userId);
+            console.log(verificaHarasResults);
             if (verificaHarasResults[0].count === 0) {
                 return res.status(403).json({ error: "Você não tem permissão para editar gerentes deste haras." });
             }
