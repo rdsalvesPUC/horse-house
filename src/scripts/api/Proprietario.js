@@ -346,19 +346,78 @@ router.get("/proprietario/:id", extractUserID, async (req, res) => {
     `;
 
     try {
-        const [results] = await connection.promise().query(query, [proprietarioId]);
+        if (req.user.user === "Proprietario") {
+            const [results] = await connection.promise().query(query, [proprietarioId]);
 
-        if (results.length === 0) {
-            return res.status(404).json({error: "Proprietário não encontrado."});
+            if (results.length === 0) {
+                return res.status(404).json({error: "Proprietário não encontrado."});
+            }
+
+            res.json(results[0]);
         }
-
-        res.json(results[0]);
+        else {
+            queryVerificacao = `Select * from haras where fk_Proprietario_ID = ? and ID = ?`;
+            const [results] = await connection.promise().query(queryVerificacao, [proprietarioId, req.user.HarasID]);
+            if (results.length === 0) {
+                return res.status(403).json({error: "Acesso negado. Você não tem permissão para visualizar este proprietário."});
+            }
+            const [resultsProprietario] = await connection.promise().query(query, [proprietarioId]);
+            if (resultsProprietario.length === 0) {
+                return res.status(404).json({error: "Proprietário não encontrado."});
+            }
+            res.json(resultsProprietario[0]);
+        }
     } catch (err) {
         console.error(err);
         res.status(500).json({error: "Erro ao processar a solicitação."});
     }
 });
 
+/**
+ * @swagger
+ * /api/proprietario:
+ *   delete:
+ *     summary: Exclui um proprietário
+ *     tags: [Proprietários]
+ *     description: Remove o proprietário autenticado do sistema
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Proprietário excluído com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *               example:
+ *                 message: Proprietário excluído com sucesso!
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
+ *       403:
+ *         description: Acesso negado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ForbiddenError'
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: Erro ao processar a solicitação.
+ */
 router.delete("/proprietario/", [extractUserID, requireProprietario], async (req, res) => {
     const proprietarioId = req.user.id;
 
@@ -373,7 +432,155 @@ router.delete("/proprietario/", [extractUserID, requireProprietario], async (req
     }
 })
 
-router.post("/proprietario/editar", [extractUserID, requireProprietario], async (req, res) => {
+/**
+ * @swagger
+ * /api/proprietario/editar:
+ *   put:
+ *     summary: Atualiza dados do proprietário
+ *     tags: [Proprietários]
+ *     description: Atualiza os dados do proprietário autenticado
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ *                 description: Nome do proprietário
+ *               sobrenome:
+ *                 type: string
+ *                 description: Sobrenome do proprietário
+ *               senha:
+ *                 type: string
+ *                 description: Nova senha do proprietário
+ *               cpf:
+ *                 type: string
+ *                 description: CPF do proprietário
+ *                 pattern: '^\d{11}$'
+ *               dataNascimento:
+ *                 type: string
+ *                 format: date
+ *                 description: Data de nascimento
+ *               telefone:
+ *                 type: string
+ *                 description: Telefone do proprietário
+ *                 pattern: '^\d{10,11}$'
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: Email do proprietário
+ *               cep:
+ *                 type: string
+ *                 description: CEP do endereço
+ *                 pattern: '^\d{8}$'
+ *               rua:
+ *                 type: string
+ *                 description: Rua do endereço
+ *               numero:
+ *                 type: integer
+ *                 description: Número do endereço
+ *               bairro:
+ *                 type: string
+ *                 description: Bairro do endereço
+ *               complemento:
+ *                 type: string
+ *                 description: Complemento do endereço
+ *               foto:
+ *                 type: string
+ *                 description: URL da foto do proprietário
+ *     responses:
+ *       200:
+ *         description: Proprietário atualizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *               example:
+ *                 message: Proprietário atualizado com sucesso!
+ *       400:
+ *         description: Dados de requisição inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               examples:
+ *                 camposObrigatorios:
+ *                   value:
+ *                     error: Pelo menos um campo deve ser fornecido para atualização.
+ *                 cpfInvalido:
+ *                   value:
+ *                     error: CPF inválido.
+ *                 emailInvalido:
+ *                   value:
+ *                     error: Email inválido.
+ *                 telefoneInvalido:
+ *                   value:
+ *                     error: Telefone inválido.
+ *                 cepInvalido:
+ *                   value:
+ *                     error: CEP inválido.
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
+ *       403:
+ *         description: Acesso negado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ForbiddenError'
+ *       404:
+ *         description: Proprietário não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: Proprietário não encontrado.
+ *       409:
+ *         description: Conflito de dados
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               examples:
+ *                 cpfDuplicado:
+ *                   value:
+ *                     error: Este CPF já está cadastrado no sistema.
+ *                 emailDuplicado:
+ *                   value:
+ *                     error: Este email já está cadastrado no sistema.
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: Erro ao processar a solicitação.
+ */
+router.put("/proprietario/editar", [extractUserID, requireProprietario], async (req, res) => {
     const proprietarioId = req.user.id;
     const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento, foto} = req.body;
 

@@ -354,7 +354,7 @@ router.get("/haras/:id", async (req, res) => {
 /**
  * @swagger
  * /api/haras/{id}:
- *   post:
+ *   put:
  *     summary: Atualiza informações de um haras
  *     tags: [Haras]
  *     description: Atualiza os dados de um haras existente
@@ -485,7 +485,7 @@ router.get("/haras/:id", async (req, res) => {
  *               example:
  *                 error: Erro ao processar a solicitação.
  */
-router.post("/haras/:id",[requireProprietario,extractUserID], async (req, res) => {
+router.put("/haras/:id",[requireProprietario,extractUserID], async (req, res) => {
 
     const { nome, rua, numero, complemento, cnpj, bairro, cep } = req.body;
 

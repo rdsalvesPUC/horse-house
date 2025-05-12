@@ -3,7 +3,7 @@ const router = express.Router();
 const connection = require("../horseDB");
 const {extractUserID, requireProprietario, requireGerenteouProprietario} = require("../middleware/auth");
 
-router.post("/criarCavalos", [requireProprietario, extractUserID], async (req, res) => {
+router.post("/cavalos/criar", [requireProprietario, extractUserID], async (req, res) => {
     const {nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, foto, haras_id} = req.body;
 
     if (nome && data_nascimento && peso && sexo && pelagem && sangue && situacao && status && registro && cert && imp && haras_id) {
@@ -36,41 +36,71 @@ router.post("/criarCavalos", [requireProprietario, extractUserID], async (req, r
     }
 
 })
-router.get("/getAllCavalos", [extractUserID], async (req, res) => {
-    let querry;
+router.get("/cavalos/haras/:harasID", [extractUserID], async (req, res) => {
+    const {harasID} = req.params;
     if (req.user.user === "proprietario") {
-        querry = `SELECT *
-                  FROM cavalo
-                  WHERE fk_Proprietario_ID = ?`;
-        const [results] = await connection.promise().query(querry, [req.user.id]);
+        const query = `SELECT *
+                       FROM cavalo
+                       WHERE fk_Proprietario_ID = ?
+                         AND fk_Haras_ID = ?`;
+        const [results] = await connection.promise().query(query, [req.user.id, harasID]);
         if (results.length === 0) {
-            return res.status(404).json({error: "Nenhum cavalo encontrado."});
-        }
-        return res.status(200).json(results);
-    } else {
-        querry = `SELECT *
-                  FROM cavalo
-                  WHERE fk_Haras_ID = ?`;
-        const [results] = await connection.promise().query(querry, [req.user.harasID]);
-        if (results.length === 0) {
-            return res.status(404).json({error: "Nenhum cavalo encontrado."});
+            return res.status(404).json({error: "Cavalos não encontrados."});
         }
         return res.status(200).json(results);
     }
-
+    if (req.user.harasID === harasID) {
+        const query = `SELECT *
+                       FROM cavalo
+                       WHERE fk_Haras_ID = ?`;
+        const [results] = await connection.promise().query(query, [harasID]);
+        if (results.length === 0) {
+            return res.status(404).json({error: "Cavalos não encontrados."});
+        }
+        return res.status(200).json(results);
+    }
+    return res.status(403).json({error: "Acesso não autorizado."});
 })
-router.get("/getCavalosById/:id", extractUserID, async (req, res) => {
+router.get("/cavalos/:id", extractUserID, async (req, res) => {
     const {id} = req.params;
-    const query = `SELECT *
-                   FROM cavalo
-                   WHERE ID = ?
-                     AND cavalo.fk_Haras_ID = ?`;
-    const [results] = await connection.promise().query(query, [id, req.user.harasID]);
-    if (results.length === 0) {
-        return res.status(404).json({error: "Cavalo não encontrado."});
+    if (req.user.user === "proprietario") {
+        const query = `SELECT *
+                       FROM cavalo
+                       WHERE ID = ?
+                         AND fk_Proprietario_ID = ?`;
+        const [results] = await connection.promise().query(query, [id, req.user.id]);
+        if (results.length === 0) {
+            return res.status(404).json({error: "Cavalo não encontrado."});
+        }
+        return res.status(200).json(results[0]);
+    } else{
+        const query = `SELECT *
+                       FROM cavalo
+                       WHERE ID = ?
+                         AND fk_Haras_ID = ?`;
+        const [results] = await connection.promise().query(query, [id, req.user.harasID]);
+        if (results.length === 0) {
+            return res.status(404).json({error: "Cavalo não encontrado."});
+        }
+        return res.status(200).json(results[0]);
     }
-    return res.status(200).json(results[0]);
 })
+
+router.get("/cavalos/dono", [requireProprietario, extractUserID], async (req, res) => {
+    try{
+        const query = `SELECT *
+                       FROM cavalo
+                       WHERE fk_Proprietario_ID = ?`;
+        const [results] = await connection.promise().query(query, [req.user.id]);
+        if (results.length === 0) {
+            return res.status(404).json({error: "Cavalos não encontrados."});
+        }
+        return res.status(200).json(results);
+    } catch (err) {
+        console.error("Erro ao buscar cavalos:", err);
+        return res.status(500).json({error: "Erro ao buscar cavalos."});
+    }
+});
 
 router.delete("/deleteCavalos/:id", extractUserID, requireGerenteouProprietario, async (req, res) => {
     const {id} = req.params;
@@ -96,7 +126,7 @@ router.delete("/deleteCavalos/:id", extractUserID, requireGerenteouProprietario,
     }
     return res.status(200).json({message: "Cavalo deletado com sucesso."});
 })
-router.post("/Cavalos/editar/:id", extractUserID, requireGerenteouProprietario, async (req, res) => {
+router.put("/Cavalos/editar/:id", extractUserID, requireGerenteouProprietario, async (req, res) => {
     const {id} = req.params;
     const {nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, foto} = req.body;
     if (!nome && !data_nascimento && !peso && !sexo && !pelagem && !sangue && !situacao && !status && !registro && !cert && !imp) {

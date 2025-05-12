@@ -305,14 +305,14 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
                 return res.status(409).json({ error: "Dados duplicados. Verifique se o CPF ou email já não estão cadastrados." });
             }
         }
-        res.status(500).json({ error: "Erro ao processar a solicitação." });a
+        res.status(500).json({ error: "Erro ao processar a solicitação." });
     }
 });
 
 /**
  * @swagger
  * /api/editarGerente/{id}:
- *   post:
+ *   put:
  *     summary: Atualiza um gerente existente
  *     tags: [Gerentes]
  *     description: Atualiza os dados de um gerente existente
@@ -378,7 +378,7 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
 router.post("/editarGerente/:id", extractUserID, async (req, res) => {
     try {
         const userType = req.user.user;
-        const userId = req.user.id; // ID do usuário logado
+        const userId = parseInt(req.user.id); // ID do usuário logado
         const gerenteId = parseInt(req.params.id);
 
         // Verificar se o ID do gerente é válido
@@ -424,8 +424,11 @@ router.post("/editarGerente/:id", extractUserID, async (req, res) => {
         // Verificar permissões
         if (userType === "proprietario") {
             // Proprietário só pode editar gerentes de seus próprios haras
-            if (gerente.fk_Proprietario_ID !== userId) {
-                return res.status(403).json({ error: "Você não tem permissão para editar este gerente." });
+            const harasId = gerente.fk_haras_id;
+            const queryVerificaHaras = `SELECT COUNT(*) as count FROM haras WHERE id = ? AND fk_Proprietario_ID = ?`;
+            const [verificaHarasResults] = await connection.promise().query(queryVerificaHaras, [harasId, userId]);
+            if (verificaHarasResults[0].count === 0) {
+                return res.status(403).json({ error: "Você não tem permissão para editar gerentes deste haras." });
             }
         } else if (userType === "gerente") {
             // Gerente só pode editar a si mesmo
