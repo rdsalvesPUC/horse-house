@@ -186,3 +186,4 @@ router.post("/Cavalos/editar/:id", extractUserID, requireGerenteouProprietario, 
     }
 
 })
+module.exports = router;
