@@ -339,11 +339,10 @@ router.get("/haras/:id", async (req, res) => {
     try {
         const query = "SELECT Nome, id FROM haras WHERE id = ?";
         const [results] = await connection.promise().query(query, [req.params.id]);
-        res.json(results);
         if (results.length === 0) {
             return res.status(404).json({error: "Haras não encontrada."});
         }
-        res.json(results[0]);
+        return res.json(results[0]);
     }
     catch (err) {
         console.error(err);
@@ -485,34 +484,68 @@ router.get("/haras/:id", async (req, res) => {
  *               example:
  *                 error: Erro ao processar a solicitação.
  */
-router.put("/haras/:id",[requireProprietario,extractUserID], async (req, res) => {
+router.put("/haras/:id",[extractUserID, requireProprietario], async (req, res) => {
 
     const { nome, rua, numero, complemento, cnpj, bairro, cep } = req.body;
 
-    if (!nome || !rua || !numero || !complemento || !cnpj || !bairro || !cep) {
-        return res.status(400).json({ error: "Todos os campos são obrigatórios." });
+    if (!nome && !rua && !numero && !complemento && !cnpj && !bairro && !cep) {
+        return res.status(400).json({ error: "Pelo menos um campo deve ser fornecido para atualização." });
     }
 
     // Validações adicionais
-    if (!validarCNPJ(cnpj)) {
+    if (cnpj && !validarCNPJ(cnpj)) {
         return res.status(400).json({ error: "CNPJ inválido." });
     }
 
-    if (!validarCEP(cep)) {
+    if (cep && !validarCEP(cep)) {
         return res.status(400).json({ error: "CEP inválido." });
     }
 
+    let queryFields = [];
+    let queryParameters = [];
+
+    if (nome) {
+        queryFields.push("Nome = ?");
+        queryParameters.push(nome);
+    }
+    if (rua) {
+        queryFields.push("Rua = ?");
+        queryParameters.push(rua);
+    }
+    if (numero) {
+        queryFields.push("Numero = ?");
+        queryParameters.push(numero);
+    }
+    if (complemento) {
+        queryFields.push("Complemento = ?");
+        queryParameters.push(complemento);
+    }
+    if (cnpj) {
+        queryFields.push("CNPJ = ?");
+        queryParameters.push(cnpj);
+    }
+    if (bairro) {
+        queryFields.push("Bairro = ?");
+        queryParameters.push(bairro);
+    }
+    if (cep) {
+        queryFields.push("fk_CEP_CEP = ?");
+        queryParameters.push(cep);
+    }
+    queryParameters.push(req.params.id);
+    queryParameters.push(req.user.id);
     try {
-        // Verificar ou cadastrar CEP, cidade e estado
-        await verificarOuCadastrarEndereco(cep);
+        if (cep){
+            // Verificar ou cadastrar CEP, cidade e estado
+            await verificarOuCadastrarEndereco(cep);
+        }
 
         const query = `
-            UPDATE haras 
-            SET Nome = ?, Rua = ?, Numero = ?, Complemento = ?, CNPJ = ?, Bairro = ?, fk_CEP_CEP = ? 
-            WHERE id = ?
+            UPDATE haras
+            SET ${queryFields.join(", ")}
+            WHERE id = ? AND fk_Proprietario_ID = ?
         `;
-
-        await connection.promise().query(query, [nome, rua, numero, complemento, cnpj, bairro, cep, req.params.id]);
+        await connection.promise().query(query, queryParameters);
         res.status(200).json({ message: "Haras atualizado com sucesso!" });
     } catch (err) {
         console.error(err);
@@ -595,16 +628,16 @@ router.put("/haras/:id",[requireProprietario,extractUserID], async (req, res) =>
  *               example:
  *                 error: Erro ao processar a solicitação.
  */
-router.delete("/haras/:id", [requireProprietario,extractUserID], async (req, res) => {
+router.delete("/haras/:id", [extractUserID, requireProprietario], async (req, res) => {
     try {
         const query = "DELETE FROM haras WHERE id = ? AND fk_Proprietario_ID = ?";
         const [results] = await connection.promise().query(query, [req.params.id, req.user.id]);
 
         if (results.affectedRows === 0) {
-            return res.status(404).json({ error: "Haras não encontrada ou você não tem permissão para excluí-la." });
+            return res.status(404).json({ error: "Haras não encontrado ou você não tem permissão para excluí-lo." });
         }
 
-        res.status(200).json({ message: "Haras excluída com sucesso!" });
+        res.status(200).json({ message: "Haras excluído com sucesso!" });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Erro ao processar a solicitação." });

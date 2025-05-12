@@ -145,8 +145,19 @@ const {validarCPF, validarEmail, validarCEP, validarTelefone} = require("../util
  *               properties:
  *                 error:
  *                   type: string
- *               example:
- *                 error: Todos os campos são obrigatórios.
+ *                   description: Mensagem de erro específica
+ *                   example: "Todos os campos são obrigatórios."
+ *       409:
+ *         description: Conflito de dados
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro de conflito
+ *                   example: "Este CPF já está cadastrado no sistema."
  *       500:
  *         description: Erro interno do servidor
  *         content:
@@ -156,8 +167,8 @@ const {validarCPF, validarEmail, validarCEP, validarTelefone} = require("../util
  *               properties:
  *                 error:
  *                   type: string
- *               example:
- *                 error: Erro ao processar a solicitação.
+ *                   description: Mensagem de erro interno
+ *                   example: "Erro ao processar a solicitação."
  */
 router.post("/criarProprietario", async (req, res) => {
     const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento, foto} = req.body;
@@ -190,23 +201,22 @@ router.post("/criarProprietario", async (req, res) => {
 
         // Verificar ou cadastrar CEP, cidade e estado
         await verificarOuCadastrarEndereco(cep);
-
+        let results;
         // Inserir o proprietário
         if(foto){
             const query = `
             INSERT INTO Proprietario (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_CEP_CEP, rua, numero, bairro, Complemento, foto)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-            const [results] = await connection.promise().query(query, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento, foto]);
+            [results] = await connection.promise().query(query, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento, foto]);
         }
         else{
             const query = `
             INSERT INTO Proprietario (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_CEP_CEP, rua, numero, bairro, Complemento)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-            const [results] = await connection.promise().query(query, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento]);
+            [results] = await connection.promise().query(query, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento]);
         }
-
         res.status(201).json({message: "Proprietário cadastrado com sucesso!", id: results.insertId});
     } catch (err) {
         console.error(err);
@@ -292,13 +302,23 @@ router.post("/criarProprietario", async (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UnauthorizedError'
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro de autenticação
+ *                   example: "Token de autenticação inválido ou expirado"
  *       403:
  *         description: Acesso negado
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ForbiddenError'
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro de autorização
+ *                   example: "Acesso negado. Você não tem permissão para visualizar este proprietário."
  *       404:
  *         description: Proprietário não encontrado
  *         content:
@@ -308,8 +328,8 @@ router.post("/criarProprietario", async (req, res) => {
  *               properties:
  *                 error:
  *                   type: string
- *               example:
- *                 error: Proprietário não encontrado.
+ *                   description: Mensagem de erro de não encontrado
+ *                   example: "Proprietário não encontrado."
  *       500:
  *         description: Erro interno do servidor
  *         content:
@@ -319,11 +339,12 @@ router.post("/criarProprietario", async (req, res) => {
  *               properties:
  *                 error:
  *                   type: string
- *               example:
- *                 error: Erro ao processar a solicitação.
+ *                   description: Mensagem de erro interno
+ *                   example: "Erro ao processar a solicitação."
  */
 router.get("/proprietario/:id", extractUserID, async (req, res) => {
     const proprietarioId = req.params.id;
+    const userId = req.user.id;
     const query = `
         SELECT Cpf,
                p.Nome,
@@ -336,17 +357,17 @@ router.get("/proprietario/:id", extractUserID, async (req, res) => {
                Complemento,
                Bairro,
                CEP,
-               c.nome,
+               cd.nome,
                UF
         FROM Proprietario p
                  JOIN CEP c ON p.fk_CEP_CEP = c.CEP
-                 JOIN Cidade c ON c.FK_Cidade_ID = c.ID
-                 JOIN Estado e ON c.fk_Estado_ID = e.ID
+                 JOIN Cidade cd ON c.FK_Cidade_ID = cd.ID
+                 JOIN Estado e ON cd.fk_Estado_ID = e.ID
         WHERE p.ID = ?
     `;
 
     try {
-        if (req.user.user === "Proprietario") {
+        if (req.user.user === "proprietario" && userId == proprietarioId) {
             const [results] = await connection.promise().query(query, [proprietarioId]);
 
             if (results.length === 0) {
@@ -356,8 +377,8 @@ router.get("/proprietario/:id", extractUserID, async (req, res) => {
             res.json(results[0]);
         }
         else {
-            queryVerificacao = `Select * from haras where fk_Proprietario_ID = ? and ID = ?`;
-            const [results] = await connection.promise().query(queryVerificacao, [proprietarioId, req.user.HarasID]);
+            const queryVerificacao = `Select * from haras where fk_Proprietario_ID = ? and ID = ?`;
+            [results] = await connection.promise().query(queryVerificacao, [proprietarioId, req.user.HarasID]);
             if (results.length === 0) {
                 return res.status(403).json({error: "Acesso negado. Você não tem permissão para visualizar este proprietário."});
             }
@@ -513,34 +534,30 @@ router.delete("/proprietario/", [extractUserID, requireProprietario], async (req
  *               properties:
  *                 error:
  *                   type: string
- *               examples:
- *                 camposObrigatorios:
- *                   value:
- *                     error: Pelo menos um campo deve ser fornecido para atualização.
- *                 cpfInvalido:
- *                   value:
- *                     error: CPF inválido.
- *                 emailInvalido:
- *                   value:
- *                     error: Email inválido.
- *                 telefoneInvalido:
- *                   value:
- *                     error: Telefone inválido.
- *                 cepInvalido:
- *                   value:
- *                     error: CEP inválido.
+ *                   description: Mensagem de erro de validação
+ *                   example: "Pelo menos um campo deve ser fornecido para atualização."
  *       401:
  *         description: Não autorizado
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UnauthorizedError'
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro de autenticação
+ *                   example: "Token de autenticação inválido ou expirado"
  *       403:
  *         description: Acesso negado
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ForbiddenError'
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro de autorização
+ *                   example: "Acesso negado. Você não tem permissão para realizar esta ação."
  *       404:
  *         description: Proprietário não encontrado
  *         content:
@@ -550,8 +567,8 @@ router.delete("/proprietario/", [extractUserID, requireProprietario], async (req
  *               properties:
  *                 error:
  *                   type: string
- *               example:
- *                 error: Proprietário não encontrado.
+ *                   description: Mensagem de erro de não encontrado
+ *                   example: "Proprietário não encontrado."
  *       409:
  *         description: Conflito de dados
  *         content:
@@ -561,13 +578,8 @@ router.delete("/proprietario/", [extractUserID, requireProprietario], async (req
  *               properties:
  *                 error:
  *                   type: string
- *               examples:
- *                 cpfDuplicado:
- *                   value:
- *                     error: Este CPF já está cadastrado no sistema.
- *                 emailDuplicado:
- *                   value:
- *                     error: Este email já está cadastrado no sistema.
+ *                   description: Mensagem de erro de conflito
+ *                   example: "Este CPF já está cadastrado no sistema."
  *       500:
  *         description: Erro interno do servidor
  *         content:
@@ -577,8 +589,8 @@ router.delete("/proprietario/", [extractUserID, requireProprietario], async (req
  *               properties:
  *                 error:
  *                   type: string
- *               example:
- *                 error: Erro ao processar a solicitação.
+ *                   description: Mensagem de erro interno
+ *                   example: "Erro ao processar a solicitação."
  */
 router.put("/proprietario/editar", [extractUserID, requireProprietario], async (req, res) => {
     const proprietarioId = req.user.id;
