@@ -39,7 +39,6 @@ const jwt = require("jsonwebtoken");
  */
 const extractUserID = (req, res, next) => {
     const authHeader = req.headers["authorization"];
-
     if (!authHeader) {
         return res.status(401).json({
             error: "Token não fornecido."
@@ -58,7 +57,7 @@ const extractUserID = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
+        console.log(decoded)
         // Verifica se o token contém as informações necessárias
         if (!decoded.id || !decoded.user) {
             return res.status(403).json({
@@ -127,8 +126,25 @@ const requireGerente = (req, res, next) => {
     next();
 };
 
+/**
+ * Middleware para verificar se o usuário tem permissão de gerente ou proprietário
+ * @param {Object} req - Objeto da requisição
+ * @param {Object} res - Objeto da resposta
+ * @param {Function} next - Função para continuar o fluxo
+ * @returns {void}
+ */
+const requireGerenteouProprietario = (req, res, next) => {
+    if (!req.user || (req.user.user !== "gerente" && req.user.user !== "proprietario")) {
+        return res.status(403).json({
+            error: "Acesso negado. Apenas gerentes podem acessar este recurso."
+        });
+    }
+    next();
+};
+
 module.exports = {
     extractUserID,
     requireProprietario,
-    requireGerente
+    requireGerente,
+    requireGerenteouProprietario
 }; 

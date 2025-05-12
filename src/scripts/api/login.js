@@ -118,7 +118,7 @@ async function tryAuthenticate(email, senha, tabela) {
             return { success: false };
         }
 
-        return { 
+        return {
             success: true, 
             usuario: usuario,
             tipo: tabela.toLowerCase()
@@ -160,11 +160,16 @@ router.post("/", async (req, res) => {
         }
 
         console.log(usuarioAutenticado.tipo)
+        let harasID;
+        if (usuarioAutenticado.usuario.fk_Haras_ID){
+            harasID = {harasId: usuarioAutenticado.usuario.fk_Haras_ID};
+        }
         const token = jwt.sign(
             { 
                 id: usuarioAutenticado.usuario.ID, 
                 email: usuarioAutenticado.usuario.Email, 
-                user: usuarioAutenticado.tipo 
+                user: usuarioAutenticado.tipo,
+                    ...harasID
             },
             process.env.JWT_SECRET,
             { expiresIn: "15d" }

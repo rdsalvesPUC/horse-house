@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const connection = require("../horseDB");
 const {verificarOuCadastrarEndereco} = require("../utils/enderecoUtils");
-const {extractUserID} = require("../middleware/auth");
+const {extractUserID, requireProprietario} = require("../middleware/auth");
 const {validarCPF, validarEmail, validarCEP, validarTelefone} = require("../utils/validations");
 
 /**
@@ -160,7 +160,7 @@ const {validarCPF, validarEmail, validarCEP, validarTelefone} = require("../util
  *                 error: Erro ao processar a solicitação.
  */
 router.post("/criarProprietario", async (req, res) => {
-    const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento} = req.body;
+    const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento, foto} = req.body;
 
     if (!nome || !sobrenome || !senha || !cpf || !dataNascimento || !telefone || !email || !cep || !rua || !numero || !bairro) {
         return res.status(400).json({error: "Todos os campos são obrigatórios."});
@@ -192,11 +192,20 @@ router.post("/criarProprietario", async (req, res) => {
         await verificarOuCadastrarEndereco(cep);
 
         // Inserir o proprietário
-        const query = `
+        if(foto){
+            const query = `
+            INSERT INTO Proprietario (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_CEP_CEP, rua, numero, bairro, Complemento, foto)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+            const [results] = await connection.promise().query(query, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento, foto]);
+        }
+        else{
+            const query = `
             INSERT INTO Proprietario (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_CEP_CEP, rua, numero, bairro, Complemento)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        const [results] = await connection.promise().query(query, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento]);
+            const [results] = await connection.promise().query(query, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento]);
+        }
 
         res.status(201).json({message: "Proprietário cadastrado com sucesso!", id: results.insertId});
     } catch (err) {
@@ -349,5 +358,139 @@ router.get("/proprietario/:id", extractUserID, async (req, res) => {
         res.status(500).json({error: "Erro ao processar a solicitação."});
     }
 });
+
+router.delete("/proprietario/", [extractUserID, requireProprietario], async (req, res) => {
+    const proprietarioId = req.user.id;
+
+    try {
+        const query = "DELETE FROM Proprietario WHERE ID = ?";
+        await connection.promise().query(query, [proprietarioId]);
+
+        res.status(200).json({message: "Proprietário excluído com sucesso!"});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: "Erro ao processar a solicitação."});
+    }
+})
+
+router.post("/proprietario/editar", [extractUserID, requireProprietario], async (req, res) => {
+    const proprietarioId = req.user.id;
+    const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento, foto} = req.body;
+
+    if (!nome && !sobrenome && !senha && !cpf && !dataNascimento && !telefone && !email && !cep && !rua && !numero && !bairro) {
+        return res.status(400).json({error: "Pelo menos um campo deve ser fornecido para atualização."});
+    }
+    // Validações adicionais para campos fornecidos
+    if (cpf && !validarCPF(cpf)) {
+        return res.status(400).json({ error: "CPF inválido." });
+    }
+
+    if (email && !validarEmail(email)) {
+        return res.status(400).json({ error: "Email inválido." });
+    }
+
+    if (telefone && !validarTelefone(telefone)) {
+        return res.status(400).json({ error: "Telefone inválido." });
+    }
+    if (cep && !validarCEP(cep)) {
+        return res.status(400).json({ error: "CEP inválido." });
+    }
+    try {
+        // Verificar ou cadastrar CEP, cidade e estado
+        if (cep) {
+            await verificarOuCadastrarEndereco(cep);
+        }}
+    catch (err) {
+        console.error(err);
+        return res.status(400).json({ error: "Erro ao processar o CEP." });
+    }
+    // Construir a query de atualização
+    let updateFields = [];
+    let queryParams = [];
+    if (nome) {
+        updateFields.push("Nome = ?");
+        queryParams.push(nome);
+    }
+    if (sobrenome) {
+        updateFields.push("Sobrenome = ?");
+        queryParams.push(sobrenome);
+    }
+    if (senha) {
+        const saltRounds = parseInt(process.env.SALT); // Define o custo do hash
+        const senhaHash = await bcrypt.hash(senha, saltRounds);
+        updateFields.push("Senha = ?");
+        queryParams.push(senhaHash);
+    }
+    if (cpf) {
+        updateFields.push("CPF = ?");
+        queryParams.push(cpf);
+    }
+    if (dataNascimento) {
+        updateFields.push("Data_Nascimento = ?");
+        queryParams.push(dataNascimento);
+    }
+    if (telefone) {
+        updateFields.push("Telefone = ?");
+        queryParams.push(telefone);
+    }
+    if (email) {
+        updateFields.push("Email = ?");
+        queryParams.push(email);
+    }
+    if (cep) {
+        updateFields.push("fk_CEP_CEP = ?");
+        queryParams.push(cep);
+    }
+    if (rua) {
+        updateFields.push("Rua = ?");
+        queryParams.push(rua);
+    }
+    if (numero) {
+        updateFields.push("Numero = ?");
+        queryParams.push(numero);
+    }
+    if (bairro) {
+        updateFields.push("Bairro = ?");
+        queryParams.push(bairro);
+    }
+    if (complemento) {
+        updateFields.push("Complemento = ?");
+        queryParams.push(complemento);
+    }
+    if (foto) {
+        updateFields.push("Foto = ?");
+        queryParams.push(foto);
+    }
+    queryParams.push(proprietarioId);
+    const query = `
+        UPDATE Proprietario
+        SET ${updateFields.join(", ")}
+        WHERE ID = ?
+    `;
+    try {
+        const [results] = await connection.promise().query(query, queryParams);
+        if (results.affectedRows === 0) {
+            return res.status(404).json({error: "Proprietário não encontrado."});
+        }
+        res.status(200).json({message: "Proprietário atualizado com sucesso!"});
+    } catch (err) {
+        console.error(err);
+        if (err.code === 'ER_DUP_ENTRY') {
+            if (err.message.includes('CPF')) {
+                return res.status(409).json({ error: "Este CPF já está cadastrado no sistema." });
+            } else if (err.message.includes('Email')) {
+                return res.status(409).json({ error: "Este email já está cadastrado no sistema." });
+            } else {
+                return res.status(409).json({ error: "Dados duplicados. Verifique se o CPF ou email já não estão cadastrados." });
+            }
+        }
+        if (err.message.includes('ER_NO_REFERENCED_ROW')) {
+            return res.status(400).json({ error: "Erro ao processar o CEP." });
+        }
+
+        console.error(err);
+        res.status(500).json({error: "Erro ao processar a solicitação."});
+    }
+})
 
 module.exports = router;

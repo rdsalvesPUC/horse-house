@@ -246,7 +246,7 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  */
 router.post("/criarGerente", [extractUserID, requireProprietario], async (req, res) => {
     try {
-        const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, haras_id} = req.body;
+        const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, haras_id, foto} = req.body;
 
         if (!nome || !sobrenome || !senha || !cpf || !dataNascimento || !email || !telefone || !haras_id) {
             return res.status(400).json({error: "Todos os campos são obrigatórios."});
@@ -276,12 +276,22 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
         const saltRounds = parseInt(process.env.SALT);
         const senhaHash = await bcrypt.hash(senha, saltRounds);
 
-        const queryGerente = `
+        if(foto){
+            const queryGerente = `
+            INSERT INTO gerente (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_haras_id, foto)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+            const [results] = await connection.promise().query(queryGerente, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id, foto]);
+        }
+        else{
+            const queryGerente = `
             INSERT INTO gerente (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_haras_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
-        const [results] = await connection.promise().query(queryGerente, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id]);
+            const [results] = await connection.promise().query(queryGerente, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id]);
+        }
 
         res.status(201).json({message: "Gerente cadastrado com sucesso!", id: results.insertId});
     } catch (err) {
@@ -295,14 +305,14 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
                 return res.status(409).json({ error: "Dados duplicados. Verifique se o CPF ou email já não estão cadastrados." });
             }
         }
-        res.status(500).json({ error: "Erro ao processar a solicitação." });
+        res.status(500).json({ error: "Erro ao processar a solicitação." });a
     }
 });
 
 /**
  * @swagger
  * /api/editarGerente/{id}:
- *   put:
+ *   post:
  *     summary: Atualiza um gerente existente
  *     tags: [Gerentes]
  *     description: Atualiza os dados de um gerente existente
@@ -365,45 +375,65 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.put("/editarGerente/:id", extractUserID, async (req, res) => {
+router.post("/editarGerente/:id", extractUserID, async (req, res) => {
     try {
         const userType = req.user.user;
-        if (userType !== "proprietario") {
-            return res.status(403).json({error: "Acesso negado. Somente proprietários podem atualizar gerentes."});
+        const userId = req.user.id; // ID do usuário logado
+        const gerenteId = parseInt(req.params.id);
+
+        // Verificar se o ID do gerente é válido
+        if (isNaN(gerenteId)) {
+            return res.status(400).json({ error: "ID do gerente inválido." });
         }
 
-        const gerenteId = req.params.id;
-        const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email} = req.body;
+        const { nome, sobrenome, senha, cpf, dataNascimento, telefone, email, foto } = req.body;
 
         // Verificar se pelo menos um campo para atualização foi fornecido
-        if (!nome && !sobrenome && !senha && !cpf && !dataNascimento && !telefone && !email) {
-            return res.status(400).json({error: "Pelo menos um campo deve ser fornecido para atualização."});
+        if (!nome && !sobrenome && !senha && !cpf && !dataNascimento && !telefone && !email && !foto) {
+            return res.status(400).json({ error: "Pelo menos um campo deve ser fornecido para atualização." });
         }
 
         // Validações adicionais para campos fornecidos
         if (cpf && !validarCPF(cpf)) {
-            return res.status(400).json({error: "CPF inválido."});
+            return res.status(400).json({ error: "CPF inválido." });
         }
 
         if (email && !validarEmail(email)) {
-            return res.status(400).json({error: "Email inválido."});
+            return res.status(400).json({ error: "Email inválido." });
         }
 
         if (telefone && !validarTelefone(telefone)) {
-            return res.status(400).json({error: "Telefone inválido."});
+            return res.status(400).json({ error: "Telefone inválido." });
         }
 
         // Verificar se o gerente existe
-        const queryVerificaGerente = "SELECT gerente.*, haras.fk_Proprietario_ID FROM gerente JOIN haras ON gerente.fk_haras_id = haras.ID WHERE gerente.ID = ?";
+        const queryVerificaGerente = `
+            SELECT gerente.*, haras.fk_Proprietario_ID 
+            FROM gerente 
+            JOIN haras ON gerente.fk_haras_id = haras.ID 
+            WHERE gerente.ID = ?
+        `;
         const [gerenteResults] = await connection.promise().query(queryVerificaGerente, [gerenteId]);
 
         if (gerenteResults.length === 0) {
-            return res.status(404).json({error: "Gerente não encontrado."});
+            return res.status(404).json({ error: "Gerente não encontrado." });
         }
 
-        // Verificar se o haras pertence ao proprietário logado
-        if (gerenteResults[0].fk_Proprietario_ID !== req.user.id) {
-            return res.status(403).json({error: "Você não tem permissão para atualizar gerentes deste haras."});
+        const gerente = gerenteResults[0];
+
+        // Verificar permissões
+        if (userType === "proprietario") {
+            // Proprietário só pode editar gerentes de seus próprios haras
+            if (gerente.fk_Proprietario_ID !== userId) {
+                return res.status(403).json({ error: "Você não tem permissão para editar este gerente." });
+            }
+        } else if (userType === "gerente") {
+            // Gerente só pode editar a si mesmo
+            if (gerenteId !== userId) {
+                return res.status(403).json({ error: "Você não tem permissão para editar este gerente." });
+            }
+        } else {
+            return res.status(403).json({ error: "Acesso negado. Somente proprietários e gerentes podem editar gerentes." });
         }
 
         // Construir a query de atualização
@@ -447,6 +477,11 @@ router.put("/editarGerente/:id", extractUserID, async (req, res) => {
             queryParams.push(email);
         }
 
+        if (foto) {
+            updateFields.push("foto = ?");
+            queryParams.push(foto);
+        }
+
         // Adicionar o ID do gerente ao final dos parâmetros
         queryParams.push(gerenteId);
 
@@ -458,13 +493,13 @@ router.put("/editarGerente/:id", extractUserID, async (req, res) => {
 
         await connection.promise().query(queryUpdateGerente, queryParams);
 
-        res.status(200).json({message: "Gerente atualizado com sucesso!"});
+        res.status(200).json({ message: "Gerente atualizado com sucesso!" });
     } catch (err) {
         console.error("Erro ao atualizar gerente:", err);
         if (err.code === 'ER_DUP_ENTRY') {
-            return res.status(409).json({error: "Dados duplicados."});
+            return res.status(409).json({ error: "Dados duplicados." });
         }
-        return res.status(500).json({error: "Erro ao processar a solicitação."});
+        return res.status(500).json({ error: "Erro ao processar a solicitação." });
     }
 });
 
@@ -641,3 +676,4 @@ router.get("/gerente/:id", extractUserID, async (req, res) => {
 });
 
 module.exports = router;
+
