@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../horseDB");
-const {extractUserID, requireProprietario} = require("../middleware/auth");
+const {extractUserID, requireProprietario, requireGerente} = require("../middleware/auth");
 const bcrypt = require("bcrypt");
 const {validarCPF, validarEmail, validarTelefone} = require("../utils/validations");
 
@@ -61,7 +61,7 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  *         telefone: "11987654321"
  *         email: joao.silva@exemplo.com
  *         haras_id: 1
- *     
+ *
  *     UpdateGerenteRequest:
  *       type: object
  *       properties:
@@ -98,7 +98,7 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  *         sobrenome: Silva Santos
  *         telefone: "11999999999"
  *         email: joao.atualizado@exemplo.com
- *     
+ *
  *     GerenteResponse:
  *       type: object
  *       properties:
@@ -140,7 +140,7 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  *         email: joao.silva@exemplo.com
  *         fk_haras_id: 1
  *         haras_nome: Haras Bela Vista
- *     
+ *
  *     CreateGerenteResponse:
  *       type: object
  *       properties:
@@ -153,7 +153,7 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  *       example:
  *         message: Gerente cadastrado com sucesso!
  *         id: 1
- *     
+ *
  *     UpdateGerenteResponse:
  *       type: object
  *       properties:
@@ -162,7 +162,7 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  *           description: Mensagem de sucesso
  *       example:
  *         message: Gerente atualizado com sucesso!
- *     
+ *
  *     ErrorResponse:
  *       type: object
  *       properties:
@@ -276,18 +276,17 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
         const saltRounds = parseInt(process.env.SALT);
         const senhaHash = await bcrypt.hash(senha, saltRounds);
         let results;
-        if(foto){
+        if (foto) {
             const queryGerente = `
-            INSERT INTO gerente (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_haras_id, foto)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
+                INSERT INTO gerente (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_haras_id, foto)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `;
             [results] = await connection.promise().query(queryGerente, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id, foto]);
-        }
-        else{
+        } else {
             const queryGerente = `
-            INSERT INTO gerente (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_haras_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `;
+                INSERT INTO gerente (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_haras_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `;
 
             [results] = await connection.promise().query(queryGerente, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id]);
         }
@@ -297,14 +296,14 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
         console.error(err);
         if (err.code === 'ER_DUP_ENTRY') {
             if (err.message.includes('CPF')) {
-                return res.status(409).json({ error: "Este CPF já está cadastrado no sistema." });
+                return res.status(409).json({error: "Este CPF já está cadastrado no sistema."});
             } else if (err.message.includes('Email')) {
-                return res.status(409).json({ error: "Este email já está cadastrado no sistema." });
+                return res.status(409).json({error: "Este email já está cadastrado no sistema."});
             } else {
-                return res.status(409).json({ error: "Dados duplicados. Verifique se o CPF ou email já não estão cadastrados." });
+                return res.status(409).json({error: "Dados duplicados. Verifique se o CPF ou email já não estão cadastrados."});
             }
         }
-        res.status(500).json({ error: "Erro ao processar a solicitação." });
+        res.status(500).json({error: "Erro ao processar a solicitação."});
     }
 });
 
@@ -374,65 +373,115 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.put("/editarGerente/:id", extractUserID, async (req, res) => {
+
+/**
+ * @swagger
+ * /api/editarGerente:
+ *   put:
+ *     summary: Atualiza os dados do gerente logado
+ *     tags: [Gerentes]
+ *     description: Permite que um gerente atualize seus próprios dados
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateGerenteRequest'
+ *     responses:
+ *       200:
+ *         description: Gerente atualizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateGerenteResponse'
+ *       400:
+ *         description: Dados de requisição inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
+ *       403:
+ *         description: Acesso negado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ForbiddenError'
+ *       404:
+ *         description: Gerente não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       409:
+ *         description: Dados duplicados
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.put("/editarGerente/:id", [extractUserID, requireProprietario], async (req, res) => {
     try {
         const userType = req.user.user;
-        const userId =req.user.id; // ID do usuário logado
+        const userId = req.user.id; // ID do usuário logado
         const gerenteId = req.params.id;
 
-        const { nome, sobrenome, senha, cpf, dataNascimento, telefone, email, foto } = req.body;
+        const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, foto} = req.body;
 
         // Verificar se pelo menos um campo para atualização foi fornecido
         if (!nome && !sobrenome && !senha && !cpf && !dataNascimento && !telefone && !email && !foto) {
-            return res.status(400).json({ error: "Pelo menos um campo deve ser fornecido para atualização." });
+            return res.status(400).json({error: "Pelo menos um campo deve ser fornecido para atualização."});
         }
 
         // Validações adicionais para campos fornecidos
         if (cpf && !validarCPF(cpf)) {
-            return res.status(400).json({ error: "CPF inválido." });
+            return res.status(400).json({error: "CPF inválido."});
         }
 
         if (email && !validarEmail(email)) {
-            return res.status(400).json({ error: "Email inválido." });
+            return res.status(400).json({error: "Email inválido."});
         }
 
         if (telefone && !validarTelefone(telefone)) {
-            return res.status(400).json({ error: "Telefone inválido." });
+            return res.status(400).json({error: "Telefone inválido."});
         }
 
         // Verificar se o gerente existe
         const queryVerificaGerente = `
-            SELECT gerente.*, haras.fk_Proprietario_ID 
-            FROM gerente 
-            JOIN haras ON gerente.fk_haras_id = haras.ID 
+            SELECT gerente.*, haras.fk_Proprietario_ID
+            FROM gerente
+                     JOIN haras ON gerente.fk_haras_id = haras.ID
             WHERE gerente.ID = ?
         `;
         const [gerenteResults] = await connection.promise().query(queryVerificaGerente, [gerenteId]);
-        console.log(gerenteResults);
         if (gerenteResults.length === 0) {
-            return res.status(404).json({ error: "Gerente não encontrado." });
+            return res.status(404).json({error: "Gerente não encontrado."});
         }
 
         const gerente = gerenteResults[0];
-
-        // Verificar permissões
-        if (userType === "proprietario") {
-            // Proprietário só pode editar gerentes de seus próprios haras
-            const harasId = gerente.fk_Haras_ID;
-            const queryVerificaHaras = `SELECT COUNT(*) as count FROM haras WHERE id = ? AND fk_Proprietario_ID = ?`;
-            const [verificaHarasResults] = await connection.promise().query(queryVerificaHaras, [harasId, userId]);
-            console.log(queryVerificaHaras, harasId, userId);
-            console.log(verificaHarasResults);
-            if (verificaHarasResults[0].count === 0) {
-                return res.status(403).json({ error: "Você não tem permissão para editar gerentes deste haras." });
-            }
-        } else if (userType === "gerente") {
-            // Gerente só pode editar a si mesmo
-            if (gerenteId !== userId) {
-                return res.status(403).json({ error: "Você não tem permissão para editar este gerente." });
-            }
-        } else {
-            return res.status(403).json({ error: "Acesso negado. Somente proprietários e gerentes podem editar gerentes." });
+        // Proprietário só pode editar gerentes de seus próprios haras
+        const harasId = gerente.fk_Haras_ID;
+        const queryVerificaHaras = `SELECT COUNT(*) as count
+                                    FROM haras
+                                    WHERE id = ?
+                                      AND fk_Proprietario_ID = ?`;
+        const [verificaHarasResults] = await connection.promise().query(queryVerificaHaras, [harasId, userId]);
+        console.log(queryVerificaHaras, harasId, userId);
+        if (verificaHarasResults[0].count === 0) {
+            return res.status(403).json({error: "Você não tem permissão para editar gerentes deste haras."});
         }
 
         // Construir a query de atualização
@@ -492,13 +541,119 @@ router.put("/editarGerente/:id", extractUserID, async (req, res) => {
 
         await connection.promise().query(queryUpdateGerente, queryParams);
 
-        res.status(200).json({ message: "Gerente atualizado com sucesso!" });
+        res.status(200).json({message: "Gerente atualizado com sucesso!"});
     } catch (err) {
         console.error("Erro ao atualizar gerente:", err);
         if (err.code === 'ER_DUP_ENTRY') {
-            return res.status(409).json({ error: "Dados duplicados." });
+            return res.status(409).json({error: "Dados duplicados."});
         }
-        return res.status(500).json({ error: "Erro ao processar a solicitação." });
+        return res.status(500).json({error: "Erro ao processar a solicitação."});
+    }
+});
+
+router.put("/editarGerente/", [extractUserID, requireGerente], async (req, res) => {
+    try {
+        const userType = req.user.user;
+        const userId = req.user.id; // ID do usuário logado
+
+        const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, foto} = req.body;
+
+        // Verificar se pelo menos um campo para atualização foi fornecido
+        if (!nome && !sobrenome && !senha && !cpf && !dataNascimento && !telefone && !email && !foto) {
+            return res.status(400).json({error: "Pelo menos um campo deve ser fornecido para atualização."});
+        }
+
+        // Validações adicionais para campos fornecidos
+        if (cpf && !validarCPF(cpf)) {
+            return res.status(400).json({error: "CPF inválido."});
+        }
+
+        if (email && !validarEmail(email)) {
+            return res.status(400).json({error: "Email inválido."});
+        }
+
+        if (telefone && !validarTelefone(telefone)) {
+            return res.status(400).json({error: "Telefone inválido."});
+        }
+
+        // Verificar se o gerente existe
+        const queryVerificaGerente = `
+            SELECT gerente.*, haras.fk_Proprietario_ID
+            FROM gerente
+                     JOIN haras ON gerente.fk_haras_id = haras.ID
+            WHERE gerente.ID = ?
+        `;
+        const [gerenteResults] = await connection.promise().query(queryVerificaGerente, [userId]);
+        if (gerenteResults.length === 0) {
+            return res.status(404).json({error: "Gerente não encontrado."});
+        }
+
+        const gerente = gerenteResults[0];
+
+        // Construir a query de atualização
+        let updateFields = [];
+        let queryParams = [];
+
+        if (nome) {
+            updateFields.push("nome = ?");
+            queryParams.push(nome);
+        }
+
+        if (sobrenome) {
+            updateFields.push("sobrenome = ?");
+            queryParams.push(sobrenome);
+        }
+
+        if (senha) {
+            const saltRounds = parseInt(process.env.SALT);
+            const senhaHash = await bcrypt.hash(senha, saltRounds);
+            updateFields.push("senha = ?");
+            queryParams.push(senhaHash);
+        }
+
+        if (cpf) {
+            updateFields.push("cpf = ?");
+            queryParams.push(cpf);
+        }
+
+        if (dataNascimento) {
+            updateFields.push("data_nascimento = ?");
+            queryParams.push(dataNascimento);
+        }
+
+        if (telefone) {
+            updateFields.push("telefone = ?");
+            queryParams.push(telefone);
+        }
+
+        if (email) {
+            updateFields.push("email = ?");
+            queryParams.push(email);
+        }
+
+        if (foto) {
+            updateFields.push("foto = ?");
+            queryParams.push(foto);
+        }
+
+        // Adicionar o ID do gerente ao final dos parâmetros
+        queryParams.push(userId);
+
+        const queryUpdateGerente = `
+            UPDATE gerente
+            SET ${updateFields.join(", ")}
+            WHERE ID = ?
+        `;
+
+        await connection.promise().query(queryUpdateGerente, queryParams);
+
+        res.status(200).json({message: "Gerente atualizado com sucesso!"});
+    } catch (err) {
+        console.error("Erro ao atualizar gerente:", err);
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({error: "Dados duplicados."});
+        }
+        return res.status(500).json({error: "Erro ao processar a solicitação."});
     }
 });
 
@@ -567,7 +722,14 @@ router.get("/gerentes/haras/:harasId", extractUserID, async (req, res) => {
 
         // Buscar todos os gerentes do haras
         const queryGerentes = `
-            SELECT ID, nome, sobrenome, cpf, data_nascimento, telefone, email, fk_haras_id
+            SELECT ID,
+                   nome,
+                   sobrenome,
+                   cpf,
+                   data_nascimento,
+                   telefone,
+                   email,
+                   fk_haras_id
             FROM gerente
             WHERE fk_haras_id = ?
         `;
@@ -636,11 +798,18 @@ router.get("/gerente/:id", extractUserID, async (req, res) => {
 
         // Verificar se o gerente existe
         const queryVerificaGerente = `
-            SELECT gerente.ID, gerente.nome, gerente.sobrenome, gerente.cpf, 
-                   gerente.data_nascimento, gerente.telefone, gerente.email, 
-                   gerente.fk_haras_id, haras.fk_Proprietario_ID, haras.Nome as haras_nome
-            FROM gerente 
-            JOIN haras ON gerente.fk_haras_id = haras.ID 
+            SELECT gerente.ID,
+                   gerente.nome,
+                   gerente.sobrenome,
+                   gerente.cpf,
+                   gerente.data_nascimento,
+                   gerente.telefone,
+                   gerente.email,
+                   gerente.fk_haras_id,
+                   haras.fk_Proprietario_ID,
+                   haras.Nome as haras_nome
+            FROM gerente
+                     JOIN haras ON gerente.fk_haras_id = haras.ID
             WHERE gerente.ID = ?
         `;
         const [gerenteResults] = await connection.promise().query(queryVerificaGerente, [gerenteId]);

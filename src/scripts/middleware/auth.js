@@ -66,11 +66,20 @@ const extractUserID = (req, res, next) => {
         }
 
         // Adiciona as informações do usuário à requisição
-        req.user = {
-            id: decoded.id,
-            user: decoded.user,
-            email: decoded.email
-        };
+        if(decoded.harasId){
+            req.user = {
+                id: decoded.id,
+                user: decoded.user,
+                email: decoded.email,
+                harasId: decoded.harasId
+            };
+        } else{
+            req.user = {
+                id: decoded.id,
+                user: decoded.user,
+                email: decoded.email
+            };
+        }
 
         next();
     } catch (err) {

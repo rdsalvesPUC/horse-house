@@ -34,7 +34,6 @@ CREATE TABLE Haras
     Complemento        VARCHAR(20),
     CNPJ               VARCHAR(14) NOT NULL UNIQUE ,
     Bairro             VARCHAR(50) NOT NULL,
-    Dominio           VARCHAR(20) NOT NULL UNIQUE,
     fk_Proprietario_ID INT,
     fk_CEP_CEP         VARCHAR(8)
 );

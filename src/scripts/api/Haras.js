@@ -19,7 +19,6 @@ const {validarCNPJ, validarCEP} = require("../utils/validations");
  *         - cnpj
  *         - bairro
  *         - cep
- *         - dominio
  *       properties:
  *         nome:
  *           type: string
@@ -46,9 +45,6 @@ const {validarCNPJ, validarCEP} = require("../utils/validations");
  *           description: CEP do endereço (8 dígitos numéricos)
  *           pattern: '^\d{8}$'
  *           example: "01234567"
- *         dominio:
- *           type: string
- *           description: Domínio único do haras
  *       example:
  *         nome: Haras Bela Vista
  *         rua: Estrada Rural
@@ -57,7 +53,6 @@ const {validarCNPJ, validarCEP} = require("../utils/validations");
  *         cnpj: "12345678901234"
  *         bairro: Zona Rural
  *         cep: "01234567"
- *         dominio: belavista
  *     
  *     CreateHarasResponse:
  *       type: object
@@ -149,9 +144,9 @@ const {validarCNPJ, validarCEP} = require("../utils/validations");
  *                 error: Erro ao inserir dados no banco de dados.
  */
 router.post("/criarHaras", [extractUserID, requireProprietario], async (req, res) => {
-    const { nome, rua, numero, complemento, cnpj, bairro, cep, dominio } = req.body;
+    const { nome, rua, numero, complemento, cnpj, bairro, cep } = req.body;
 
-    if (!nome || !rua || !numero || !complemento || !cnpj || !bairro || !cep || !dominio) {
+    if (!nome || !rua || !numero || !complemento || !cnpj || !bairro || !cep) {
         return res.status(400).json({ error: "Todos os campos são obrigatórios." });
     }
 
@@ -169,19 +164,17 @@ router.post("/criarHaras", [extractUserID, requireProprietario], async (req, res
         await verificarOuCadastrarEndereco(cep);
 
         const query = `
-            INSERT INTO haras (Nome, Rua, Numero, Complemento, CNPJ, Bairro, Dominio, fk_Proprietario_ID, fk_CEP_CEP) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO haras (Nome, Rua, Numero, Complemento, CNPJ, Bairro, fk_Proprietario_ID, fk_CEP_CEP) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
-        const [results] = await connection.promise().query(query, [nome, rua, numero, complemento, cnpj, bairro, dominio, req.user.id, cep]);
+        const [results] = await connection.promise().query(query, [nome, rua, numero, complemento, cnpj, bairro, req.user.id, cep]);
         res.status(201).json({ message: "Haras cadastrado com sucesso!", id: results.insertId });
     } catch (err) {
         console.error(err);
         if (err.code === 'ER_DUP_ENTRY') {
             if (err.message.includes('CNPJ')) {
                 return res.status(409).json({ error: "Este CNPJ já está cadastrado no sistema." });
-            } else if (err.message.includes('Dominio')) {
-                return res.status(409).json({ error: "Este domínio já está cadastrado no sistema." });
             } else {
                 return res.status(409).json({ error: "Dados duplicados. Verifique se o CNPJ ou domínio já não estão cadastrados." });
             }
@@ -469,9 +462,6 @@ router.get("/haras/:id", async (req, res) => {
  *                 cnpjDuplicado:
  *                   value:
  *                     error: Este CNPJ já está cadastrado no sistema.
- *                 dominioDuplicado:
- *                   value:
- *                     error: Este domínio já está cadastrado no sistema.
  *       500:
  *         description: Erro interno do servidor
  *         content:
@@ -552,8 +542,6 @@ router.put("/haras/:id",[extractUserID, requireProprietario], async (req, res) =
         if (err.code === 'ER_DUP_ENTRY') {
             if (err.message.includes('CNPJ')) {
                 return res.status(409).json({ error: "Este CNPJ já está cadastrado no sistema." });
-            } else if (err.message.includes('Dominio')) {
-                return res.status(409).json({ error: "Este domínio já está cadastrado no sistema." });
             } else {
                 return res.status(409).json({ error: "Dados duplicados. Verifique se o CNPJ ou domínio já não estão cadastrados." });
             }

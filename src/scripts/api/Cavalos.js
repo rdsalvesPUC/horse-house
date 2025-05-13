@@ -257,7 +257,7 @@ router.get("/cavalos/haras/:harasID", [extractUserID], async (req, res) => {
         return res.status(200).json(results);
     }
     // Se o usuário não for proprietário, verifica o fk_Haras_ID
-    if (req.user.harasID === harasID) {
+    if (req.user.harasId == harasID) {
         const query = `SELECT *
                        FROM cavalo
                        WHERE fk_Haras_ID = ?`;
@@ -334,7 +334,7 @@ router.get("/cavalos/id/:id", extractUserID, async (req, res) => {
                        FROM cavalo
                        WHERE ID = ?
                          AND fk_Haras_ID = ?`;
-        const [results] = await connection.promise().query(query, [id, req.user.harasID]);
+        const [results] = await connection.promise().query(query, [id, req.user.harasId]);
         if (results.length === 0) {
             return res.status(404).json({error: "Cavalo não encontrado."});
         }
@@ -481,7 +481,7 @@ router.delete("/deleteCavalos/:id", extractUserID, requireGerenteouProprietario,
                    FROM cavalo
                    WHERE ID = ?
                      AND fk_Haras_ID = ?`;
-    const [results] = await connection.promise().query(query, [id, req.user.harasID]);
+    const [results] = await connection.promise().query(query, [id, req.user.harasId]);
     if (results.affectedRows === 0) {
         return res.status(404).json({error: "Cavalo não encontrado."});
     }
@@ -683,7 +683,7 @@ router.put("/Cavalos/editar/:id", extractUserID, requireGerenteouProprietario, a
                        WHERE ID = ?
                          AND fk_Proprietario_ID = ?`;
     } else {
-        queryParams.push(req.user.harasID);
+        queryParams.push(req.user.harasId);
         query = `UPDATE cavalo
                        SET ${queryFields.join(", ")}
                        WHERE ID = ?

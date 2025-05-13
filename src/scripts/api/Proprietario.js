@@ -4,7 +4,7 @@ const router = express.Router();
 const connection = require("../horseDB");
 const {verificarOuCadastrarEndereco} = require("../utils/enderecoUtils");
 const {extractUserID, requireProprietario} = require("../middleware/auth");
-const {validarCPF, validarEmail, validarCEP, validarTelefone} = require("../utils/validations");
+const {validarCPF, validarEmail, validarCEP, validarTelefone} = ("../utils/validations");
 
 /**
  * @swagger
@@ -381,7 +381,8 @@ router.get("/proprietario/:id", extractUserID, async (req, res) => {
         }
         else {
             const queryVerificacao = `Select * from haras where fk_Proprietario_ID = ? and ID = ?`;
-            [results] = await connection.promise().query(queryVerificacao, [proprietarioId, req.user.HarasID]);
+            const [results] = await connection.promise().query(queryVerificacao, [proprietarioId, req.user.harasId]);
+            console.log(queryVerificacao, [proprietarioId, req.user.harasId])
             if (results.length === 0) {
                 return res.status(403).json({error: "Acesso negado. Você não tem permissão para visualizar este proprietário."});
             }
