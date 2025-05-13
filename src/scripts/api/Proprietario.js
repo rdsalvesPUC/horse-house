@@ -4,7 +4,7 @@ const router = express.Router();
 const connection = require("../horseDB");
 const {verificarOuCadastrarEndereco} = require("../utils/enderecoUtils");
 const {extractUserID, requireProprietario} = require("../middleware/auth");
-const {validarCPF, validarEmail, validarCEP, validarTelefone} = ("../utils/validations");
+const {validarCPF, validarEmail, validarCEP, validarTelefone} = require("../utils/validations");
 
 /**
  * @swagger
