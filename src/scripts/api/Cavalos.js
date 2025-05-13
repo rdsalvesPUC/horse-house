@@ -178,7 +178,7 @@ router.post("/cavalos/criar", [extractUserID, requireProprietario], async (req, 
     try {
         const query = `INSERT INTO cavalo (Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, fk_Proprietario_ID, fk_Haras_ID)
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        [results] = await connection.promise().query(query, [nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, req.user.id, haras_id])
+        const [results] = await connection.promise().query(query, [nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, req.user.id, haras_id])
         return res.status(201).json({message: "Cavalo cadastrado com sucesso!", id: results.insertId});
     } catch (err) {
         console.log("Erro ao inserir o cavalo:", err);
