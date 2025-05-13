@@ -155,10 +155,10 @@ const {extractUserID, requireProprietario, requireGerenteouProprietario} = requi
  *               example:
  *                 error: Erro ao criar o cavalo.
  */
-router.post("/cavalos/criar", [requireProprietario, extractUserID], async (req, res) => {
+router.post("/cavalos/criar", [extractUserID, requireProprietario], async (req, res) => {
     const {nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, foto, haras_id} = req.body;
 
-    if (nome && data_nascimento && peso && sexo && pelagem && sangue && situacao && status && registro && cert && imp && haras_id) {
+    if (!nome || !data_nascimento || !peso || !sexo || !pelagem || !sangue || !registro || !cert || !imp || !haras_id || !situacao || !status) {
         return res.status(400).json({error: "Todos os campos são obrigatórios."});
     }
     if (foto) {
@@ -166,6 +166,7 @@ router.post("/cavalos/criar", [requireProprietario, extractUserID], async (req, 
             const query = `INSERT INTO cavalo (Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto, fk_Proprietario_ID, fk_Haras_ID)
                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             const [results] = await connection.promise().query(query, [nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, foto, req.user.id, haras_id])
+            return res.status(201).json({message: "Cavalo cadastrado com sucesso!", id: results.insertId});
         } catch (err) {
             console.error("Erro ao inserir o cavalo:", err);
             if (err.code === 'ER_DUP_ENTRY') {
@@ -173,20 +174,19 @@ router.post("/cavalos/criar", [requireProprietario, extractUserID], async (req, 
             }
             return res.status(500).json({error: "Erro ao criar o cavalo."});
         }
-
     }
     try {
-        const query = `INSERT INTO cavalo (Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto, fk_Proprietario_ID, fk_Haras_ID)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        [results] = await connection.promise.query(query, [nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, req.user.id, haras_id])
+        const query = `INSERT INTO cavalo (Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, fk_Proprietario_ID, fk_Haras_ID)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        [results] = await connection.promise().query(query, [nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, req.user.id, haras_id])
+        return res.status(201).json({message: "Cavalo cadastrado com sucesso!", id: results.insertId});
     } catch (err) {
-        console.error("Erro ao inserir o cavalo:", err);
+        console.log("Erro ao inserir o cavalo:", err);
         if (err.code === 'ER_DUP_ENTRY') {
             return res.status(409).json({error: "Cavalo já cadastrado."});
         }
         return res.status(500).json({error: "Erro ao criar o cavalo."});
     }
-
 })
 
 /**
@@ -272,7 +272,7 @@ router.get("/cavalos/haras/:harasID", [extractUserID], async (req, res) => {
 
 /**
  * @swagger
- * /api/cavalos/{id}:
+ * /api/cavalos/id/{id}:
  *   get:
  *     summary: Obtém detalhes de um cavalo específico
  *     tags: [Cavalos]
@@ -317,7 +317,7 @@ router.get("/cavalos/haras/:harasID", [extractUserID], async (req, res) => {
  *               example:
  *                 error: Cavalo não encontrado.
  */
-router.get("/cavalos/:id", extractUserID, async (req, res) => {
+router.get("/cavalos/id/:id", extractUserID, async (req, res) => {
     const {id} = req.params;
     if (req.user.user === "proprietario") {
         const query = `SELECT *
@@ -395,7 +395,7 @@ router.get("/cavalos/:id", extractUserID, async (req, res) => {
  *               example:
  *                 error: Erro ao buscar cavalos.
  */
-router.get("/cavalos/dono", [requireProprietario, extractUserID], async (req, res) => {
+router.get("/cavalos/dono", [extractUserID, requireProprietario], async (req, res) => {
     try{
         const query = `SELECT *
                        FROM cavalo

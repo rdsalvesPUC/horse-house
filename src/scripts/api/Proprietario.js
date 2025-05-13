@@ -219,7 +219,7 @@ router.post("/criarProprietario", async (req, res) => {
         }
         res.status(201).json({message: "Proprietário cadastrado com sucesso!", id: results.insertId});
     } catch (err) {
-        console.error(err);
+        console.error(err.message);
         if (err.code === 'ER_DUP_ENTRY') {
             if (err.message.includes('CPF')) {
                 return res.status(409).json({ error: "Este CPF já está cadastrado no sistema." });
@@ -228,6 +228,9 @@ router.post("/criarProprietario", async (req, res) => {
             } else {
                 return res.status(409).json({ error: "Dados duplicados. Verifique se o CPF ou email já não estão cadastrados." });
             }
+        }
+        if (err.message=== 'CEP inválido ou não encontrado na API dos Correios.'){
+            return res.status(400).json({error: "CEP inválido."});
         }
         res.status(500).json({ error: "Erro ao processar a solicitação." });
     }
@@ -448,8 +451,8 @@ router.delete("/proprietario/", [extractUserID, requireProprietario], async (req
 
         res.status(200).json({message: "Proprietário excluído com sucesso!"});
     } catch (err) {
-        console.error(err);
-        res.status(500).json({error: "Erro ao processar a solicitação."});
+        res.status(500).
+        json({error: "Erro ao processar a solicitação."});
     }
 })
 

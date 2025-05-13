@@ -22,6 +22,6 @@ router.use("/api/getCep", getCepAPI);
 router.use("/api/getUsuarioLogado", getUsuarioLogadoAPI);
 router.use("/api/deletarFuncionario", deleteFuncionarioAPI);
 router.use("/api/loginExpirado", loginExpiradoAPI);
-router.use("/api/cavalos", CavalosAPI);
+router.use("/api", CavalosAPI);
 
 module.exports = router;
