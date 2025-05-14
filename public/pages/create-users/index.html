@@ -17,49 +17,49 @@
 				<div class="flex flex-col gap-8 p-10">
 					<!-- Campos Nome, Sobrenome, Email, etc. -->
 					<div class="flex flex-col gap-2">
-						<label for="nome" class="font-medium">Nome</label>
+						<label for="nome" class="font-medium inline-block">Nome <span class="text-error">*</span></label>
 						<input id="nome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu nome" />
 						<span id="erro-nome" class="text-xs text-red-500 hidden">Nome inválido</span>
 					</div>
 
 					<div class="flex flex-col gap-2">
-						<label for="sobrenome" class="font-medium">Sobrenome</label>
+						<label for="sobrenome" class="font-medium">Sobrenome <span class="text-error">*</span></label>
 						<input id="sobrenome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu sobrenome" />
 						<span id="erro-sobrenome" class="text-xs text-red-500 hidden">Sobrenome inválido</span>
 					</div>
 
 					<div class="flex flex-col gap-2">
-						<label for="email" class="font-medium">E-mail</label>
+						<label for="email" class="font-medium">E-mail <span class="text-error">*</span></label>
 						<input id="email" type="email" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu e-mail" />
 						<span id="erro-email" class="text-xs text-red-500 hidden">E-mail inválido</span>
 					</div>
 
 					<div class="flex flex-col gap-2">
-						<label for="senha" class="font-medium">Senha</label>
+						<label for="senha" class="font-medium">Senha <span class="text-error">*</span></label>
 						<input id="senha" type="password" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite sua senha" />
 						<span id="erro-senha" class="text-xs text-red-500 hidden">Senha inválida</span>
 					</div>
 
 					<div class="flex flex-col gap-2">
-						<label for="telefone" class="font-medium">Telefone</label>
+						<label for="telefone" class="font-medium">Telefone <span class="text-error">*</span></label>
 						<input id="telefone" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu telefone" />
 						<span id="erro-telefone" class="text-xs text-red-500 hidden">Telefone inválido</span>
 					</div>
 
 					<div class="flex flex-col gap-2">
-						<label for="cpf" class="font-medium">CPF</label>
+						<label for="cpf" class="font-medium">CPF <span class="text-error">*</span></label>
 						<input id="cpf" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu CPF" />
 						<span id="erro-cpf" class="text-xs text-red-500 hidden">CPF inválido</span>
 					</div>
 
 					<div class="flex flex-col gap-2">
-						<label for="dataNascimento" class="font-medium">Data de Nascimento</label>
+						<label for="dataNascimento" class="font-medium">Data de Nascimento <span class="text-error">*</span></label>
 						<input id="dataNascimento" type="date" class="rounded-md p-3 text-sm border border-secondary" />
 						<span id="erro-dataNascimento" class="text-xs text-red-500 hidden">Data de nascimento inválida</span>
 					</div>
 
 					<div class="flex flex-col gap-2">
-						<label for="tipoUsuario" class="font-medium">Tipo de Usuário</label>
+						<label for="tipoUsuario" class="font-medium">Tipo de Usuário <span class="text-error">*</span></label>
 						<select id="tipoUsuario" class="rounded-md p-3 text-sm border border-secondary">
 							<option value="">Selecione</option>
 							<option value="Gerente">Gerente</option>
@@ -72,7 +72,7 @@
 
 					<!-- NOVO CAMPO (já estava no GitHub, vamos usar corretamente agora) -->
 					<div id="container-haras" class="hidden flex flex-col gap-2">
-						<label for="select-haras" class="font-medium">Selecione o Haras</label>
+						<label for="select-haras" class="font-medium">Selecione o Haras <span class="text-error">*</span></label>
 						<select id="select-haras" class="rounded-md p-3 text-sm border border-secondary">
 							<option value="">Selecione o Haras</option>
 						</select>
@@ -91,123 +91,137 @@
 			</form>
 		</div>
 
-		<!-- SCRIPT -->
 		<script>
-			const tipoUsuarioSelect = document.getElementById("tipoUsuario");
-			const containerHaras = document.getElementById("container-haras");
-			const selectHaras = document.getElementById("select-haras");
-			const campoCrmv = document.getElementById("campo-crmv");
-			const botaoCadastrar = document.getElementById("botao-cadastrar-user");
+		/* ---------------------- CONSTANTES / ELEMENTOS FIXOS ---------------------- */
+		const TOKEN          = localStorage.getItem("token");
 
-			// Quando mudar o tipo de usuário
-			tipoUsuarioSelect.addEventListener("change", function () {
-				if (this.value === "Veterinario") {
-					campoCrmv.classList.remove("hidden");
-					containerHaras.classList.add("hidden"); // veterinário não precisa haras
-				} else if (this.value === "Gerente") {
-					campoCrmv.classList.add("hidden");
-					containerHaras.classList.remove("hidden");
-					carregarHaras(); // <-- busca haras da API
-				} else {
-					campoCrmv.classList.add("hidden");
-					containerHaras.classList.add("hidden");
-				}
+		const form           = document.getElementById("form-cadastro");
+
+		const tipoSelect     = document.getElementById("tipoUsuario");
+		const crmvBox        = document.getElementById("campo-crmv");
+		const crmvField      = document.getElementById("crmv");
+
+		const harasBox       = document.getElementById("container-haras");
+		const selectHaras    = document.getElementById("select-haras");
+
+		/* ---------------------- MOSTRA / ESCONDE CAMPOS EXTRA --------------------- */
+		tipoSelect.addEventListener("change", () => {
+			if (tipoSelect.value === "Veterinario") {
+			crmvBox.classList.remove("hidden");
+			harasBox.classList.add("hidden");
+			} else if (tipoSelect.value === "Gerente") {
+			crmvBox.classList.add("hidden");
+			harasBox.classList.remove("hidden");
+			carregarHaras();
+			} else {
+			crmvBox.classList.add("hidden");
+			harasBox.classList.add("hidden");
+			}
+		});
+
+		async function carregarHaras() {
+			try {
+			const r = await fetch("http://localhost:3000/api/getAllHaras", {
+				headers: { Authorization: `Bearer ${TOKEN}` }
 			});
+			if (!r.ok) throw new Error("Erro ao buscar Haras");
+			const lista = await r.json();
 
-			async function carregarHaras() {
-				try {
-					const response = await fetch("http://localhost:3000/api/getAllHaras", {
-						method: "GET",
-						headers: {
-							Authorization: `Bearer ${localStorage.getItem("token")}`,
-							"Content-Type": "application/json",
-						},
-					});
+			selectHaras.innerHTML =
+				'<option value="">Selecione o Haras</option>' +
+				lista.map(h => `<option value="${h.id}">${h.Nome}</option>`).join("");
+			} catch (e) {
+			console.error(e.message);
+			}
+		}
 
-					if (!response.ok) {
-						throw new Error("Erro ao buscar haras");
-					}
+		/* ----------------------------- VALIDAÇÕES --------------------------------- */
+		function mostrarErro(id)  { document.getElementById(id).classList.remove("hidden"); }
+		function esconderErro(id) { document.getElementById(id).classList.add("hidden"); }
 
-					const haras = await response.json();
+		function validarNome(v)        { return v.length >= 2; }
+		function validarSobrenome(v)   { return v.length >= 2; }
+		function validarEmail(v)       { return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v); }
+		function validarSenha(v)       { return v.length >= 6 && v.length <= 20; }
+		function validarTelefone(v)    { return /^\d{10,11}$/.test(v); }
+		function validarCPF(v)         { return /^\d{11}$/.test(v); }
+		function validarData(v)        { return !!v; }
+		function validarCRMV(v)        { return /^\w{3,20}$/.test(v); }
 
-					// Limpa e popula o select
-					selectHaras.innerHTML = '<option value="">Selecione o Haras</option>';
-					haras.forEach((harasItem) => {
-						const option = document.createElement("option");
-						option.value = harasItem.id; // aqui precisa ser o id do haras
-						option.textContent = harasItem.Nome;
-						selectHaras.appendChild(option);
-					});
-				} catch (error) {
-					console.error("Erro ao carregar haras:", error.message);
-				}
+		/* ------------------------- SUBMIT COM VALIDAÇÃO --------------------------- */
+		form.addEventListener("submit", async (ev) => {
+
+			/* campos */
+			const nomeField   = document.getElementById("nome");
+			const sobreField  = document.getElementById("sobrenome");
+			const emailField  = document.getElementById("email");
+			const senhaField  = document.getElementById("senha");
+			const telField    = document.getElementById("telefone");
+			const cpfField    = document.getElementById("cpf");
+			const dataField   = document.getElementById("dataNascimento");
+
+			/* --- valida ---- */
+			let ok = true;
+
+			if (!validarNome(nomeField.value.trim()))                       { mostrarErro("erro-nome");           ok = false; } else esconderErro("erro-nome");
+			if (!validarSobrenome(sobreField.value.trim()))                 { mostrarErro("erro-sobrenome");      ok = false; } else esconderErro("erro-sobrenome");
+			if (!validarEmail(emailField.value.trim()))                     { mostrarErro("erro-email");          ok = false; } else esconderErro("erro-email");
+			if (!validarSenha(senhaField.value.trim()))                     { mostrarErro("erro-senha");          ok = false; } else esconderErro("erro-senha");
+			if (!validarTelefone(telField.value.replace(/\D/g,"")))         { mostrarErro("erro-telefone");       ok = false; } else esconderErro("erro-telefone");
+			if (!validarCPF(cpfField.value.replace(/\D/g,"")))              { mostrarErro("erro-cpf");            ok = false; } else esconderErro("erro-cpf");
+			if (!validarData(dataField.value))                              { mostrarErro("erro-dataNascimento"); ok = false; } else esconderErro("erro-dataNascimento");
+			if (!tipoSelect.value)                                          { mostrarErro("erro-tipoUsuario");    ok = false; } else esconderErro("erro-tipoUsuario");
+
+			if (tipoSelect.value === "Veterinario") {
+			if (!validarCRMV(crmvField.value.trim()))                     { mostrarErro("erro-crmv");           ok = false; } else esconderErro("erro-crmv");
 			}
 
-			botaoCadastrar.addEventListener("click", async function (event) {
-				event.preventDefault();
+			if (tipoSelect.value === "Gerente") {
+			if (!selectHaras.value)                                       { mostrarErro("erro-haras");          ok = false; } else esconderErro("erro-haras");
+			}
 
-				const nome = document.getElementById("nome").value.trim();
-				const sobrenome = document.getElementById("sobrenome").value.trim();
-				const email = document.getElementById("email").value.trim();
-				const senha = document.getElementById("senha").value.trim();
-				const telefone = document.getElementById("telefone").value.trim();
-				const cpf = document.getElementById("cpf").value.trim().replace(/\D/g, ""); // ← remove tudo que não é dígito
-				const dataNascimento = document.getElementById("dataNascimento").value.trim();
-				const tipoUsuario = document.getElementById("tipoUsuario").value;
-				const crmv = document.getElementById("crmv")?.value.trim();
-				const harasId = document.getElementById("select-haras")?.value;
+			if (!ok) { ev.preventDefault(); return; }   // bloqueia envio se houver erro
+			ev.preventDefault();                        // evita recarregar a página
 
-				if (!nome || !sobrenome || !email || !senha || !telefone || !cpf || !dataNascimento || !tipoUsuario) {
-					alert("Preencha todos os campos obrigatórios.");
-					return;
-				}
+			/* --- monta body / endpoint ---- */
+			const body = {
+			nome           : nomeField.value.trim(),
+			sobrenome      : sobreField.value.trim(),
+			email          : emailField.value.trim(),
+			senha          : senhaField.value.trim(),
+			telefone       : telField.value.trim(),
+			cpf            : cpfField.value.replace(/\D/g,""),
+			dataNascimento : dataField.value.trim()
+			};
 
-				let endpoint = "";
-				let dados = { nome, sobrenome, email, senha, telefone, cpf, dataNascimento };
+			let endpoint = "";
+			if (tipoSelect.value === "Gerente") {
+			endpoint = "criarGerente";
+			body.haras_id = selectHaras.value;
+			}
+			else if (tipoSelect.value === "Treinador") endpoint = "criarTreinador";
+			else if (tipoSelect.value === "Tratador")  endpoint = "criarTratador";
+			else if (tipoSelect.value === "Veterinario") {
+			endpoint  = "criarVeterinario";
+			body.crmv = crmvField.value.trim();
+			}
 
-				if (tipoUsuario === "Gerente") {
-					endpoint = "criarGerente";
-					if (!harasId) {
-						alert("Selecione o Haras para o Gerente!");
-						return;
-					}
-					dados.haras_id = harasId;
-				} else if (tipoUsuario === "Treinador") {
-					endpoint = "criarTreinador";
-				} else if (tipoUsuario === "Tratador") {
-					endpoint = "criarTratador";
-				} else if (tipoUsuario === "Veterinario") {
-					endpoint = "criarVeterinario";
-					if (!crmv) {
-						alert("Preencha o CRMV para o veterinário.");
-						return;
-					}
-					dados.crmv = crmv;
-				}
-
-				try {
-					const response = await fetch(`http://localhost:3000/api/${endpoint}`, {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${localStorage.getItem("token")}`,
-						},
-						body: JSON.stringify(dados),
-					});
-
-					const result = await response.json();
-
-					if (!response.ok) {
-						throw new Error(result.error || "Erro ao cadastrar.");
-					}
-
-					alert(`${tipoUsuario} cadastrado com sucesso!`);
-					window.location.reload();
-				} catch (error) {
-					console.error("Erro:", error.message);
-					alert("Erro ao cadastrar: " + error.message);
-				}
+			/* --- envia ---- */
+			try {
+			const r = await fetch(`http://localhost:3000/api/${endpoint}`, {
+				method : "POST",
+				headers: { "Content-Type": "application/json", Authorization: `Bearer ${TOKEN}` },
+				body   : JSON.stringify(body)
 			});
+			const res = await r.json();
+			if (!r.ok) throw new Error(res.error || "Erro ao cadastrar");
+
+			alert(`${tipoSelect.value} cadastrado com sucesso!`);
+			location.reload();
+			} catch (e) {
+			alert("Falha: " + e.message);
+			}
+		});
 		</script>
 	</body>
 </html>
