@@ -12,7 +12,7 @@
 				<img src="/assets/images/logo-h-whitebg.svg" alt="Logo" class="aspect-[4.59] object-contain w-[202px] self-stretch shrink-0 my-auto" />
 			</a>
 			<div class="self-stretch flex items-center gap-4 my-auto">
-				<div class="hidden xl:block text-tertiary text-[19px] font-semibold self-stretch my-auto font-lexend text-base font-semibold">Não tem uma conta?</div>
+				<div class="hidden xl:block text-tertiary text-[19px] font-semibold self-stretch my-auto font-lexend text-base">Não tem uma conta?</div>
 				<a href="/register" class="self-stretch bg-secondary hover:bg-tertiary gap-2.5 text-tertiary hover:text-secondary font-heebo text-base font-bold my-auto px-5 py-2.5">SIGN UP</a>
 			</div>
 		</header>
@@ -21,96 +21,96 @@
 		<main class="relative flex flex-col items-center flex-1 overflow-hidden">
 			<img src="/assets/images/hero.jpg" alt="Background" class="absolute h-full w-full object-cover inset-0" />
 			<div class="absolute inset-0" style="background: var(--Overlay, rgba(34, 44, 45, 0.8))"></div>
-			<div class="relative z-10 bg-tertiary rounded-xl shadow-[0px_6px_16px_rgba(0,0,0,0.08),…] overflow-hidden mt-[88px] px-12 py-8 w-full min-w-[320px] max-w-[768px]">
+			<div class="relative z-10 bg-tertiary rounded-xl shadow-[0px_6px_16px_rgba(0,0,0,0.08),…] overflow-hidden mt-[88px] px-8 py-12 w-full min-w-[320px] max-w-[768px]">
 				<div>
-					<!-- RegisterSteps -->
-					<div class="w-full">
-						<div class="flex items-center justify-center">
-							<!-- Step Indicators -->
-							<div class="flex items-center">
-								<!-- Step 1 -->
-								<div class="relative flex flex-col items-center">
-									<div class="w-10 h-10 rounded-full bg-secondary text-primary flex items-center justify-center z-10">1</div>
-									<span class="text-xs mt-2 text-secondary">Informações Pessoais</span>
-								</div>
-								<div class="w-full h-[2px] bg-gray-200"></div>
-								<!-- Step 2 -->
-								<div class="relative flex flex-col items-center">
-									<div class="w-10 h-10 rounded-full bg-tertiary text-primary border border-secondary flex items-center justify-center z-10">2</div>
-									<span class="text-xs mt-2 text-gray-400">Contato</span>
-								</div>
-								<div class="w-full h-[2px] bg-gray-200"></div>
-								<!-- Step 3 -->
-								<div class="relative flex flex-col items-center">
-									<div class="w-10 h-10 rounded-full bg-tertiary text-primary border border-secondary flex items-center justify-center z-10">3</div>
-									<span class="text-xs mt-2 text-gray-400">Endereço</span>
-								</div>
-								<div class="w-full h-[2px] bg-gray-200"></div>
-								<!-- Step 4 -->
-								<div class="relative flex flex-col items-center">
-									<div class="w-10 h-10 rounded-full bg-tertiary text-primary border border-secondary flex items-center justify-center z-10">4</div>
-									<span class="text-xs mt-2 text-gray-400">Segurança</span>
-								</div>
+					<!-- RegisterSteps final -->
+					<div class="relative w-full">
+						<div class="absolute h-[2px] bg-gray-200" style="top: 20px; left: 12.5%; right: 12.5%"></div>
+
+						<!-- Passos -->
+						<div class="relative z-10 flex justify-between items-start">
+							<!-- Step 1 -->
+							<div class="flex-1 flex flex-col items-center">
+								<div class="w-10 h-10 rounded-full bg-secondary text-primary flex items-center justify-center">1</div>
+								<span class="text-xs mt-2 text-secondary whitespace-nowrap">Informações Pessoais</span>
+							</div>
+
+							<!-- Step 2 -->
+							<div class="flex-1 flex flex-col items-center">
+								<div class="w-10 h-10 rounded-full bg-tertiary text-primary border border-secondary flex items-center justify-center">2</div>
+								<span class="text-xs mt-2 text-gray-400 whitespace-nowrap">Contato</span>
+							</div>
+
+							<!-- Step 3 -->
+							<div class="flex-1 flex flex-col items-center">
+								<div class="w-10 h-10 rounded-full bg-tertiary text-primary border border-secondary flex items-center justify-center">3</div>
+								<span class="text-xs mt-2 text-gray-400 whitespace-nowrap">Endereço</span>
+							</div>
+
+							<!-- Step 4 -->
+							<div class="flex-1 flex flex-col items-center">
+								<div class="w-10 h-10 rounded-full bg-tertiary text-primary border border-secondary flex items-center justify-center">4</div>
+								<span class="text-xs mt-2 text-gray-400 whitespace-nowrap">Segurança</span>
 							</div>
 						</div>
 					</div>
 
 					<!-- Form Wrapper -->
 					<div class="text-center mb-8 mt-8">
-						<h1 class="text-2xl font-bold text-primary" id="form-title">Título da Etapa</h1>
+						<h1 class="font-lexend text-2xl text-primary font-semibold" id="form-title">Título da Etapa</h1>
 						<p class="text-gray-600 mt-1" id="form-subtitle">Subtítulo explicativo da etapa</p>
 					</div>
 					<div class="max-w-lg mx-auto">
 						<!-- Step 1: Informações Pessoais -->
 						<section data-step="1" class="space-y-6">
-							<div class="space-y-4">
+							<div class="space-y-6">
 								<div>
-									<label for="language" class="block text-sm font-medium mb-1">Idioma</label>
-									<select id="language" class="w-full border rounded p-2 bg-white">
+									<label for="language" class="block text-sm font-medium mb-2">Idioma</label>
+									<select id="language" class="input-register-spa">
 										<option value="pt">Português</option>
 										<option value="en">English</option>
 										<option value="es">Español</option>
 									</select>
 								</div>
 								<div>
-									<label for="fullName" class="block text-sm font-medium mb-1">Nome Completo</label>
-									<input id="fullName" type="text" placeholder="Digite seu nome completo" class="w-full border rounded p-2 bg-white" />
+									<label for="fullName" class="block text-sm font-medium mb-2">Nome Completo</label>
+									<input id="fullName" type="text" placeholder="Digite seu nome completo" class="input-register-spa" />
 								</div>
 								<div>
-									<label for="cpf" class="block text-sm font-medium mb-1">CPF</label>
-									<input id="cpf" type="text" placeholder="000.000.000-00" maxlength="14" class="w-full border rounded p-2 bg-white" />
+									<label for="cpf" class="block text-sm font-medium mb-2">CPF</label>
+									<input id="cpf" type="text" placeholder="000.000.000-00" maxlength="14" class="input-register-spa" />
 								</div>
 							</div>
-							<button type="button" class="w-full py-3 bg-secondary text-primary rounded">Próximo</button>
+							<button type="button" class="w-full py-3 bg-secondary hover:bg-secondary/80 gap-2.5 text-tertiary font-heebo text-base font-bold">Próximo</button>
 						</section>
 
 						<!-- Step 2: Contato -->
-						<section data-step="2" class="space-y-6 hidden">
-							<div class="space-y-4">
+						<section data-step="2" class="space-y-6">
+							<div class="space-y-6">
 								<div>
-									<label for="phone" class="block text-sm font-medium mb-1">Telefone</label>
+									<label for="phone" class="block text-sm font-medium mb-2">Telefone</label>
 									<input id="phone" type="text" placeholder="(00) 00000-0000" maxlength="15" class="w-full border rounded p-2 bg-white" />
 								</div>
 								<div>
-									<label for="email" class="block text-sm font-medium mb-1">Email</label>
+									<label for="email" class="block text-sm font-medium mb-2">Email</label>
 									<input id="email" type="email" placeholder="seu@email.com" class="w-full border rounded p-2 bg-white" />
 								</div>
 								<div>
-									<label for="birthDate" class="block text-sm font-medium mb-1">Data de Nascimento</label>
+									<label for="birthDate" class="block text-sm font-medium mb-2">Data de Nascimento</label>
 									<input id="birthDate" type="date" class="w-full border rounded p-2 bg-white" />
 								</div>
 							</div>
 							<div class="flex justify-between">
 								<button type="button" class="px-6 py-3 border rounded">Voltar</button>
-								<button type="button" class="px-6 py-3 bg-secondary text-primary rounded">Próximo</button>
+								<button type="button" class="w-full py-3 bg-secondary hover:bg-secondary/80 gap-2.5 text-tertiary font-heebo text-base font-bold">Próximo</button>
 							</div>
 						</section>
 
 						<!-- Step 3: Endereço -->
 						<section data-step="3" class="space-y-6 hidden">
-							<div class="space-y-4">
+							<div class="space-y-6">
 								<div>
-									<label for="cep" class="block text-sm font-medium mb-1">CEP</label>
+									<label for="cep" class="block text-sm font-medium mb-2">CEP</label>
 									<div class="flex space-x-2">
 										<input id="cep" type="text" placeholder="00000-000" maxlength="9" class="flex-1 border rounded p-2 bg-white" />
 										<button type="button" class="px-4 py-2 border rounded">Buscar</button>
@@ -118,57 +118,57 @@
 								</div>
 								<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 									<div>
-										<label for="state" class="block text-sm font-medium mb-1">Estado</label>
+										<label for="state" class="block text-sm font-medium mb-2">Estado</label>
 										<input id="state" type="text" placeholder="Estado" class="w-full border rounded p-2 bg-white" />
 									</div>
 									<div>
-										<label for="city" class="block text-sm font-medium mb-1">Cidade</label>
+										<label for="city" class="block text-sm font-medium mb-2">Cidade</label>
 										<input id="city" type="text" placeholder="Cidade" class="w-full border rounded p-2 bg-white" />
 									</div>
 								</div>
 								<div>
-									<label for="neighborhood" class="block text-sm font-medium mb-1">Bairro</label>
+									<label for="neighborhood" class="block text-sm font-medium mb-2">Bairro</label>
 									<input id="neighborhood" type="text" placeholder="Bairro" class="w-full border rounded p-2 bg-white" />
 								</div>
 								<div>
-									<label for="street" class="block text-sm font-medium mb-1">Rua</label>
+									<label for="street" class="block text-sm font-medium mb-2">Rua</label>
 									<input id="street" type="text" placeholder="Rua" class="w-full border rounded p-2 bg-white" />
 								</div>
 								<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 									<div>
-										<label for="number" class="block text-sm font-medium mb-1">Número</label>
+										<label for="number" class="block text-sm font-medium mb-2">Número</label>
 										<input id="number" type="text" placeholder="Número" class="w-full border rounded p-2 bg-white" />
 									</div>
 									<div>
-										<label for="complement" class="block text-sm font-medium mb-1">Complemento</label>
+										<label for="complement" class="block text-sm font-medium mb-2">Complemento</label>
 										<input id="complement" type="text" placeholder="Complemento (opcional)" class="w-full border rounded p-2 bg-white" />
 									</div>
 								</div>
 							</div>
 							<div class="flex justify-between">
 								<button type="button" class="px-6 py-3 border rounded">Voltar</button>
-								<button type="button" class="px-6 py-3 bg-secondary text-primary rounded">Próximo</button>
+								<button type="button" class="w-full py-3 bg-secondary hover:bg-secondary/80 gap-2.5 text-tertiary font-heebo text-base font-bold">Próximo</button>
 							</div>
 						</section>
 
 						<!-- Step 4: Segurança -->
 						<section data-step="4" class="space-y-6 hidden">
-							<div class="space-y-4 relative">
+							<div class="space-y-6 relative">
 								<div>
-									<label for="password" class="block text-sm font-medium mb-1">Senha</label>
+									<label for="password" class="block text-sm font-medium mb-2">Senha</label>
 									<input id="password" type="password" placeholder="Sua senha" class="w-full border rounded p-2 pr-10 bg-white" />
 									<button type="button" class="absolute right-3 top-10">👁️</button>
 									<p class="text-sm text-gray-500 mt-1">Sua senha deve ter pelo menos 8 caracteres e incluir letras maiúsculas, minúsculas, números e caracteres especiais.</p>
 								</div>
 								<div>
-									<label for="confirmPassword" class="block text-sm font-medium mb-1">Confirmar Senha</label>
+									<label for="confirmPassword" class="block text-sm font-medium mb-2">Confirmar Senha</label>
 									<input id="confirmPassword" type="password" placeholder="Confirme sua senha" class="w-full border rounded p-2 pr-10 bg-white" />
 									<button type="button" class="absolute right-3 top-24">👁️</button>
 								</div>
 							</div>
 							<div class="flex justify-between">
 								<button type="button" class="px-6 py-3 border rounded">Voltar</button>
-								<button type="button" class="px-6 py-3 bg-secondary text-primary rounded">Concluir Cadastro</button>
+								<button type="button" class="w-full py-3 bg-secondary hover:bg-secondary/80 gap-2.5 text-tertiary font-heebo text-base font-bold">Concluir Cadastro</button>
 							</div>
 						</section>
 					</div>
@@ -181,4 +181,34 @@
 			<div class="container mx-auto">&copy; 2025 HorseHouse. Todos os direitos reservados.</div>
 		</footer>
 	</body>
+	<!-- <script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const sections = Array.from(document.querySelectorAll("section[data-step]"));
+			let currentStep = 1;
+			const totalSteps = sections.length;
+
+			function showStep(n) {
+				sections.forEach((sec) => {
+					sec.classList.toggle("hidden", Number(sec.dataset.step) !== n);
+				});
+			}
+
+			// delega clicks de “Próximo” e “Voltar”
+			document.body.addEventListener("click", (e) => {
+				if (!e.target.matches("button")) return;
+				const btn = e.target;
+				if (btn.textContent.trim() === "Próximo" && currentStep < totalSteps) {
+					currentStep++;
+					showStep(currentStep);
+				}
+				if (btn.textContent.trim() === "Voltar" && currentStep > 1) {
+					currentStep--;
+					showStep(currentStep);
+				}
+			});
+
+			// inicializa
+			showStep(currentStep);
+		});
+	</script> -->
 </html>
