@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../horseDB");
-const {extrairUserID} = require("../utils/extrairUserID");
+const {extractUserID} = require("../middleware/auth");
 
 /**
  * @swagger
@@ -15,6 +15,33 @@ const {extrairUserID} = require("../utils/extrairUserID");
  *           description: Mensagem de sucesso
  *       example:
  *         message: Funcionário excluído com sucesso!
+ *     
+ *     UnauthorizedError:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Mensagem de erro de autenticação
+ *       example:
+ *         error: Token de autenticação inválido ou expirado
+ *
+ *     ForbiddenError:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Mensagem de erro de autorização
+ *       example:
+ *         error: Acesso negado. Você não tem permissão para realizar esta ação
+ *     
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Mensagem de erro
+ *       example:
+ *         error: Erro ao processar a solicitação
  */
 
 /**
@@ -52,47 +79,33 @@ const {extrairUserID} = require("../utils/extrairUserID");
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: Tipo de funcionário inválido.
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
  *       403:
  *         description: Acesso negado
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: Acesso negado. Somente proprietários podem excluir funcionários.
+ *               $ref: '#/components/schemas/ForbiddenError'
  *       404:
  *         description: Funcionário não encontrado
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: Funcionário não encontrado.
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: Erro ao excluir funcionário.
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.delete("/:tipo/:id", extrairUserID, async (req, res) => {
+router.delete("/:tipo/:id", extractUserID, async (req, res) => {
     const {tipo, id} = req.params;
     const userType = req.user.user;
 

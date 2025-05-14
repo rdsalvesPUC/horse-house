@@ -21,6 +21,7 @@ CREATE TABLE Proprietario
     Complemento     VARCHAR(20),
     ID              INT PRIMARY KEY AUTO_INCREMENT,
     Bairro          VARCHAR(50) NOT NULL,
+    Foto            BLOB,
     fk_CEP_CEP      VARCHAR(8)
 );
 
@@ -33,7 +34,6 @@ CREATE TABLE Haras
     Complemento        VARCHAR(20),
     CNPJ               VARCHAR(14) NOT NULL UNIQUE ,
     Bairro             VARCHAR(50) NOT NULL,
-    Dominio           VARCHAR(20) NOT NULL UNIQUE,
     fk_Proprietario_ID INT,
     fk_CEP_CEP         VARCHAR(8)
 );
@@ -48,6 +48,7 @@ CREATE TABLE Treinador
     Email           VARCHAR(50) NOT NULL,
     Senha           VARCHAR(256) NOT NULL,
     Data_Nascimento DATE,
+    Foto            BLOB,
     fk_Haras_ID     INT
 );
 
@@ -62,6 +63,7 @@ CREATE TABLE Veterinario
     CPF             VARCHAR(11) NOT NULL UNIQUE,
     Sobrenome       VARCHAR(50) NOT NULL,
     CRMV            VARCHAR(20) NOT NULL,
+    Foto            BLOB,
     fk_Haras_ID     INT
 );
 
@@ -75,6 +77,7 @@ CREATE TABLE Tratador
     Telefone        VARCHAR(11),
     Email           VARCHAR(50) NOT NULL,
     Senha           VARCHAR(256) NOT NULL,
+    Foto            BLOB,
     fk_Haras_ID     INT
 );
 
@@ -92,7 +95,9 @@ CREATE TABLE Cavalo
     Registro           VARCHAR(20) NOT NULL,
     CERT               VARCHAR(20) NOT NULL,
     IMP                VARCHAR(20) NOT NULL,
-    fk_Proprietario_ID INT
+    Foto            BLOB,
+    fk_Proprietario_ID INT,
+    fk_Haras_ID INT
 );
 
 CREATE TABLE CEP
@@ -132,6 +137,7 @@ CREATE TABLE Gerente
     Data_Nascimento DATE NOT NULL,
     Telefone        VARCHAR(11),
     Email           VARCHAR(50) NOT NULL,
+    Foto            BLOB,
     fk_Haras_ID     INT
 );
 
@@ -214,6 +220,9 @@ ALTER TABLE Cavalo
         FOREIGN KEY (fk_Proprietario_ID)
             REFERENCES Proprietario (ID)
             ON DELETE CASCADE;
+ALTER TABLE Cavalo ADD CONSTRAINT FK_Cavalo_4
+    FOREIGN KEY (fk_Haras_ID)
+        REFERENCES Haras (ID);
 
 ALTER TABLE CEP
     ADD CONSTRAINT FK_CEP_2
@@ -286,3 +295,5 @@ ALTER TABLE Treina
         FOREIGN KEY (fk_Treinador_ID)
             REFERENCES Treinador (ID)
             ON DELETE CASCADE;
+INSERT INTO Pais (Nome) VALUES
+('Brasil');
