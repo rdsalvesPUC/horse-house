@@ -155,17 +155,36 @@ const {extractUserID, requireProprietario, requireGerenteouProprietario} = requi
  *               example:
  *                 error: Erro ao criar o cavalo.
  */
-router.post("/cavalos/criar", [extractUserID, requireProprietario], async (req, res) => {
-    const {nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, foto, haras_id} = req.body;
-
-    if (!nome || !data_nascimento || !peso || !sexo || !pelagem || !sangue || !registro || !cert || !imp || !haras_id || !situacao || !status) {
+router.post("/cavalos/criar", [extractUserID, requireGerenteouProprietario], async (req, res) => {
+    const {nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, foto} = req.body;
+    let proprietario_id;
+    let {haras_id} = req.body;
+    if (!nome || !data_nascimento || !peso || !sexo || !pelagem || !sangue || !registro || !cert || !imp || !situacao || !status) {
         return res.status(400).json({error: "Todos os campos são obrigatórios."});
+    }
+    if (req.user.user === "proprietario") {
+        if (!haras_id) {
+            return res.status(400).json({error: "ID do haras é obrigatório."});
+        }
+        proprietario_id = req.user.id;
+    } else if (req.user.user === "gerente") {
+        haras_id = req.user.harasId;
+        const query = `SELECT fk_Proprietario_ID
+                 FROM haras
+                 WHERE ID = ?`;
+        const [results] = await connection.promise().query(query, [haras_id]);
+        if (results.length === 0) {
+            return res.status(404).json({error: "Haras não encontrado."});
+        }
+        proprietario_id = results[0].fk_Proprietario_ID;
+    } else {
+        return res.status(403).json({error: "Acesso não autorizado."});
     }
     if (foto) {
         try {
             const query = `INSERT INTO cavalo (Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto, fk_Proprietario_ID, fk_Haras_ID)
                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-            const [results] = await connection.promise().query(query, [nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, foto, req.user.id, haras_id])
+            const [results] = await connection.promise().query(query, [nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, foto, proprietario_id, haras_id])
             return res.status(201).json({message: "Cavalo cadastrado com sucesso!", id: results.insertId});
         } catch (err) {
             console.error("Erro ao inserir o cavalo:", err);
@@ -178,7 +197,7 @@ router.post("/cavalos/criar", [extractUserID, requireProprietario], async (req, 
     try {
         const query = `INSERT INTO cavalo (Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, fk_Proprietario_ID, fk_Haras_ID)
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        const [results] = await connection.promise().query(query, [nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, req.user.id, haras_id])
+        const [results] = await connection.promise().query(query, [nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, proprietario_id, haras_id])
         return res.status(201).json({message: "Cavalo cadastrado com sucesso!", id: results.insertId});
     } catch (err) {
         console.log("Erro ao inserir o cavalo:", err);
@@ -246,7 +265,7 @@ router.post("/cavalos/criar", [extractUserID, requireProprietario], async (req, 
 router.get("/cavalos/haras/:harasID", [extractUserID], async (req, res) => {
     const {harasID} = req.params;
     if (req.user.user === "proprietario") {
-        const query = `SELECT *
+        const query = `SELECT Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto
                        FROM cavalo
                        WHERE fk_Proprietario_ID = ?
                          AND fk_Haras_ID = ?`;
@@ -258,7 +277,7 @@ router.get("/cavalos/haras/:harasID", [extractUserID], async (req, res) => {
     }
     // Se o usuário não for proprietário, verifica o fk_Haras_ID
     if (req.user.harasId == harasID) {
-        const query = `SELECT *
+        const query = `SELECT Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto
                        FROM cavalo
                        WHERE fk_Haras_ID = ?`;
         const [results] = await connection.promise().query(query, [harasID]);
@@ -320,7 +339,7 @@ router.get("/cavalos/haras/:harasID", [extractUserID], async (req, res) => {
 router.get("/cavalos/id/:id", extractUserID, async (req, res) => {
     const {id} = req.params;
     if (req.user.user === "proprietario") {
-        const query = `SELECT *
+        const query = `SELECT Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto
                        FROM cavalo
                        WHERE ID = ?
                          AND fk_Proprietario_ID = ?`;
@@ -329,8 +348,8 @@ router.get("/cavalos/id/:id", extractUserID, async (req, res) => {
             return res.status(404).json({error: "Cavalo não encontrado."});
         }
         return res.status(200).json(results[0]);
-    } else{
-        const query = `SELECT *
+    } else {
+        const query = `SELECT Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto
                        FROM cavalo
                        WHERE ID = ?
                          AND fk_Haras_ID = ?`;
@@ -396,8 +415,8 @@ router.get("/cavalos/id/:id", extractUserID, async (req, res) => {
  *                 error: Erro ao buscar cavalos.
  */
 router.get("/cavalos/dono", [extractUserID, requireProprietario], async (req, res) => {
-    try{
-        const query = `SELECT *
+    try {
+        const query = `SELECT Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto
                        FROM cavalo
                        WHERE fk_Proprietario_ID = ?`;
         const [results] = await connection.promise().query(query, [req.user.id]);
@@ -463,9 +482,9 @@ router.get("/cavalos/dono", [extractUserID, requireProprietario], async (req, re
  *               example:
  *                 error: Cavalo não encontrado.
  */
-router.delete("/deleteCavalos/:id", extractUserID, requireGerenteouProprietario, async (req, res) => {
+router.delete("/deleteCavalos/:id", extractUserID, requireProprietario, async (req, res) => {
     const {id} = req.params;
-    if (req.user.user === "proprietario") {
+    try {
         const query = `DELETE
                        FROM cavalo
                        WHERE ID = ?
@@ -475,17 +494,10 @@ router.delete("/deleteCavalos/:id", extractUserID, requireGerenteouProprietario,
             return res.status(404).json({error: "Cavalo não encontrado."});
         }
         return res.status(200).json({message: "Cavalo deletado com sucesso."});
+    } catch (err) {
+        console.error("Erro ao deletar o cavalo:", err);
+        return res.status(500).json({error: "Erro ao deletar o cavalo."});
     }
-    // Se o usuário for gerente, verifica o fk_Haras_ID
-    const query = `DELETE
-                   FROM cavalo
-                   WHERE ID = ?
-                     AND fk_Haras_ID = ?`;
-    const [results] = await connection.promise().query(query, [id, req.user.harasId]);
-    if (results.affectedRows === 0) {
-        return res.status(404).json({error: "Cavalo não encontrado."});
-    }
-    return res.status(200).json({message: "Cavalo deletado com sucesso."});
 })
 
 /**
@@ -679,15 +691,15 @@ router.put("/Cavalos/editar/:id", extractUserID, requireGerenteouProprietario, a
     if (req.user.user === "proprietario") {
         queryParams.push(req.user.id);
         query = `UPDATE cavalo
-                       SET ${queryFields.join(", ")}
-                       WHERE ID = ?
-                         AND fk_Proprietario_ID = ?`;
+                 SET ${queryFields.join(", ")}
+                 WHERE ID = ?
+                   AND fk_Proprietario_ID = ?`;
     } else {
         queryParams.push(req.user.harasId);
         query = `UPDATE cavalo
-                       SET ${queryFields.join(", ")}
-                       WHERE ID = ?
-                         AND fk_Haras_ID = ?`;
+                 SET ${queryFields.join(", ")}
+                 WHERE ID = ?
+                   AND fk_Haras_ID = ?`;
     }
     try {
         const [results] = await connection.promise().query(query, queryParams);
@@ -695,12 +707,11 @@ router.put("/Cavalos/editar/:id", extractUserID, requireGerenteouProprietario, a
             return res.status(404).json({error: "Cavalo não encontrado."});
         }
         return res.status(200).json({message: "Cavalo atualizado com sucesso."});
-    } catch (err){
+    } catch (err) {
         console.error("Erro ao atualizar o cavalo:", err);
         if (err.code === 'ER_DUP_ENTRY') {
             return res.status(409).json({error: "Cavalo já cadastrado."});
-        }
-        else if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        } else if (err.code === 'ER_NO_REFERENCED_ROW_2') {
             return res.status(404).json({error: "Cavalo não encontrado."});
         }
         return res.status(500).json({error: "Erro ao atualizar o cavalo."});
