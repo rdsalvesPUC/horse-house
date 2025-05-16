@@ -1,3 +1,15 @@
+zacessoControle();
+/* acesso controle */
+async function acessoControle() {
+    const TOKEN = localStorage.getItem("token");
+    const r = await fetch("/api/loginExpirado", {
+        headers: { Authorization: `Bearer ${TOKEN}` },
+    });
+    if (r.ok) {
+        //window.location.href = "/redirecionarParaAMainLogada";
+    }
+}
+
 const traducoes = {
     pt: {
         titulo: "Cadastro",

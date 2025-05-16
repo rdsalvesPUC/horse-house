@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const {requireGerente, requireProprietario, extractUserID} = require("../middleware/auth");
 const router = express.Router();
 
 /**
@@ -18,7 +19,7 @@ const router = express.Router();
  *       example:
  *         expired: false
  *         message: Token válido.
- *     
+ *
  *     TokenExpiredResponse:
  *       type: object
  *       properties:
@@ -31,7 +32,7 @@ const router = express.Router();
  *       example:
  *         expired: true
  *         message: Token expirado.
- *     
+ *
  *     TokenErrorResponse:
  *       type: object
  *       properties:
@@ -77,11 +78,11 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/TokenErrorResponse'
  */
-router.post("/", async (req, res) => {
+router.get("/loginExpirado", async (req, res) => {
     const token = req.headers["authorization"];
 
     if (!token) {
-        return res.status(401).json({ 
+        return res.status(401).json({
             error: "Token não fornecido.",
             expired: false
         });
@@ -92,7 +93,7 @@ router.post("/", async (req, res) => {
 
         jwt.verify(tokenValue, process.env.JWT_SECRET);
 
-        return res.json({ 
+        return res.status(200).json({
             expired: false,
             message: "Token válido."
         });
@@ -100,17 +101,34 @@ router.post("/", async (req, res) => {
         console.error("Erro ao verificar o token:", err);
 
         if (err.name === "TokenExpiredError") {
-            return res.json({ 
+            return res.status(403).json({
                 expired: true,
                 message: "Token expirado."
             });
         }
 
-        return res.status(403).json({ 
+        return res.status(403).json({
             error: "Token inválido.",
             expired: false
         });
     }
 });
 
+router.get("/requerGerente", [extractUserID, requireGerente], (req, res) => {
+    res.json({
+        message: "Acesso permitido."
+    });
+})
+
+router.get("/requerProprietario", [extractUserID, requireProprietario], (req, res) => {
+    res.json({
+        message: "Acesso permitido."
+    });
+})
+router.get("/requerGerenteProprietario", [extractUserID, requireGerente], (req, res) => {
+    res.json({
+        message: "Acesso permitido.",
+        user: req.user.user
+    });
+})
 module.exports = router;

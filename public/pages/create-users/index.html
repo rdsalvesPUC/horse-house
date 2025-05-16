@@ -93,6 +93,7 @@
 
 		<!-- SCRIPT -->
 		<script>
+			acessoControle();
 			const tipoUsuarioSelect = document.getElementById("tipoUsuario");
 			const containerHaras = document.getElementById("container-haras");
 			const selectHaras = document.getElementById("select-haras");
@@ -113,6 +114,18 @@
 					containerHaras.classList.add("hidden");
 				}
 			});
+
+			/* acesso controle */
+			async function acessoControle() {
+				const TOKEN = localStorage.getItem("token");
+				const r = await fetch("/api/requerProprietario", {
+					headers: { Authorization: `Bearer ${TOKEN}` },
+				});
+				if (!r.ok) {
+					alert("Você não tem permissão para acessar esta página.");
+					window.location.href = "/login";
+				}
+			}
 
 			async function carregarHaras() {
 				try {
