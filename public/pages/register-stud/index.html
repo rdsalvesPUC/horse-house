@@ -48,8 +48,14 @@
 					headers: { Authorization: `Bearer ${TOKEN}` },
 				});
 				if (!r.ok) {
-					alert("Você não tem permissão para acessar esta página.");
-					window.location.href = "/login";
+					const result = await r.json();
+					if (result.login){
+						window.location.href = "/login";
+					}
+					else{
+						window.location.href = "/home";
+					}
+
 				}
 			}
 			document.getElementById("cep").addEventListener("blur", async () => {

@@ -41,7 +41,8 @@ const extractUserID = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     if (!authHeader) {
         return res.status(401).json({
-            error: "Token não fornecido."
+            error: "Token não fornecido.",
+            login: true
         });
     }
 
@@ -49,7 +50,8 @@ const extractUserID = (req, res, next) => {
     const parts = authHeader.split(" ");
     if (parts.length !== 2 || parts[0] !== "Bearer") {
         return res.status(401).json({
-            error: "Formato de token inválido. Use: Bearer <token>"
+            error: "Formato de token inválido. Use: Bearer <token>",
+            login: true
         });
     }
 
@@ -61,7 +63,8 @@ const extractUserID = (req, res, next) => {
         // Verifica se o token contém as informações necessárias
         if (!decoded.id || !decoded.user) {
             return res.status(403).json({
-                error: "Token inválido: informações ausentes"
+                error: "Token inválido: informações ausentes",
+                login: true
             });
         }
 
@@ -87,18 +90,21 @@ const extractUserID = (req, res, next) => {
 
         if (err.name === "TokenExpiredError") {
             return res.status(403).json({
-                error: "Token expirado."
+                error: "Token expirado.",
+                login: true
             });
         }
 
         if (err.name === "JsonWebTokenError") {
             return res.status(403).json({
-                error: "Token inválido."
+                error: "Token inválido.",
+                login: true
             });
         }
 
         return res.status(403).json({
-            error: "Erro ao processar o token."
+            error: "Erro ao processar o token.",
+            login: true
         });
     }
 };

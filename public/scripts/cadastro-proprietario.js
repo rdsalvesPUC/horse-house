@@ -1,4 +1,4 @@
-zacessoControle();
+acessoControle();
 /* acesso controle */
 async function acessoControle() {
     const TOKEN = localStorage.getItem("token");

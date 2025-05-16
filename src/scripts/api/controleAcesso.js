@@ -45,6 +45,28 @@ const router = express.Router();
  *       example:
  *         error: Token inválido.
  *         expired: false
+ *
+ *     AcessoPermitidoResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: Mensagem de confirmação de acesso
+ *       example:
+ *         message: Acesso permitido.
+ *
+ *     AcessoPermitidoComTipoResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: Mensagem de confirmação de acesso
+ *         user:
+ *           type: string
+ *           description: Tipo do usuário autenticado
+ *       example:
+ *         message: Acesso permitido.
+ *         user: gerente
  */
 
 /**
@@ -131,4 +153,95 @@ router.get("/requerGerenteProprietario", [extractUserID, requireGerente], (req, 
         user: req.user.user
     });
 })
+
+/**
+ * @swagger
+ * /api/requerGerente:
+ *   get:
+ *     summary: Verifica acesso de gerente
+ *     tags: [Autenticação]
+ *     description: Verifica se o usuário tem permissão de gerente
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Acesso permitido para gerente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AcessoPermitidoResponse'
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TokenErrorResponse'
+ *       403:
+ *         description: Acesso negado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TokenErrorResponse'
+ */
+
+/**
+ * @swagger
+ * /api/requerProprietario:
+ *   get:
+ *     summary: Verifica acesso de proprietário
+ *     tags: [Autenticação]
+ *     description: Verifica se o usuário tem permissão de proprietário
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Acesso permitido para proprietário
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AcessoPermitidoResponse'
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TokenErrorResponse'
+ *       403:
+ *         description: Acesso negado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TokenErrorResponse'
+ */
+
+/**
+ * @swagger
+ * /api/requerGerenteProprietario:
+ *   get:
+ *     summary: Verifica acesso de gerente ou proprietário
+ *     tags: [Autenticação]
+ *     description: Verifica se o usuário tem permissão de gerente ou proprietário
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Acesso permitido para gerente ou proprietário
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AcessoPermitidoComTipoResponse'
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TokenErrorResponse'
+ *       403:
+ *         description: Acesso negado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TokenErrorResponse'
+ */
+
 module.exports = router;

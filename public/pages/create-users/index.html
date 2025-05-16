@@ -122,14 +122,20 @@
 					headers: { Authorization: `Bearer ${TOKEN}` },
 				});
 				if (!r.ok) {
-					alert("Você não tem permissão para acessar esta página.");
-					window.location.href = "/login";
+					const result = await r.json();
+					if (result.login){
+						window.location.href = "/login";
+					}
+					else{
+						window.location.href = "/home";
+					}
+
 				}
 			}
 
 			async function carregarHaras() {
 				try {
-					const response = await fetch("http://localhost:3000/api/getAllHaras", {
+					const response = await fetch("/api/getAllHaras", {
 						method: "GET",
 						headers: {
 							Authorization: `Bearer ${localStorage.getItem("token")}`,
