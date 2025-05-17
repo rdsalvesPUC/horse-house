@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../horseDB");
-const {extractUserID} = require("../middleware/auth");
+const {extractUserID, requireProprietario} = require("../middleware/auth");
 
 /**
  * @swagger
@@ -105,13 +105,8 @@ const {extractUserID} = require("../middleware/auth");
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.delete("/:tipo/:id", extractUserID, async (req, res) => {
+router.delete("/:tipo/:id", [extractUserID, requireProprietario], async (req, res) => {
     const {tipo, id} = req.params;
-    const userType = req.user.user;
-
-    if (userType !== "proprietario") {
-        return res.status(403).json({error: "Acesso negado. Somente proprietários podem excluir funcionários."});
-    }
 
     const tiposPermitidos = ["gerente", "treinador", "veterinario", "tratador"];
     if (!tiposPermitidos.includes(tipo)) {

@@ -93,6 +93,7 @@
 
 		<!-- SCRIPT -->
 		<script>
+			acessoControle();
 			const tipoUsuarioSelect = document.getElementById("tipoUsuario");
 			const containerHaras = document.getElementById("container-haras");
 			const selectHaras = document.getElementById("select-haras");
@@ -114,9 +115,27 @@
 				}
 			});
 
+			/* acesso controle */
+			async function acessoControle() {
+				const TOKEN = localStorage.getItem("token");
+				const r = await fetch("/api/requerProprietario", {
+					headers: { Authorization: `Bearer ${TOKEN}` },
+				});
+				if (!r.ok) {
+					const result = await r.json();
+					if (result.login){
+						window.location.href = "/login";
+					}
+					else{
+						window.location.href = "/home";
+					}
+
+				}
+			}
+
 			async function carregarHaras() {
 				try {
-					const response = await fetch("http://localhost:3000/api/getAllHaras", {
+					const response = await fetch("/api/getAllHaras", {
 						method: "GET",
 						headers: {
 							Authorization: `Bearer ${localStorage.getItem("token")}`,

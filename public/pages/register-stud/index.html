@@ -40,6 +40,24 @@
 		</main>
 
 		<script>
+			acessoControle();
+			/* acesso controle */
+			async function acessoControle() {
+				const TOKEN = localStorage.getItem("token");
+				const r = await fetch("/api/requerProprietario", {
+					headers: { Authorization: `Bearer ${TOKEN}` },
+				});
+				if (!r.ok) {
+					const result = await r.json();
+					if (result.login){
+						window.location.href = "/login";
+					}
+					else{
+						window.location.href = "/home";
+					}
+
+				}
+			}
 			document.getElementById("cep").addEventListener("blur", async () => {
 				const cep = document.getElementById("cep").value.replace(/\D/g, "");
 

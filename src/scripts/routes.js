@@ -10,7 +10,7 @@ const HarasAPI = require("./api/Haras");
 const getCepAPI = require("./api/getCep");
 const getUsuarioLogadoAPI = require("./api/getUsuarioLogado");
 const deleteFuncionarioAPI = require("./api/deleteFuncionario");
-const loginExpiradoAPI = require("./api/loginExpirado");
+const controleAcessoAPI = require("./api/controleAcesso");
 const CavalosAPI = require("./api/Cavalos");
 
 router.use("/api", ProprietarioAPI);
@@ -21,7 +21,7 @@ router.use("/api", HarasAPI);
 router.use("/api/getCep", getCepAPI);
 router.use("/api/getUsuarioLogado", getUsuarioLogadoAPI);
 router.use("/api/deletarFuncionario", deleteFuncionarioAPI);
-router.use("/api/loginExpirado", loginExpiradoAPI);
+router.use("/api", controleAcessoAPI);
 router.use("/api", CavalosAPI);
 
 module.exports = router;
