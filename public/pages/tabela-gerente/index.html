@@ -62,7 +62,7 @@
 		<script>
 			/* eslint-disable no-alert */
 			const TOKEN = localStorage.getItem("token");
-
+			acessoControle();
 			/* elementos */
 			const selectHaras = document.getElementById("select-haras");
 			const tbody = document.getElementById("tbody-gerentes");
@@ -96,6 +96,23 @@
 				modal.classList.add("hidden");
 				modal.classList.remove("flex");
 				idEdicao = null;
+			}
+
+			/* acesso controle */
+			async function acessoControle() {
+				const r = await fetch("/api/requerProprietario", {
+					headers: { Authorization: `Bearer ${TOKEN}` },
+				});
+				if (!r.ok) {
+					const result = await r.json();
+					if (result.login){
+						window.location.href = "/login";
+					}
+					else{
+						window.location.href = "/home";
+					}
+
+				}
 			}
 
 			/* carregar haras ------------------------------------------------------- */

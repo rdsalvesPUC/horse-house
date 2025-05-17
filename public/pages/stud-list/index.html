@@ -31,6 +31,24 @@
 		</main>
 
 		<script>
+			acessoControle();
+			/* acesso controle */
+			async function acessoControle() {
+				const TOKEN = localStorage.getItem("token");
+				const r = await fetch("/api/requerProprietario", {
+					headers: { Authorization: `Bearer ${TOKEN}` },
+				});
+				if (!r.ok) {
+					const result = await r.json();
+					if (result.login){
+						window.location.href = "/login";
+					}
+					else{
+						window.location.href = "/home";
+					}
+				}
+			}
+
 			const harasExemplo = [
 				{ id: 1, nome: "Haras Cavalão", cnpj: "12.345.678/0001-90", cep: "12345-678", logradouro: "Rua Principal" },
 				{ id: 2, nome: "Cavalinhos", cnpj: "98.765.432/0001-10", cep: "87654-321", logradouro: "Av. Central" },
