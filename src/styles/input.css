@@ -168,6 +168,10 @@
         @apply font-heebo border border-secondary text-secondary px-5 py-2.5 font-bold hover:bg-secondary hover:text-tertiary transition-colors;
     }
 
+    .input-register-spa {
+        @apply flex h-10 w-full rounded-md border border-gray-200 px-3 py-2 text-base md:text-sm bg-white;
+    }
+
     .img-menu-home-site {
         width: 24px;
         height: 24px;
