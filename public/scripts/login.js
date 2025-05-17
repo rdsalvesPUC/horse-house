@@ -1,3 +1,14 @@
+acessoControle();
+/* acesso controle */
+async function acessoControle() {
+	const TOKEN = localStorage.getItem("token");
+	const r = await fetch("/api/loginExpirado", {
+		headers: { Authorization: `Bearer ${TOKEN}` },
+	});
+	if (r.ok) {
+		//window.location.href = "/redirecionarParaAMainLogada";
+	}
+}
 document.addEventListener("DOMContentLoaded", () => {
 	const form       = document.getElementById("loginForm");      // <form id="loginForm">
 	const toggleBtn  = document.getElementById("togglePassword"); // <button id="togglePassword">

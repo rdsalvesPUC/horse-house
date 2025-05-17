@@ -1,3 +1,15 @@
+acessoControle();
+/* acesso controle */
+async function acessoControle() {
+    const TOKEN = localStorage.getItem("token");
+    const r = await fetch("/api/loginExpirado", {
+        headers: { Authorization: `Bearer ${TOKEN}` },
+    });
+    if (r.ok) {
+        //window.location.href = "/redirecionarParaAMainLogada";
+    }
+}
+
 const traducoes = {
     pt: {
         titulo: "Cadastro",
@@ -565,6 +577,7 @@ document.getElementById('form-cadastro').addEventListener('submit', async functi
         .then(data => {
             console.log("Resposta do servidor:", data);
             alert("cadastrado com sucesso!");
+            window.location.href = "/home";
         })
         .catch(error => {
             console.error("Erro ao cadastrar", error);
