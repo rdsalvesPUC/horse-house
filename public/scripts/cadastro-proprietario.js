@@ -193,10 +193,8 @@ async function buscarEndereco() {
         const data = await response.json();
 
         // Preenche os campos com os dados da API própria
-        bloquearCampo('logradouro', data.logradouro || '');
-        bloquearCampo('bairro', data.bairro || '');
         bloquearCampo('cidade', data.Cidade);
-        bloquearCampo('estado', data.UF);
+        bloquearCampo('estado', data.Estado);
         cepInvalido.classList.add('hidden');
         return true;
 
@@ -221,7 +219,7 @@ async function buscarViaCEP(cep, idioma) {
         bloquearCampo('logradouro', data.logradouro);
         bloquearCampo('bairro', data.bairro);
         bloquearCampo('cidade', data.localidade);
-        bloquearCampo('estado', data.uf);
+        bloquearCampo('estado', data.estado);
         cepInvalido.classList.add('hidden');
         return true;
 
@@ -566,7 +564,7 @@ document.getElementById('form-cadastro').addEventListener('submit', async functi
             numero
         };
 
-        fetch("http://localhost:3000/api/criarProprietario", {
+        fetch("/api/criarProprietario", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -575,8 +573,9 @@ document.getElementById('form-cadastro').addEventListener('submit', async functi
         })
         .then(response => response.json())
         .then(data => {
-            console.log("Resposta do servidor:", data);
-            alert("cadastrado com sucesso!");
+            if (data.error) {
+                throw new Error("Erro ao cadastrar.");
+            }
             window.location.href = "/home";
         })
         .catch(error => {

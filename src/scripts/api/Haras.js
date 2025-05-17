@@ -146,7 +146,7 @@ const {validarCNPJ, validarCEP} = require("../utils/validations");
 router.post("/criarHaras", [extractUserID, requireProprietario], async (req, res) => {
     const { nome, rua, numero, complemento, cnpj, bairro, cep } = req.body;
 
-    if (!nome || !rua || !numero || !complemento || !cnpj || !bairro || !cep) {
+    if (!nome || !rua || !numero || !cnpj || !bairro || !cep) {
         return res.status(400).json({ error: "Todos os campos são obrigatórios." });
     }
 

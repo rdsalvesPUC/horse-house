@@ -1,82 +1,78 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Cadastro de Haras</title>
-		<link rel="stylesheet" href="/styles/output.css" />
-	</head>
-	<body class="bg-primary">
-		<header class="w-full bg-primary flex items-center p-2"></header>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Cadastrar Novo Haras</title>
+	<link rel="stylesheet" href="/styles/output.css" />
+</head>
+<body class="bg-primary">
+<header class="relative justify-between items-center bg-primary flex w-full gap-[40px_100px] flex-wrap p-8 max-md:max-w-full max-md:px-5">
+	<a href="/">
+		<img src="/assets/images/logo-h-whitebg.svg" alt="Logo" class="aspect-[4.59] object-contain w-[202px] self-stretch shrink-0 my-auto" />
+	</a>
+<!--	<div class="self-stretch flex items-center gap-4 my-auto">-->
+<!--		<div class="hidden xl:block text-tertiary text-[19px] font-semibold self-stretch my-auto font-lexend text-base font-semibold">Já cadastrou seu haras?</div>-->
+<!--		<a href="/login" class="self-stretch bg-secondary hover:bg-tertiary gap-2.5 text-tertiary hover:text-secondary font-heebo text-base font-bold my-auto px-5 py-2.5">SIGN IN</a>-->
+<!--	</div>-->
+</header>
+<main class="flex flex-col items-center justify-center min-h-screen bg-primary pt-0 p-6 md:p-2">
+	<div class="bg-tertiary p-6 md:p-10 rounded-lg shadow-lg w-full max-w-2xl md:max-w-full md:flex-grow">
 
-		<main class="flex flex-col items-center justify-center min-h-screen bg-primary pt-0 p-6 md:p-2">
-			<div class="bg-tertiary p-6 md:p-10 rounded-lg shadow-lg w-full max-w-2xl">
-				<h1 class="text-2xl font-bold text-black mb-6">Cadastro de Haras</h1>
+		<h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Insira os dados do novo Haras</h2>
 
-				<form id="cadastroHaras" class="space-y-4">
-					<div>
-						<label for="nome" class="block text-sm text-black">Nome do Haras</label>
-						<input type="text" id="nome" name="nome" required class="w-full p-3 rounded-md border outline-none focus:ring-2 focus:ring-secondary" />
-					</div>
-
-					<div>
-						<label for="cnpj" class="block text-sm text-black">CNPJ</label>
-						<input type="text" id="cnpj" name="cnpj" required class="w-full p-3 rounded-md border outline-none focus:ring-2 focus:ring-secondary" placeholder="00.000.000/0000-00" />
-					</div>
-
-					<div>
-						<label for="cep" class="block text-sm text-black">CEP</label>
-						<input type="text" id="cep" name="cep" required class="w-full p-3 rounded-md border outline-none focus:ring-2 focus:ring-secondary" placeholder="00000-000" />
-					</div>
-
-					<div>
-						<label for="logradouro" class="block text-sm text-black">Logradouro</label>
-						<input type="text" id="logradouro" name="logradouro" readonly class="w-full p-3 rounded-md border bg-gray-200 text-gray-700" />
-					</div>
-
-					<button type="submit" class="w-full p-3 bg-secondary text-black font-bold rounded-md hover:bg-secondary-dark transition">Cadastrar</button>
-				</form>
+		<form action="/stud-list" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 md:gap-x-20" id="form-haras">
+			<div class="text-left">
+				<label for="cnpj" class="text-sm text-gray-700">CNPJ</label><span class="text-error"> *</span>
+				<input id="cnpj" type="text" name="cpf" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+				<p id="cnpj-erro" class="text-error text-sm mt-1 hidden">O CNPJ é obrigatório.</p>
+				<span id="cnpj-invalido" class="text-error text-sm hidden">CNPJ inválido! Digite um CNPJ válido.</span>
 			</div>
-		</main>
+			<div class="text-left">
+				<label for="nome" class="text-sm text-gray-700">Nome</label><span class="text-error"> *</span>
+				<input id="nome" type="text" name="nome" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+				<p id="nome-erro" class="text-error text-sm mt-1 hidden">O Nome é obrigatório.</p>
+			</div>
+			<div class="text-left">
+				<label for="cep" class="text-sm text-gray-700">CEP</label><span class="text-error"> *</span>
+				<input id="cep" type="text" name="cep" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" maxlength="9" />
+				<p id="cep-erro" class="text-error text-sm mt-1 hidden">O CEP é obrigatório.</p>
+				<p id="cep-invalido" class="text-error text-sm mt-1 hidden">CEP inválido! Digite no formato 00000-000.</p>
+			</div>
+			<div class="text-left">
+				<label for="estado" class="text-sm text-gray-700">Estado</label><span class="text-error"> *</span>
+				<input id="estado" type="text" name="estado" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+				<p id="estado-erro" class="text-error text-sm mt-1 hidden">O Estado é obrigatório.</p>
+			</div>
+			<div class="text-left">
+				<label for="bairro" class="text-sm text-gray-700">Bairro</label><span class="text-error"> *</span>
+				<input id="bairro" type="text" name="bairro" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+				<p id="bairro-erro" class="text-error text-sm mt-1 hidden">O Bairro é obrigatório.</p>
+			</div>
+			<div class="text-left">
+				<label for="cidade" class="text-sm text-gray-700">Cidade</label><span class="text-error"> *</span>
+				<input id="cidade" type="text" name="cidade" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+				<p id="cidade-erro" class="text-error text-sm mt-1 hidden">A Cidade é obrigatória.</p>
+			</div>
+			<div class="text-left">
+				<label for="logradouro" class="text-sm text-gray-700">Rua</label><span class="text-error"> *</span>
+				<input id="logradouro" type="text" name="logradouro" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+				<p id="logradouro-erro" class="text-error text-sm mt-1 hidden">A Rua é obrigatória.</p>
+			</div>
+			<div class="text-left">
+				<label for="numero" class="text-sm text-gray-700">Número</label><span class="text-error"> *</span>
+				<input id="numero" type="number" name="numero" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+				<p id="numero-erro" class="text-error text-sm mt-1 hidden">O Número é obrigatório.</p>
+			</div>
+			<div class="text-left">
+				<label for="complemento" class="text-sm text-gray-700">Complemento</label>
+				<input id="complemento" type="text" name="complemento" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
+			</div>
 
-		<script>
-			acessoControle();
-			/* acesso controle */
-			async function acessoControle() {
-				const TOKEN = localStorage.getItem("token");
-				const r = await fetch("/api/requerProprietario", {
-					headers: { Authorization: `Bearer ${TOKEN}` },
-				});
-				if (!r.ok) {
-					const result = await r.json();
-					if (result.login){
-						window.location.href = "/login";
-					}
-					else{
-						window.location.href = "/home";
-					}
-
-				}
-			}
-			document.getElementById("cep").addEventListener("blur", async () => {
-				const cep = document.getElementById("cep").value.replace(/\D/g, "");
-
-				if (cep.length === 8) {
-					try {
-						const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-						const data = await response.json();
-
-						if (!data.erro) {
-							document.getElementById("logradouro").value = data.logradouro;
-						} else {
-							document.getElementById("logradouro").value = "";
-							alert("CEP não encontrado.");
-						}
-					} catch (error) {
-						alert("Erro ao buscar CEP.");
-					}
-				}
-			});
-		</script>
-	</body>
+			<button id="botao-cadastrar" type="submit" class="w-full md:col-span-2 py-3 text-tertiary bg-secondary rounded-md transition duration-300 ease-in-out hover:bg-primary mt-3">Cadastrar</button>
+		</form>
+	</div>
+</main>
+<script defer src="/scripts/cadastro-haras.js"></script>
+</body>
 </html>
