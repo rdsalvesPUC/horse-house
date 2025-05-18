@@ -1,0 +1,51 @@
+<!-- components/sidebar.html -->
+<div class="bg-primary h-screen w-full flex flex-col relative">
+	<!-- Logo/Título -->
+	<div class="h-16 p-2 flex items-center justify-center">
+		<a href="">
+			<img src="/assets/images/logo-h-whitebg.svg" alt="Horse House Logo" class="object-contain md:w-[150px] lg:w-[180px]" />
+		</a>
+	</div>
+
+	<!-- Navegação -->
+	<div class="py-4 px-2 flex-1 overflow-auto">
+		<nav class="flex flex-col space-y-1">
+			<a href="/dashboard" data-view="visao-geral" class="flex items-center py-3 px-3 rounded-md bg-secondary/10 text-secondary transition-colors duration-200">
+				<!-- ícone Home -->
+				<svg class="h-5 w-5 mr-3 fill-current text-secondary" viewBox="0 0 24 24"><!-- … --></svg>
+				<span class="text-tertiary">Haras</span>
+				<svg class="ml-auto h-4 w-4 fill-current text-secondary" viewBox="0 0 24 24"><!-- ChevronRight --></svg>
+			</a>
+
+			<a href="/dashboard/usuarios" data-view="usuarios" class="flex items-center py-3 px-3 rounded-md text-tertiary hover:bg-secondary/10 hover:text-secondary transition-colors duration-200">
+				<svg class="h-5 w-5 mr-3 fill-current text-tertiary" viewBox="0 0 24 24"><!-- Users --></svg>
+				<span>Usuários</span>
+			</a>
+
+			<a href="/dashboard/cavalos" data-view="cavalos" class="flex items-center py-3 px-3 rounded-md text-tertiary hover:bg-secondary/10 hover:text-secondary transition-colors duration-200">
+				<svg class="h-5 w-5 mr-3 fill-current text-tertiary" viewBox="0 0 24 24"><!-- Cavalos --></svg>
+				<span>Cavalos</span>
+			</a>
+
+			<a href="/dashboard/plano-treino" data-view="plano-treino" class="flex items-center py-3 px-3 rounded-md text-tertiary hover:bg-secondary/10 hover:text-secondary transition-colors duration-200">
+				<svg class="h-5 w-5 mr-3 fill-current text-tertiary" viewBox="0 0 24 24"><!-- Treino --></svg>
+				<span>Plano de Treino</span>
+			</a>
+
+			<a href="/dashboard/plano-alimentacao" data-view="plano-alimentacao" class="flex items-center py-3 px-3 rounded-md text-tertiary hover:bg-secondary/10 hover:text-secondary transition-colors duration-200">
+				<svg class="h-5 w-5 mr-3 fill-current text-tertiary" viewBox="0 0 24 24"><!-- Alimentação --></svg>
+				<span>Plano de Alimentação</span>
+			</a>
+
+			<a href="/dashboard/plano-veterinario" data-view="plano-veterinario" class="flex items-center py-3 px-3 rounded-md text-tertiary hover:bg-secondary/10 hover:text-secondary transition-colors duration-200">
+				<svg class="h-5 w-5 mr-3 fill-current text-tertiary" viewBox="0 0 24 24"><!-- Veterinário --></svg>
+				<span>Plano Veterinário</span>
+			</a>
+		</nav>
+	</div>
+
+	<!-- Botão de colapso/expansão -->
+	<button id="toggleSidebar" class="absolute -right-3 top-20 bg-tertiary rounded-full p-1 border border-secondary shadow-md hover:bg-secondary/10 transition-colors" aria-label="Colapsar/Expandir sidebar">
+		<svg class="h-4 w-4 fill-current text-primary" viewBox="0 0 24 24"><!-- ChevronLeft/Right --></svg>
+	</button>
+</div>
