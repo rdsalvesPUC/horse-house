@@ -1,141 +1,234 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Novo Cadastro</title>
+		<title>Cadastro de Proprietário - HorseHouse</title>
 		<link rel="stylesheet" href="/styles/output.css" />
 	</head>
-	<body class="bg-primary">
+	<body class="flex flex-col h-screen min-h-[768px]">
 		<header class="relative justify-between items-center bg-primary flex w-full gap-[40px_100px] flex-wrap p-8 max-md:max-w-full max-md:px-5">
 			<a href="/">
 				<img src="/assets/images/logo-h-whitebg.svg" alt="Logo" class="aspect-[4.59] object-contain w-[202px] self-stretch shrink-0 my-auto" />
 			</a>
 			<div class="self-stretch flex items-center gap-4 my-auto">
-				<div class="hidden xl:block text-tertiary text-[19px] font-semibold self-stretch my-auto font-lexend text-base font-semibold">Já cadastrou seu haras?</div>
-				<a href="/login" class="self-stretch bg-secondary hover:bg-tertiary gap-2.5 text-tertiary hover:text-secondary font-heebo text-base font-bold my-auto px-5 py-2.5">SIGN IN</a>
+				<div class="hidden xl:block text-tertiary text-[19px] font-semibold self-stretch my-auto font-lexend text-base">Não tem uma conta?</div>
+				<a href="/register" class="self-stretch bg-secondary hover:bg-tertiary gap-2.5 text-tertiary hover:text-secondary font-heebo text-base font-bold my-auto px-5 py-2.5">SIGN UP</a>
 			</div>
 		</header>
-		<main class="flex flex-col items-center justify-center min-h-screen bg-primary pt-0 p-6 md:p-2">
-			<div class="bg-tertiary p-6 md:p-10 rounded-lg shadow-lg w-full max-w-2xl md:max-w-full md:flex-grow">
-				<div class="text-left mb-4">
-					<label for="idioma" class="text-sm text-gray-700">Idioma</label>
-					<select id="idioma" class="w-full max-w-xs p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none">
-						<option value="pt">Português</option>
-						<option value="en">English</option>
-					</select>
+
+		<!-- Main Content -->
+		<main class="relative flex flex-col items-center flex-1">
+			<img src="/assets/images/hero.jpg" alt="Background" class="absolute h-full w-full object-cover inset-0" />
+			<div class="absolute inset-0" style="background: var(--Overlay, rgba(34, 44, 45, 0.8))"></div>
+			<div class="relative z-10 bg-tertiary rounded-xl shadow-[0px_6px_16px_rgba(0,0,0,0.08),…] overflow-hidden mt-[88px] px-8 py-12 w-full min-w-[320px] max-w-[768px]">
+				<div>
+					<!-- RegisterSteps final -->
+					<div class="relative w-full">
+						<div class="absolute h-[2px] bg-gray-200" style="top: 20px; left: 12.5%; right: 12.5%"></div>
+
+						<!-- Passos -->
+						<div class="relative z-10 flex justify-between items-start">
+							<!-- Step 1 -->
+							<div class="flex-1 flex flex-col items-center" data-step-indicator="1">
+								<div class="w-10 h-10 rounded-full bg-secondary text-primary border border-secondary flex items-center justify-center">1</div>
+								<span class="text-xs mt-2 text-secondary whitespace-nowrap">Informações Pessoais</span>
+							</div>
+
+							<!-- Step 2 -->
+							<div class="flex-1 flex flex-col items-center" data-step-indicator="2">
+								<div class="w-10 h-10 rounded-full bg-tertiary text-primary border border-secondary flex items-center justify-center">2</div>
+								<span class="text-xs mt-2 text-gray-400 whitespace-nowrap">Contato</span>
+							</div>
+
+							<!-- Step 3 -->
+							<div class="flex-1 flex flex-col items-center" data-step-indicator="3">
+								<div class="w-10 h-10 rounded-full bg-tertiary text-primary border border-secondary flex items-center justify-center">3</div>
+								<span class="text-xs mt-2 text-gray-400 whitespace-nowrap">Endereço</span>
+							</div>
+
+							<!-- Step 4 -->
+							<div class="flex-1 flex flex-col items-center" data-step-indicator="4">
+								<div class="w-10 h-10 rounded-full bg-tertiary text-primary border border-secondary flex items-center justify-center">4</div>
+								<span class="text-xs mt-2 text-gray-400 whitespace-nowrap">Segurança</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Form Wrapper -->
+					<div class="text-center mb-8 mt-8">
+						<h1 class="font-lexend text-2xl text-primary font-semibold" id="titulo-cadastro">Título da Etapa</h1>
+						<p class="text-gray-600 mt-1" id="subtitle-cadastro">Subtítulo explicativo da etapa</p>
+					</div>
+					<div class="max-w-lg mx-auto">
+						<!-- Step 1: Informações Pessoais -->
+						<section data-step="1" class="space-y-6">
+							<div class="space-y-6">
+								<div>
+									<label for="idioma" class="block text-sm font-medium mb-2">Idioma</label>
+									<select id="idioma" class="input-register-spa">
+										<option value="pt">Português</option>
+										<option value="en">English</option>
+									</select>
+								</div>
+								<div>
+									<label for="cpf" class="inline-block text-sm font-medium mb-2">CPF</label><span class="text-error"> *</span>
+									<input id="cpf" type="text" placeholder="000.000.000-00" maxlength="14" class="input-register-spa" />
+									<p id="cpf-erro" class="text-error text-sm mt-1 hidden">O CPF é obrigatório.</p>
+									<span id="cpf-invalido" class="text-error text-sm hidden">CPF inválido! Digite um CPF válido.</span>
+								</div>
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+									<div>
+										<label for="nome" class="inline-block text-sm font-medium mb-2">Nome</label><span class="text-error"> *</span>
+										<input id="nome" type="text" placeholder="Digite seu primeiro nome" class="input-register-spa" />
+										<p id="nome-erro" class="text-error text-sm mt-1 hidden">O Nome completo é obrigatório.</p>
+									</div>
+									<div>
+										<label for="sobrenome" class="inline-block text-sm font-medium mb-2">Sobrenome</label><span class="text-error"> *</span>
+										<input id="sobrenome" type="text" placeholder="Digite seu sobrenome" class="input-register-spa" />
+										<p id="sobrenome-erro" class="text-error text-sm mt-1 hidden">O Sobrenome é obrigatório.</p>
+									</div>
+								</div>
+							</div>
+							<button type="button" class="btn-form-next">Próximo</button>
+						</section>
+
+						<!-- Step 2: Contato -->
+						<section data-step="2" class="space-y-6 hidden">
+							<div class="space-y-6">
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+									<div>
+										<label for="telefone" class="inline-block text-sm font-medium mb-2">Telefone</label><span class="text-error"> *</span>
+										<input id="telefone" type="text" placeholder="(00) 00000-0000" maxlength="15" class="input-register-spa" />
+										<p id="telefone-erro" class="text-error text-sm mt-1 hidden">O Telefone é obrigatório.</p>
+										<span id="telefone-invalido" class="text-error text-sm hidden">Insira um telefone válido (Deve ter entre 10 e 11 dígitos e não pode conter letras).</span>
+									</div>
+									<div>
+										<label for="data-nascimento" class="inline-block text-sm font-medium mb-2">Data de Nascimento</label><span class="text-error"> *</span>
+										<input id="data-nascimento" type="date" class="input-register-spa" />
+										<p id="data-nascimento-erro" class="text-error text-sm mt-1 hidden">O Data de Nascimento é obrigatório.</p>
+										<p id="data-nascimento-invalida" class="text-error text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
+									</div>
+								</div>
+								<div>
+									<label for="email" class="inline-block text-sm font-medium mb-2">Email</label><span class="text-error"> *</span>
+									<input id="email" type="email" placeholder="seu@email.com" class="input-register-spa" />
+									<p id="email-erro" class="text-error text-sm mt-1 hidden">O E-mail é obrigatório.</p>
+									<span id="email-invalido" class="text-error text-sm hidden">Insira um e-mail válido.</span>
+								</div>
+							</div>
+							<div class="flex gap-8">
+								<button type="button" class="btn-form-previous">Voltar</button>
+								<button type="button" class="btn-form-next">Próximo</button>
+							</div>
+						</section>
+
+						<!-- Step 3: Endereço -->
+						<section data-step="3" class="space-y-6 hidden">
+							<div class="space-y-6">
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+									<div>
+										<label for="cep" class="inline-block text-sm font-medium mb-2">CEP</label><span class="text-error"> *</span>
+										<input id="cep" type="text" placeholder="00000-000" maxlength="9" class="input-register-spa" />
+										<p id="cep-erro" class="text-error text-sm mt-1 hidden">O CEP é obrigatório.</p>
+										<p id="cep-invalido" class="text-error text-sm mt-1 hidden">CEP inválido! Digite no formato 00000-000.</p>
+									</div>
+									<div>
+										<label for="estado" class="inline-block text-sm font-medium mb-2">Estado</label><span class="text-error"> *</span>
+										<input id="estado" type="text" placeholder="Estado" class="input-register-spa" />
+										<p id="estado-erro" class="text-error text-sm mt-1 hidden">O Estado é obrigatório.</p>
+									</div>
+								</div>
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+									<div>
+										<label for="cidade" class="inline-block text-sm font-medium mb-2">Cidade</label><span class="text-error"> *</span>
+										<input id="cidade" type="text" placeholder="Cidade" class="input-register-spa" />
+										<p id="cidade-erro" class="text-error text-sm mt-1 hidden">O Cidade é obrigatório.</p>
+									</div>
+									<div>
+										<label for="bairro" class="inline-block text-sm font-medium mb-2">Bairro</label><span class="text-error"> *</span>
+										<input id="bairro" type="text" placeholder="Bairro" class="input-register-spa" />
+										<p id="bairro-erro" class="text-error text-sm mt-1 hidden">O Bairro é obrigatório.</p>
+									</div>
+								</div>
+								<div>
+									<label for="logradouro" class="inline-block text-sm font-medium mb-2">Rua</label><span class="text-error"> *</span>
+									<input id="logradouro" type="text" placeholder="Rua" class="input-register-spa" />
+									<p id="logradouro-erro" class="text-error text-sm mt-1 hidden">O Rua é obrigatório.</p>
+								</div>
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+									<div>
+										<label for="numero" class="inline-block text-sm font-medium mb-2">Número</label><span class="text-error"> *</span>
+										<input id="numero" type="text" placeholder="Número" class="input-register-spa" />
+										<p id="numero-erro" class="text-error text-sm mt-1 hidden">O Número é obrigatório.</p>
+									</div>
+									<div>
+										<label for="complemento" class="inline-block text-sm font-medium mb-2">Complemento</label>
+										<input id="complemento" type="text" placeholder="Complemento (opcional)" class="input-register-spa" />
+									</div>
+								</div>
+							</div>
+							<div class="flex gap-8 justify-between">
+								<button type="button" class="btn-form-previous">Voltar</button>
+								<button type="button" class="btn-form-next">Próximo</button>
+							</div>
+						</section>
+
+						<!-- Step 4: Segurança -->
+						<section data-step="4" class="space-y-6 hidden">
+							<div class="space-y-6 relative">
+								<div>
+									<label for="senha" class="inline-block text-sm font-medium mb-2">Senha</label><span class="text-error"> *</span>
+									<div class="relative w-full">
+										<input id="senha" type="password" class="input-register-spa" />
+										<button id="mostrar-senha" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none">
+											<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+												<path d="M1 12C1 12 5 20 12 20C19 20 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+												<circle cx="12" cy="12" r="3" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+											</svg>
+										</button>
+									</div>
+									<p id="senha-erro" class="text-error text-sm mt-1 hidden">A Senha é obrigatória.</p>
+									<div class="text-sm text-gray-600 mt-2">
+										<div id="senha-requisitos" class="font-medium"></div>
+										<ul class="list-disc list-inside">
+											<li id="req-maiuscula" class="text-error"></li>
+											<li id="req-numero" class="text-error"></li>
+											<li id="req-especial" class="text-error"></li>
+											<li id="req-tamanho" class="text-error"></li>
+										</ul>
+									</div>
+								</div>
+								<div>
+									<label for="senha-confirmacao" class="inline-block text-sm font-medium mb-2">Confirmação de Senha</label><span class="text-error"> *</span>
+									<div class="relative w-full">
+										<input id="senha-confirmacao" type="password" class="input-register-spa" />
+										<button id="mostrar-confirmacao-senha" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none">
+											<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+												<path d="M1 12C1 12 5 20 12 20C19 20 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+												<circle cx="12" cy="12" r="3" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+											</svg>
+										</button>
+									</div>
+									<span id="senha-diferente" class="text-error text-sm hidden"></span>
+								</div>
+							</div>
+							<div class="flex gap-8 justify-between">
+								<button type="button" class="btn-form-previous">Voltar</button>
+								<button id="botao-cadastrar" type="button" class="btn-form-next">Concluir Cadastro</button>
+							</div>
+						</section>
+					</div>
 				</div>
-
-				<h2 id="titulo-cadastro" class="text-3xl font-semibold text-gray-800 mb-6 text-center">Cadastro</h2>
-
-				<form action="/login" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 md:gap-x-20" id="form-cadastro">
-					<div class="text-left">
-						<label for="cpf" class="text-sm text-gray-700">CPF</label><span class="text-error"> *</span>
-						<input id="cpf" type="text" name="cpf" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-						<p id="cpf-erro" class="text-error text-sm mt-1 hidden">O CPF é obrigatório.</p>
-						<span id="cpf-invalido" class="text-error text-sm hidden">CPF inválido! Digite um CPF válido.</span>
-					</div>
-					<div class="text-left">
-						<label for="nome" class="text-sm text-gray-700">Nome</label><span class="text-error"> *</span>
-						<input id="nome" type="text" name="nome" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-						<p id="nome-erro" class="text-error text-sm mt-1 hidden">O Nome é obrigatório.</p>
-					</div>
-					<div class="text-left">
-						<label for="sobrenome" class="text-sm text-gray-700">Sobrenome</label><span class="text-error"> *</span>
-						<input id="sobrenome" type="text" name="sobrenome" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-						<p id="sobrenome-erro" class="text-error text-sm mt-1 hidden">O Sobrenome é obrigatório.</p>
-					</div>
-					<div class="text-left">
-						<label for="telefone" class="text-sm text-gray-700">Telefone</label><span class="text-error"> *</span>
-						<input id="telefone" type="text" name="telefone" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-						<p id="telefone-erro" class="text-error text-sm mt-1 hidden">O Telefone é obrigatório.</p>
-						<span id="telefone-invalido" class="text-error text-sm hidden">Insira um telefone válido (Deve ter entre 10 e 11 dígitos e não pode conter letras).</span>
-					</div>
-					<div class="text-left">
-						<label for="data-nascimento" class="text-sm text-gray-700">Data de Nascimento</label><span class="text-error"> *</span>
-						<input id="data-nascimento" type="date" name="data-nascimento" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-						<p id="data-nascimento-erro" class="text-error text-sm mt-1 hidden">O Data de Nascimento é obrigatório.</p>
-						<p id="data-nascimento-invalida" class="text-error text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
-					</div>
-					<div class="text-left">
-						<label for="email" class="text-sm text-gray-700">E-mail</label><span class="text-error"> *</span>
-						<input id="email" type="text" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-						<p id="email-erro" class="text-error text-sm mt-1 hidden">O E-mail é obrigatório.</p>
-						<span id="email-invalido" class="text-error text-sm hidden">Insira um e-mail válido.</span>
-					</div>
-					<div class="text-left">
-						<label for="cep" class="text-sm text-gray-700">CEP</label><span class="text-error"> *</span>
-						<input id="cep" type="text" name="cep" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" maxlength="9" />
-						<p id="cep-erro" class="text-error text-sm mt-1 hidden">O CEP é obrigatório.</p>
-						<p id="cep-invalido" class="text-error text-sm mt-1 hidden">CEP inválido! Digite no formato 00000-000.</p>
-					</div>
-					<div class="text-left">
-						<label for="estado" class="text-sm text-gray-700">Estado</label><span class="text-error"> *</span>
-						<input id="estado" type="text" name="estado" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-						<p id="estado-erro" class="text-error text-sm mt-1 hidden">O Estado é obrigatório.</p>
-					</div>
-					<div class="text-left">
-						<label for="bairro" class="text-sm text-gray-700">Bairro</label><span class="text-error"> *</span>
-						<input id="bairro" type="text" name="bairro" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-						<p id="bairro-erro" class="text-error text-sm mt-1 hidden">O Bairro é obrigatório.</p>
-					</div>
-					<div class="text-left">
-						<label for="cidade" class="text-sm text-gray-700">Cidade</label><span class="text-error"> *</span>
-						<input id="cidade" type="text" name="cidade" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-						<p id="cidade-erro" class="text-error text-sm mt-1 hidden">O Cidade é obrigatório.</p>
-					</div>
-					<div class="text-left">
-						<label for="logradouro" class="text-sm text-gray-700">Rua</label><span class="text-error"> *</span>
-						<input id="logradouro" type="text" name="logradouro" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-						<p id="logradouro-erro" class="text-error text-sm mt-1 hidden">O Rua é obrigatório.</p>
-					</div>
-					<div class="text-left">
-						<label for="numero" class="text-sm text-gray-700">Número</label><span class="text-error"> *</span>
-						<input id="numero" type="number" name="numero" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-						<p id="numero-erro" class="text-error text-sm mt-1 hidden">O Número é obrigatório.</p>
-					</div>
-					<div class="text-left">
-						<label for="senha" class="text-sm text-gray-700">Senha</label><span class="text-error"> *</span>
-						<div class="relative w-full">
-							<input id="senha" type="password" class="relative w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-							<button id="mostrar-senha" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none">
-								<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-									<path d="M1 12C1 12 5 20 12 20C19 20 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-									<circle cx="12" cy="12" r="3" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-								</svg>
-							</button>
-						</div>
-						<p id="senha-erro" class="text-error text-sm mt-1 hidden">A Senha é obrigatória.</p>
-						<div class="text-sm text-gray-600 mt-2">
-							<div id="senha-requisitos" class="font-medium"></div>
-							<ul class="list-disc list-inside">
-								<li id="req-maiuscula" class="text-error"></li>
-								<li id="req-numero" class="text-error"></li>
-								<li id="req-especial" class="text-error"></li>
-								<li id="req-tamanho" class="text-error"></li>
-							</ul>
-						</div>
-					</div>
-					<div class="text-left">
-						<label for="senha-confirmacao" class="text-sm text-gray-700">Confirmação de Senha</label><span class="text-error"> *</span>
-						<div class="relative w-full">
-							<input id="senha-confirmacao" type="password" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-secondary outline-none" />
-							<button id="mostrar-confirmacao-senha" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none">
-								<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-									<path d="M1 12C1 12 5 20 12 20C19 20 23 12 23 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-									<circle cx="12" cy="12" r="3" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-								</svg>
-							</button>
-						</div>
-						<span id="senha-diferente" class="text-error text-sm hidden"></span>
-					</div>
-
-					<button id="botao-cadastrar" type="submit" class="w-full md:col-span-2 py-3 text-tertiary bg-secondary rounded-md transition duration-300 ease-in-out hover:bg-primary mt-3">Cadastrar</button>
-				</form>
 			</div>
 		</main>
-		<script defer src="/scripts/cadastro-proprietario.js"></script>
+
+		<!-- Footer -->
+		<footer class="bg-primary text-tertiary py-4 text-center text-sm">
+			<div class="container mx-auto">&copy; 2025 HorseHouse. Todos os direitos reservados.</div>
+		</footer>
 	</body>
+	<script defer src="/scripts/cadastro-spa.js"></script>
 </html>
