@@ -137,6 +137,64 @@ atualizarIdioma("pt");
 
 // CONTROLE DE NAVEGAÇÃO ENTRE OS STEPS
 
+function updateIndicators(currentStep) {
+  document.querySelectorAll('[data-step-indicator]').forEach(wrapper => {
+    const step = Number(wrapper.dataset.stepIndicator);
+    const circle = wrapper.querySelector('div');   // o círculo
+    const label  = wrapper.querySelector('span');  // a legenda
+
+    // limpa todas as classes de estado
+    circle.classList.remove(
+      'bg-secondary','text-primary',
+      'bg-tertiary','border-secondary','text-gray-400'
+    );
+    // restauramos o texto original ou o ✓
+    if (step < currentStep) {
+      // concluído
+      circle.classList.add('bg-secondary','text-primary');
+      circle.innerHTML = '✓';
+		label.classList.replace('text-gray-400', 'text-secondary');
+		// circle.classList.remove('border','border-secondary')
+    }
+    else if (step === currentStep) {
+      // atual
+      circle.classList.add('bg-secondary','text-primary');
+      circle.textContent = step;
+      label.classList.replace('text-gray-400','text-secondary');
+    }
+    else {
+      // futuro
+      circle.classList.add('bg-tertiary','text-primary','border-secondary');
+      circle.textContent = step;
+      label.classList.replace('text-secondary','text-gray-400');
+    }
+  });
+}
+
+function updateTitles(step) {
+  const titulo    = document.getElementById('titulo-cadastro');
+  const subtitulo = document.getElementById('subtitle-cadastro');
+
+  switch (step) {
+    case 1:
+      titulo.textContent    = 'Vamos começar o cadastro';
+      subtitulo.textContent = 'Preencha suas informações pessoais';
+      break;
+    case 2:
+      titulo.textContent    = 'Informações de Contato';
+      subtitulo.textContent = 'Como podemos entrar em contato com você?';
+      break;
+    case 3:
+      titulo.textContent    = 'Endereço';
+      subtitulo.textContent = 'Informe seu endereço completo';
+      break;
+    case 4:
+      titulo.textContent    = 'Segurança da Conta';
+      subtitulo.textContent = 'Crie uma senha forte para proteger sua conta';
+      break;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	const sections = Array.from(document.querySelectorAll("section[data-step]"));
 	let currentStep = 1;
@@ -173,17 +231,28 @@ document.addEventListener("DOMContentLoaded", () => {
 			if (currentStep < totalSteps) {
 				currentStep++;
 				showStep(currentStep);
+				showStep(currentStep);
+				updateIndicators(currentStep);
+				updateTitles(currentStep);
 			}
 		} else if (btn.classList.contains("btn-form-previous")) {
 			if (currentStep > 1) {
 				currentStep--;
 				showStep(currentStep);
+				showStep(currentStep);
+				updateIndicators(currentStep);
+				updateTitles(currentStep);
 			}
 		}
 	});
 
 	showStep(currentStep);
+	showStep(currentStep);
+	updateIndicators(currentStep);
+	updateTitles(currentStep);
 });
+
+
 
 function bloquearCampo(id, valor) {
 	const campo = document.getElementById(id);
