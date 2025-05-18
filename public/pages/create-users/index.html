@@ -106,9 +106,8 @@
 						<span id="erro-crmv" class="text-xs text-red-500 hidden">CRMV inválido</span>
 					</div>
 
-				<button type="submit" class="bg-secondary text-tertiary p-3 rounded-md hover:bg-primary transition-all">
-						Cadastrar
-					</button>
+				<button type="submit" class="bg-secondary text-tertiary p-3 rounded-md hover:bg-primary transition-all">Cadastrar</button>
+				</div>
 			</form>
 		</div>
 
@@ -332,6 +331,15 @@
 			return ehValido;
 			}
 
+            document.getElementById("email").addEventListener("input", validarEmail);
+            document.getElementById("nome").addEventListener("input", validarNome);
+            document.getElementById("sobrenome").addEventListener("input", validarSobrenome);
+            document.getElementById("senha").addEventListener("input", function () {
+                const senha = this.value;
+                validarSenha(senha);
+            });
+            document.getElementById("dataNascimento").addEventListener("input", validarDataNascimento);
+            document.getElementById("cpf").addEventListener("input", validarCPF);
 			document.getElementById("form-cadastro").addEventListener("submit", async function (event) {
 				event.preventDefault();
 
