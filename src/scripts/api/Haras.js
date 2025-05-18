@@ -146,7 +146,7 @@ const {validarCNPJ, validarCEP} = require("../utils/validations");
 router.post("/criarHaras", [extractUserID, requireProprietario], async (req, res) => {
     const { nome, rua, numero, complemento, cnpj, bairro, cep } = req.body;
 
-    if (!nome || !rua || !numero || !complemento || !cnpj || !bairro || !cep) {
+    if (!nome || !rua || !numero || !cnpj || !bairro || !cep) {
         return res.status(400).json({ error: "Todos os campos são obrigatórios." });
     }
 
@@ -263,7 +263,7 @@ router.post("/criarHaras", [extractUserID, requireProprietario], async (req, res
  */
 router.get("/getAllHaras", [extractUserID, requireProprietario], async (req, res) => {
     try {
-        const query = "SELECT Nome, id FROM haras WHERE fk_Proprietario_ID = ?";
+        const query = "SELECT haras.ID, haras.Nome, Rua, Numero, Complemento, CNPJ, Bairro, cidade.nome as Cidade, estado.Nome as Estado, fk_CEP_CEP as Cep FROM haras LEFT JOIN CEP ON haras.fk_CEP_CEP = CEP.CEP LEFT JOIN cidade ON CEP.FK_Cidade_ID = cidade.ID LEFT JOIN estado on cidade.fk_Estado_ID = estado.ID WHERE fk_Proprietario_ID = ?";
         const [results] = await connection.promise().query(query, [req.user.id]);
         res.json(results);
     } catch (err) {
@@ -330,7 +330,7 @@ router.get("/getAllHaras", [extractUserID, requireProprietario], async (req, res
  */
 router.get("/haras/:id", async (req, res) => {
     try {
-        const query = "SELECT Nome, id FROM haras WHERE id = ?";
+        const query = "SELECT haras.ID, haras.Nome, Rua, Numero, Complemento, CNPJ, Bairro, cidade.nome as Cidade, estado.Nome as Estado, fk_CEP_CEP as Cep FROM haras LEFT JOIN CEP ON haras.fk_CEP_CEP = CEP.CEP LEFT JOIN cidade ON CEP.FK_Cidade_ID = cidade.ID LEFT JOIN estado on cidade.fk_Estado_ID = estado.ID WHERE haras.id = ?";
         const [results] = await connection.promise().query(query, [req.params.id]);
         if (results.length === 0) {
             return res.status(404).json({error: "Haras não encontrada."});
@@ -620,7 +620,7 @@ router.delete("/haras/:id", [extractUserID, requireProprietario], async (req, re
     try {
         const query = "DELETE FROM haras WHERE id = ? AND fk_Proprietario_ID = ?";
         const [results] = await connection.promise().query(query, [req.params.id, req.user.id]);
-
+        console.log(results);
         if (results.affectedRows === 0) {
             return res.status(404).json({ error: "Haras não encontrado ou você não tem permissão para excluí-lo." });
         }
