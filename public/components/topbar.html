@@ -1,0 +1,80 @@
+<div class="h-16 border-b border-gray-200 bg-white flex items-center justify-between px-6">
+	<!-- Lado esquerdo: Logo + Select de Haras -->
+	<div class="flex items-center space-x-6">
+		<!-- Dropdown estático de Haras -->
+		<div class="relative">
+			<select class="w-[200px] py-2 pl-3 pr-8 border border-secondary/50 rounded-md text-gray-700 bg-white appearance-none focus:outline-none">
+				<option value="">Selecionar Haras</option>
+				<option value="1">Haras São Jorge</option>
+				<option value="2">Haras Bela Vista</option>
+				<option value="3">Haras Monte Verde</option>
+			</select>
+			<!-- setinha à direita -->
+			<span class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+				<!-- Aqui você coloca um ícone de chevron-down -->
+				▼
+			</span>
+		</div>
+	</div>
+
+	<!-- Central: Campo de busca -->
+	<div class="flex-1 max-w-md px-6">
+		<div class="relative">
+			<!-- ícone de search -->
+			<span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"> 🔍 </span>
+			<input type="text" placeholder="Buscar..." class="w-full pl-10 pr-4 py-2 border border-secondary/50 rounded-md focus:outline-none" />
+		</div>
+	</div>
+
+	<!-- Lado direito: Notificações + Avatar + Dropdown -->
+	<div class="flex items-center space-x-4">
+		<!-- Sino de notificações -->
+		<button class="relative p-2 rounded-full hover:bg-gray-100">
+			🔔
+			<!-- bolinha vermelha de não-lido -->
+			<span class="absolute top-1 right-1 block h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+		</button>
+		<div class="relative">
+			<!-- já existe o botão que abre o menu, mantenha-o -->
+			<button id="userMenuBtn" class="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-gray-100">
+				<!-- Avatar, nome e seta tal como antes -->
+				<div class="h-8 w-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm">J</div>
+				<div class="flex flex-col leading-tight">
+					<span class="text-sm font-medium text-gray-800">João Silva</span>
+					<span class="text-xs text-gray-500">Administrador</span>
+				</div>
+				<span class="text-gray-400">⌄</span>
+			</button>
+
+			<!-- Dropdown menu: escondido até ser acionado -->
+			<div id="userMenu" class="hidden absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg">
+				<!-- Label -->
+				<div class="px-4 py-2 text-sm font-semibold text-gray-700">Minha Conta</div>
+				<div class="border-t border-gray-100"></div>
+
+				<!-- Item: Perfil -->
+				<a href="/perfil" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-100">
+					<!-- substitua por SVG do ícone User -->
+					<span class="mr-2">👤</span>
+					Perfil
+				</a>
+
+				<!-- Item: Configurações -->
+				<a href="#" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-100">
+					<!-- substitua por SVG do ícone Settings -->
+					<span class="mr-2">⚙️</span>
+					Configurações
+				</a>
+
+				<div class="border-t border-gray-100"></div>
+
+				<!-- Item: Sair -->
+				<a href="/logout" class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-b-md">
+					<!-- substitua por SVG do ícone LogOut -->
+					<span class="mr-2">🚪</span>
+					Sair
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
