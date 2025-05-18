@@ -65,7 +65,11 @@
 	</div>
 </div>
 
-<script>
+<script type="module">
+	import Modal from "/scripts/load-modal.js";
+
+	const modalAlert = new Modal();
+
 	document.addEventListener("DOMContentLoaded", acessoControle);
 	/* eslint-disable no-alert */
 	const TOKEN = localStorage.getItem("token");
@@ -366,15 +370,15 @@
 	/* update ----------------------------------------------------------------*/
 	btnSalvar.addEventListener("click", async () => {
 		if (!validarNome()) {
-			alert("Nome inválido");
+			modalAlert.show("Nome inválido");
 			return;
 		}
 		if (!validarCNPJ()) {
-			alert("CNPJ inválido");
+			modalAlert.show("CNPJ inválido");
 			return;
 		}
 		if (!await buscarEndereco()) {
-			alert("CEP inválido");
+			modalAlert.show("CEP inválido");
 			return;
 		}
 
@@ -386,7 +390,7 @@
 		const numero = edNumero.value.trim();
 		const complemento = edComplemento.value.trim();
 		if (!nome || !cnpj || !cep || !bairo || !logradouro || !numero) {
-			alert("Preencha todos os campos obrigatórios.");
+			modalAlert.show("Preencha todos os campos obrigatórios.");
 			return;
 		}
 		const dados = {

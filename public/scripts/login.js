@@ -1,3 +1,7 @@
+import Modal from "/scripts/load-modal.js";
+
+const modal = new Modal();
+
 acessoControle();
 /* acesso controle */
 async function acessoControle() {
@@ -60,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		localStorage.setItem("userType", data.userType);
 		window.location.href = "/create-users";
 	  } catch (err) {
-		alert("Email ou senha incorretos.");
+		modal.show("Email ou senha incorretos.");
 		console.error(err);
 	  }
 	});

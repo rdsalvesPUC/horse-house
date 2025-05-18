@@ -267,7 +267,10 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
 
         // Verificar se o haras pertence ao proprietário logado
         const queryVerificaHaras = "SELECT COUNT(*) as count FROM haras WHERE id = ? AND fk_Proprietario_ID = ?";
+
         const [verificaHarasResults] = await connection.promise().query(queryVerificaHaras, [haras_id, req.user.id]);
+        console.log(queryVerificaHaras, haras_id, req.user.id);
+        console.log(verificaHarasResults);
 
         if (verificaHarasResults[0].count === 0) {
             return res.status(403).json({error: "Você não tem permissão para adicionar gerentes a este haras."});

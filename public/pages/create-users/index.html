@@ -106,21 +106,24 @@
 						<span id="erro-crmv" class="text-xs text-red-500 hidden">CRMV inválido</span>
 					</div>
 
-				<button type="submit" class="bg-secondary text-tertiary p-3 rounded-md hover:bg-primary transition-all">
-						Cadastrar
-					</button>
+				<button type="submit" class="bg-secondary text-tertiary p-3 rounded-md hover:bg-primary transition-all">Cadastrar</button>
+				</div>
 			</form>
 		</div>
 
-		<script>
-			const TOKEN = localStorage.getItem("token");
+		<script type="module">
+			import Modal from "/scripts/load-modal.js";
+
+			const modal = new Modal();
+
+            const TOKEN = localStorage.getItem("token");
 
 			const tipoUsuarioSelect = document.getElementById("tipoUsuario");
 			const containerHaras = document.getElementById("container-haras");
 			const selectHaras = document.getElementById("select-haras");
 			const campoCrmv = document.getElementById("campo-crmv");
 			const botaoCadastrar = document.getElementById("botao-cadastrar-user");
-			
+
 			// Mostrar / ocultar campos de acordo com tipo de usuário
 			tipoUsuarioSelect.addEventListener("change", function () {
 				if (this.value === "Veterinario") {
@@ -145,9 +148,9 @@
 					window.location.href = result.login ? "/login" : "/home";
 				}
 			}
-			
+
 			acessoControle();
-			
+
 			async function carregarHaras() {
 				try {
 					const response = await fetch("/api/getAllHaras", {
@@ -328,6 +331,15 @@
 			return ehValido;
 			}
 
+            document.getElementById("email").addEventListener("input", validarEmail);
+            document.getElementById("nome").addEventListener("input", validarNome);
+            document.getElementById("sobrenome").addEventListener("input", validarSobrenome);
+            document.getElementById("senha").addEventListener("input", function () {
+                const senha = this.value;
+                validarSenha(senha);
+            });
+            document.getElementById("dataNascimento").addEventListener("input", validarDataNascimento);
+            document.getElementById("cpf").addEventListener("input", validarCPF);
 			document.getElementById("form-cadastro").addEventListener("submit", async function (event) {
 				event.preventDefault();
 
@@ -422,10 +434,10 @@
 						throw new Error(result.error || "Erro ao cadastrar.");
 					}
 
-					alert(`${tipoUsuario} cadastrado com sucesso!`);
+					modal.show(`${tipoUsuario} cadastrado com sucesso!`);
 					window.location.reload();
 				} catch (error) {
-					alert("Erro ao cadastrar: " + error.message);
+					modal.show("Erro ao cadastrar: " + error.message);
 				}
 			});
 		</script>
