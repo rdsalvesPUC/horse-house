@@ -121,7 +121,7 @@
 					headers: { Authorization: `Bearer ${TOKEN}` },
 				});
 				const lista = await r.json();
-				selectHaras.innerHTML = '<option value="">Selecione o Haras</option>' + lista.map((h) => `<option value="${h.id}">${h.Nome}</option>`).join("");
+				selectHaras.innerHTML = '<option value="">Selecione o Haras</option>' + lista.map((h) => `<option value="${h.ID}">${h.Nome}</option>`).join("");
 			}
 			/* listar --------------------------------------------------------------- */
 			async function listarGerentes(harasId) {

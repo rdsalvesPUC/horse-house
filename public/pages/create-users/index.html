@@ -16,46 +16,66 @@
 			<form id="form-cadastro" class="space-y-4">
 				<div class="flex flex-col gap-8 p-10">
 					<!-- Campos Nome, Sobrenome, Email, etc. -->
+					<!-- NOME -->
 					<div class="flex flex-col gap-2">
-						<label for="nome" class="font-medium">Nome</label>
+						<label for="nome" class="font-medium">Nome<span class="text-error"> *</span></label>
 						<input id="nome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu nome" />
-						<span id="erro-nome" class="text-xs text-red-500 hidden">Nome inválido</span>
+						<p id="nome-erro" class="text-error text-sm mt-1 hidden">O Nome é obrigatório.</p>
 					</div>
 
+					<!-- SOBRENOME -->
 					<div class="flex flex-col gap-2">
-						<label for="sobrenome" class="font-medium">Sobrenome</label>
+						<label for="sobrenome" class="font-medium">Sobrenome<span class="text-error"> *</span></label>
 						<input id="sobrenome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu sobrenome" />
-						<span id="erro-sobrenome" class="text-xs text-red-500 hidden">Sobrenome inválido</span>
+						<p id="sobrenome-erro" class="text-error text-sm mt-1 hidden">O Sobrenome é obrigatório.</p>
 					</div>
 
+					<!-- EMAIL -->
 					<div class="flex flex-col gap-2">
-						<label for="email" class="font-medium">E-mail</label>
-						<input id="email" type="email" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu e-mail" />
-						<span id="erro-email" class="text-xs text-red-500 hidden">E-mail inválido</span>
+						<label for="email" class="font-medium">E-mail<span class="text-error"> *</span></label>
+						<input id="email" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu e-mail" />
+						<p id="email-erro" class="text-error text-sm mt-1 hidden">O E-mail é obrigatório.</p>
+						<span id="email-invalido" class="text-error text-sm hidden">Insira um e-mail válido.</span>
 					</div>
 
+					<!-- SENHA -->
 					<div class="flex flex-col gap-2">
-						<label for="senha" class="font-medium">Senha</label>
+						<label for="senha" class="font-medium">Senha<span class="text-error"> *</span></label>
 						<input id="senha" type="password" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite sua senha" />
-						<span id="erro-senha" class="text-xs text-red-500 hidden">Senha inválida</span>
+						<p id="senha-erro" class="text-error text-sm mt-1 hidden">A Senha é obrigatória.</p>
+						<div class="text-sm text-gray-600 mt-2">
+							<div id="senha-requisitos" class="font-medium">A senha deve conter:</div>
+							<ul class="list-disc list-inside">
+								<li id="req-maiuscula" class="text-error">Pelo menos uma letra maiúscula</li>
+								<li id="req-numero" class="text-error">Pelo menos um número</li>
+								<li id="req-especial" class="text-error">Pelo menos um caractere especial</li>
+								<li id="req-tamanho" class="text-error">Mínimo de 6 caracteres</li>
+							</ul>
+						</div>
 					</div>
 
+					<!-- TELEFONE -->
 					<div class="flex flex-col gap-2">
-						<label for="telefone" class="font-medium">Telefone</label>
+						<label for="telefone" class="font-medium">Telefone<span class="text-error"> *</span></label>
 						<input id="telefone" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu telefone" />
-						<span id="erro-telefone" class="text-xs text-red-500 hidden">Telefone inválido</span>
+						<p id="telefone-erro" class="text-error text-sm mt-1 hidden">O Telefone é obrigatório.</p>
+						<span id="telefone-invalido" class="text-error text-sm hidden">Insira um telefone válido (10 a 11 dígitos).</span>
 					</div>
 
+					<!-- CPF -->
 					<div class="flex flex-col gap-2">
-						<label for="cpf" class="font-medium">CPF</label>
+						<label for="cpf" class="font-medium">CPF<span class="text-error"> *</span></label>
 						<input id="cpf" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu CPF" />
-						<span id="erro-cpf" class="text-xs text-red-500 hidden">CPF inválido</span>
+						<p id="cpf-erro" class="text-error text-sm mt-1 hidden">O CPF é obrigatório.</p>
+						<span id="cpf-invalido" class="text-error text-sm hidden">CPF inválido! Digite um CPF válido.</span>
 					</div>
 
+					<!-- DATA DE NASCIMENTO -->
 					<div class="flex flex-col gap-2">
-						<label for="dataNascimento" class="font-medium">Data de Nascimento</label>
+						<label for="dataNascimento" class="font-medium">Data de Nascimento<span class="text-error"> *</span></label>
 						<input id="dataNascimento" type="date" class="rounded-md p-3 text-sm border border-secondary" />
-						<span id="erro-dataNascimento" class="text-xs text-red-500 hidden">Data de nascimento inválida</span>
+						<p id="data-nascimento-erro" class="text-error text-sm mt-1 hidden">A Data de Nascimento é obrigatória.</p>
+						<p id="data-nascimento-invalida" class="text-error text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
 					</div>
 
 					<div class="flex flex-col gap-2">
@@ -86,56 +106,51 @@
 						<span id="erro-crmv" class="text-xs text-red-500 hidden">CRMV inválido</span>
 					</div>
 
-					<button id="botao-cadastrar-user" class="bg-secondary text-tertiary p-3 rounded-md hover:bg-primary transition-all">Cadastrar</button>
-				</div>
+				<button type="submit" class="bg-secondary text-tertiary p-3 rounded-md hover:bg-primary transition-all">
+						Cadastrar
+					</button>
 			</form>
 		</div>
 
-		<!-- SCRIPT -->
 		<script type="module">
 			import Modal from "/scripts/load-modal.js";
 
 			const modal = new Modal();
 
-			acessoControle();
+            const TOKEN = localStorage.getItem("token");
+
 			const tipoUsuarioSelect = document.getElementById("tipoUsuario");
 			const containerHaras = document.getElementById("container-haras");
 			const selectHaras = document.getElementById("select-haras");
 			const campoCrmv = document.getElementById("campo-crmv");
 			const botaoCadastrar = document.getElementById("botao-cadastrar-user");
 
-			// Quando mudar o tipo de usuário
+			// Mostrar / ocultar campos de acordo com tipo de usuário
 			tipoUsuarioSelect.addEventListener("change", function () {
 				if (this.value === "Veterinario") {
 					campoCrmv.classList.remove("hidden");
-					containerHaras.classList.add("hidden"); // veterinário não precisa haras
+					containerHaras.classList.add("hidden");
 				} else if (this.value === "Gerente") {
 					campoCrmv.classList.add("hidden");
 					containerHaras.classList.remove("hidden");
-					carregarHaras(); // <-- busca haras da API
+					carregarHaras();
 				} else {
 					campoCrmv.classList.add("hidden");
 					containerHaras.classList.add("hidden");
 				}
 			});
 
-			/* acesso controle */
 			async function acessoControle() {
-				const TOKEN = localStorage.getItem("token");
 				const r = await fetch("/api/requerProprietario", {
 					headers: { Authorization: `Bearer ${TOKEN}` },
 				});
 				if (!r.ok) {
 					const result = await r.json();
-					if (result.login){
-						window.location.href = "/login";
-					}
-					else{
-						window.location.href = "/home";
-					}
-
+					window.location.href = result.login ? "/login" : "/home";
 				}
 			}
+
+			acessoControle();
 
 			async function carregarHaras() {
 				try {
@@ -166,34 +181,226 @@
 				}
 			}
 
-			botaoCadastrar.addEventListener("click", async function (event) {
+			// Máscaras e validações ao digitar
+			document.getElementById('cpf').addEventListener('input', function () {
+				let value = this.value.replace(/\D/g, ''); // impedir tudo que não for numero
+				if (value.length > 11) value = value.slice(0, 11); // impede mais de 11 caracteres
+
+				let formattedCPF;
+				if (value.length > 9) formattedCPF = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+				else if (value.length > 6) formattedCPF = value.replace(/(\d{3})(\d{3})(\d{1,3})/, "$1.$2.$3");
+				else if (value.length > 3) formattedCPF = value.replace(/(\d{3})(\d{1,3})/, "$1.$2");
+				else formattedCPF = value;
+				this.value = formattedCPF;
+			});
+
+			document.getElementById('telefone').addEventListener('input', function (e) {
+				this.value = this.value.replace(/\D/g, '');
+				let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+				if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+
+				// Aplica a máscara (XX) XXXX-XXXX ou (XX) XXXXX-XXXX
+				if (value.length > 2) {
+					value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+				}
+				if (value.length > 10) {
+					value = `${value.slice(0, 10)}-${value.slice(10)}`;
+				}
+
+				e.target.value = value; // Atualiza o valor do campo
+			});
+
+			function validarNome() {
+				document.getElementById('nome').value = document.getElementById('nome').value.replace(/[^a-zA-Záéíóúâêîôûãõç ]/g, '');
+				const nome = document.getElementById('nome').value;
+
+				if (nome.length < 3) {
+					document.getElementById('nome-erro').classList.remove('hidden');
+					return false;
+				}
+				document.getElementById('nome-erro').classList.add('hidden');
+				return true;
+			}
+
+			function validarSobrenome() {
+				document.getElementById('sobrenome').value = document.getElementById('sobrenome').value.replace(/[^a-zA-Záéíóúâêîôûãõç ]/g, '');
+				const sobrenome = document.getElementById('sobrenome').value;
+				if (sobrenome.length < 3) {
+					document.getElementById('sobrenome-erro').classList.remove('hidden');
+					return false;
+				}
+				document.getElementById('sobrenome-erro').classList.add('hidden');
+				return true;
+			}
+
+			function validarEmail() {
+			const email = document.getElementById('email');
+			const emailInvalido = document.getElementById('email-invalido');
+			const emailValue = email.value.trim();
+
+			// Regex para validar o formato do e-mail
+			const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+			if (!regexEmail.test(emailValue)) {
+				emailInvalido.classList.remove('hidden');
+				return false;
+			}
+			emailInvalido.classList.add('hidden'); // Esconde a mensagem de erro se o e-mail for válido
+			return true;
+			}
+
+			function validarCPF() {
+				let cpf = document.getElementById('cpf').value;
+				cpf = cpf.replace(/\D/g, ""); // Remove não números
+
+				if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+					document.getElementById('cpf-invalido').classList.remove('hidden');
+					return false; // Bloqueia CPFs com todos os números iguais (ex: 000.000.000-00)
+				}
+
+				let soma = 0, resto;
+
+				// Valida primeiro dígito
+				for (let i = 1; i <= 9; i++) {
+					soma += parseInt(cpf[i - 1]) * (11 - i);
+				}
+				resto = (soma * 10) % 11;
+				if (resto === 10 || resto === 11) resto = 0;
+				if (resto !== parseInt(cpf[9])) {
+					document.getElementById('cpf-invalido').classList.remove('hidden');
+					return false;
+				}
+
+				// Valida segundo dígito
+				soma = 0;
+				for (let i = 1; i <= 10; i++) {
+					soma += parseInt(cpf[i - 1]) * (12 - i);
+				}
+				resto = (soma * 10) % 11;
+				if (resto === 10 || resto === 11) resto = 0;
+				if (resto !== parseInt(cpf[10])) {
+					document.getElementById('cpf-invalido').classList.remove('hidden');
+					return false;
+				}
+				document.getElementById('cpf-invalido').classList.add('hidden');
+				return true;
+			}
+
+			function validarSenha(s) {
+				const maiuscula = /[A-Z]/.test(s);
+				const numero = /\d/.test(s);
+				const especial = /[!@#$%^&*(),.?":{}|<>]/.test(s);
+				const tamanho = s.length >= 6;
+
+				document.getElementById('req-maiuscula').classList.toggle("text-success", maiuscula);
+				document.getElementById('req-numero').classList.toggle("text-success", numero);
+				document.getElementById('req-especial').classList.toggle("text-success", especial);
+				document.getElementById('req-tamanho').classList.toggle("text-success", tamanho);
+
+				document.getElementById('req-maiuscula').classList.toggle("text-error", !maiuscula);
+				document.getElementById('req-numero').classList.toggle("text-error", !numero);
+				document.getElementById('req-especial').classList.toggle("text-error", !especial);
+				document.getElementById('req-tamanho').classList.toggle("text-error", !tamanho);
+
+				return maiuscula && numero && especial && tamanho;
+			}
+
+			function validarDataNascimento() {
+			const dataInvalida = document.getElementById('data-nascimento-invalida');
+			const data = document.getElementById('dataNascimento').value;
+			const dataNascimento = new Date(data);
+			const dataAtual = new Date();
+			if (dataNascimento > dataAtual) {
+				dataInvalida.classList.remove('hidden');
+				return false;
+			}
+			const idadeMinima = new Date();
+			idadeMinima.setFullYear(idadeMinima.getFullYear() - 120);
+			if (dataNascimento < idadeMinima) {
+				dataInvalida.classList.remove('hidden');
+				return false;
+			}
+
+			dataInvalida.classList.add('hidden');
+			return true;
+			}
+
+			function validarCRMV() {
+			const crmv = document.getElementById("crmv").value;
+			const ehValido = /^\w{3,20}$/.test(crmv);
+			ehValido ? hide("erro-crmv") : show("erro-crmv");
+			return ehValido;
+			}
+
+			document.getElementById("form-cadastro").addEventListener("submit", async function (event) {
 				event.preventDefault();
 
 				const nome = document.getElementById("nome").value.trim();
 				const sobrenome = document.getElementById("sobrenome").value.trim();
 				const email = document.getElementById("email").value.trim();
 				const senha = document.getElementById("senha").value.trim();
-				const telefone = document.getElementById("telefone").value.trim();
-				const cpf = document.getElementById("cpf").value.trim().replace(/\D/g, ""); // ← remove tudo que não é dígito
-				const dataNascimento = document.getElementById("dataNascimento").value.trim();
+				const telefone = document.getElementById("telefone").value.replace(/\D/g, "");
+				const cpf = document.getElementById("cpf").value.trim();
+				const dataNascimento = document.getElementById("dataNascimento").value;
 				const tipoUsuario = document.getElementById("tipoUsuario").value;
 				const crmv = document.getElementById("crmv")?.value.trim();
-				const harasId = document.getElementById("select-haras")?.value;
-				console.log(harasId);
-				if (!nome || !sobrenome || !email || !senha || !telefone || !cpf || !dataNascimento || !tipoUsuario) {
-					modal.show("Preencha todos os campos obrigatórios.");
-					return;
+				const harasId = selectHaras.value;
+
+				let valido = true;
+
+				if (!validarNome()) valido = false;
+				if (!validarSobrenome()) valido = false;
+				if (!validarEmail()) valido = false;
+				if (!validarCPF()) valido = false;
+				if (!validarSenha(senha)) {
+					document.getElementById("senha-erro").classList.remove("hidden");
+					valido = false;
+				} else {
+					document.getElementById("senha-erro").classList.add("hidden");
 				}
 
-				let endpoint = "";
-				let dados = { nome, sobrenome, email, senha, telefone, cpf, dataNascimento };
+				if (telefone.length < 10 || telefone.length > 11) {
+					document.getElementById("telefone-erro").classList.remove("hidden");
+					valido = false;
+				} else {
+					document.getElementById("telefone-erro").classList.add("hidden");
+				}
 
+				if (!dataNascimento) {
+					document.getElementById("data-nascimento-erro").classList.remove("hidden");
+					valido = false;
+				} else {
+					document.getElementById("data-nascimento-erro").classList.add("hidden");
+				}
+
+				if (!tipoUsuario) {
+					document.getElementById("erro-tipoUsuario").classList.remove("hidden");
+					valido = false;
+				} else {
+					document.getElementById("erro-tipoUsuario").classList.add("hidden");
+				}
+
+				if (tipoUsuario === "Gerente" && !harasId) {
+					document.getElementById("erro-haras").classList.remove("hidden");
+					valido = false;
+				} else {
+					document.getElementById("erro-haras").classList.add("hidden");
+				}
+
+				if (tipoUsuario === "Veterinario" && (!crmv || crmv.length < 3)) {
+					document.getElementById("erro-crmv").classList.remove("hidden");
+					valido = false;
+				} else {
+					document.getElementById("erro-crmv").classList.add("hidden");
+				}
+
+				if (!valido) return;
+
+				// Monta dados para envio
+				let endpoint = "";
+				let dados = { nome, sobrenome, email, senha, telefone, cpf: cpf.replace(/\D/g, ""), dataNascimento };
 				if (tipoUsuario === "Gerente") {
 					endpoint = "criarGerente";
-					if (!harasId) {
-						modal.show("Selecione o Haras para o Gerente!");
-						return;
-					}
 					dados.haras_id = harasId;
 				} else if (tipoUsuario === "Treinador") {
 					endpoint = "criarTreinador";
@@ -201,34 +408,28 @@
 					endpoint = "criarTratador";
 				} else if (tipoUsuario === "Veterinario") {
 					endpoint = "criarVeterinario";
-					if (!crmv) {
-						modal.show("Preencha o CRMV para o veterinário.");
-						return;
-					}
 					dados.crmv = crmv;
 				}
 
 				try {
-					const response = await fetch(`http://localhost:3000/api/${endpoint}`, {
+					const response = await fetch(`/api/${endpoint}`, {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${localStorage.getItem("token")}`,
+							Authorization: `Bearer ${TOKEN}`,
 						},
 						body: JSON.stringify(dados),
 					});
-
 					const result = await response.json();
 
 					if (!response.ok) {
 						throw new Error(result.error || "Erro ao cadastrar.");
 					}
 
-					modal.show(`${tipoUsuario} cadastrado com sucesso!`);
+					alert(`${tipoUsuario} cadastrado com sucesso!`);
 					window.location.reload();
 				} catch (error) {
-					console.error("Erro:", error.message);
-					modal.show("Erro ao cadastrar: " + error.message);
+					alert("Erro ao cadastrar: " + error.message);
 				}
 			});
 		</script>
