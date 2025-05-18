@@ -92,7 +92,11 @@
 		</div>
 
 		<!-- SCRIPT -->
-		<script>
+		<script type="module">
+			import Modal from "/scripts/load-modal.js";
+
+			const modal = new Modal();
+
 			acessoControle();
 			const tipoUsuarioSelect = document.getElementById("tipoUsuario");
 			const containerHaras = document.getElementById("container-haras");
@@ -175,9 +179,9 @@
 				const tipoUsuario = document.getElementById("tipoUsuario").value;
 				const crmv = document.getElementById("crmv")?.value.trim();
 				const harasId = document.getElementById("select-haras")?.value;
-
+				console.log(harasId);
 				if (!nome || !sobrenome || !email || !senha || !telefone || !cpf || !dataNascimento || !tipoUsuario) {
-					alert("Preencha todos os campos obrigatórios.");
+					modal.show("Preencha todos os campos obrigatórios.");
 					return;
 				}
 
@@ -187,7 +191,7 @@
 				if (tipoUsuario === "Gerente") {
 					endpoint = "criarGerente";
 					if (!harasId) {
-						alert("Selecione o Haras para o Gerente!");
+						modal.show("Selecione o Haras para o Gerente!");
 						return;
 					}
 					dados.haras_id = harasId;
@@ -198,7 +202,7 @@
 				} else if (tipoUsuario === "Veterinario") {
 					endpoint = "criarVeterinario";
 					if (!crmv) {
-						alert("Preencha o CRMV para o veterinário.");
+						modal.show("Preencha o CRMV para o veterinário.");
 						return;
 					}
 					dados.crmv = crmv;
@@ -220,11 +224,11 @@
 						throw new Error(result.error || "Erro ao cadastrar.");
 					}
 
-					alert(`${tipoUsuario} cadastrado com sucesso!`);
+					modal.show(`${tipoUsuario} cadastrado com sucesso!`);
 					window.location.reload();
 				} catch (error) {
 					console.error("Erro:", error.message);
-					alert("Erro ao cadastrar: " + error.message);
+					modal.show("Erro ao cadastrar: " + error.message);
 				}
 			});
 		</script>
