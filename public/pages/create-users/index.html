@@ -153,7 +153,7 @@
 					selectHaras.innerHTML = '<option value="">Selecione o Haras</option>';
 					haras.forEach((harasItem) => {
 						const option = document.createElement("option");
-						option.value = harasItem.id; // aqui precisa ser o id do haras
+						option.value = harasItem.ID // aqui precisa ser o id do haras
 						option.textContent = harasItem.Nome;
 						selectHaras.appendChild(option);
 					});
