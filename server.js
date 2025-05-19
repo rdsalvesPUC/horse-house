@@ -29,6 +29,12 @@ app.use(
   })
 );
 
+app.get("/dashboard/*", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "pages", "dashboard", "index.html")
+  );
+});
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "pages", "home", "index.html"));
 });
