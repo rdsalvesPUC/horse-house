@@ -26,17 +26,17 @@
       const p = await res.json();
 
       document.getElementById("cpf").value = p.Cpf;
-      document.getElementById("firstName").value = p.Nome;
-      document.getElementById("lastName").value = p.Sobrenome;
-      document.getElementById("phone").value = p.Telefone ?? "";
-      document.getElementById("dob").value = p.Data_Nascimento?.split("T")[0] ?? "";
+      document.getElementById("nome").value = p.Nome;
+      document.getElementById("sobrenome").value = p.Sobrenome;
+      document.getElementById("telefone").value = p.Telefone ?? "";
+      document.getElementById("data-nascimento").value = p.Data_Nascimento?.split("T")[0] ?? "";
       document.getElementById("email").value = p.Email;
       document.getElementById("cep").value = p.CEP;
-      document.getElementById("state").value = p.UF;
-      document.getElementById("city").value = p.nome;
-      document.getElementById("neighborhood").value = p.Bairro;
-      document.getElementById("street").value = p.Rua;
-      document.getElementById("number").value = p.Numero;
+      document.getElementById("estado").value = p.UF;
+      document.getElementById("cidade").value = p.nome;
+      document.getElementById("bairro").value = p.Bairro;
+      document.getElementById("logradouro").value = p.Rua;
+      document.getElementById("numero").value = p.Numero;
       document.getElementById("complemento").value = p.Complemento ?? "";
 
     } catch (error) {
@@ -49,15 +49,15 @@
     e.preventDefault();
 
     const dados = {
-      nome: document.getElementById("firstName").value.trim(),
-      sobrenome: document.getElementById("lastName").value.trim(),
-      telefone: document.getElementById("phone").value.trim(),
-      dataNascimento: document.getElementById("dob").value,
+      nome: document.getElementById("nome").value.trim(),
+      sobrenome: document.getElementById("sobrenome").value.trim(),
+      telefone: document.getElementById("telefone").value.trim(),
+      dataNascimento: document.getElementById("data-nascimento").value,
       email: document.getElementById("email").value.trim(),
       cep: document.getElementById("cep").value.trim(),
-      rua: document.getElementById("street").value.trim(),
-      numero: document.getElementById("number").value.trim(),
-      bairro: document.getElementById("neighborhood").value.trim(),
+      rua: document.getElementById("rua").value.trim(),
+      numero: document.getElementById("numero").value.trim(),
+      bairro: document.getElementById("bairro").value.trim(),
       complemento: document.getElementById("complemento").value.trim()
     };
 
