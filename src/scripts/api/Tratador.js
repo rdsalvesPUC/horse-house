@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../horseDB");
-const {extractUserID, requireProprietario, requireGerente} = require("../middleware/auth");
+const {extractUserID, requireProprietario, requireGerente, requireGerenteouProprietario, requireTratador} = require("../middleware/auth");
 const bcrypt = require("bcrypt");
 const {validarCPF, validarEmail, validarTelefone} = require("../utils/validations");
 
@@ -9,7 +9,7 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  * @swagger
  * components:
  *   schemas:
- *     CreateGerenteRequest:
+ *     CreateTratadorRequest:
  *       type: object
  *       required:
  *         - nome
@@ -23,35 +23,38 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  *       properties:
  *         nome:
  *           type: string
- *           description: Nome do gerente
+ *           description: Nome do tratador
  *         sobrenome:
  *           type: string
- *           description: Sobrenome do gerente
+ *           description: Sobrenome do tratador
  *         senha:
  *           type: string
- *           description: Senha do gerente
+ *           description: Senha do tratador
  *         cpf:
  *           type: string
- *           description: CPF do gerente (11 dígitos numéricos, válido)
+ *           description: CPF do tratador (11 dígitos numéricos, válido)
  *           pattern: '^\d{11}$'
  *           example: "12345678901"
  *         dataNascimento:
  *           type: string
  *           format: date
- *           description: Data de nascimento do gerente
+ *           description: Data de nascimento do tratador
  *         telefone:
  *           type: string
- *           description: Telefone do gerente (10 ou 11 dígitos numéricos, com DDD válido)
+ *           description: Telefone do tratador (10 ou 11 dígitos numéricos, com DDD válido)
  *           pattern: '^\d{10,11}$'
  *           example: "11987654321"
  *         email:
  *           type: string
  *           format: email
- *           description: Email do gerente (formato válido)
+ *           description: Email do tratador (formato válido)
  *           example: "joao.silva@exemplo.com"
  *         haras_id:
  *           type: integer
- *           description: ID do haras ao qual o gerente será vinculado
+ *           description: ID do haras ao qual o tratador será vinculado
+ *         foto:
+ *           type: string
+ *           description: URL da foto do tratador (opcional)
  *       example:
  *         nome: João
  *         sobrenome: Silva
@@ -61,75 +64,80 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  *         telefone: "11987654321"
  *         email: joao.silva@exemplo.com
  *         haras_id: 1
+ *         foto: "https://exemplo.com/foto.jpg"
  *
- *     UpdateGerenteRequest:
+ *     UpdateTratadorRequest:
  *       type: object
  *       properties:
  *         nome:
  *           type: string
- *           description: Nome do gerente
+ *           description: Nome do tratador
  *         sobrenome:
  *           type: string
- *           description: Sobrenome do gerente
+ *           description: Sobrenome do tratador
  *         senha:
  *           type: string
- *           description: Senha do gerente
+ *           description: Senha do tratador
  *         cpf:
  *           type: string
- *           description: CPF do gerente (11 dígitos numéricos, válido)
+ *           description: CPF do tratador (11 dígitos numéricos, válido)
  *           pattern: '^\d{11}$'
  *           example: "12345678901"
  *         dataNascimento:
  *           type: string
  *           format: date
- *           description: Data de nascimento do gerente
+ *           description: Data de nascimento do tratador
  *         telefone:
  *           type: string
- *           description: Telefone do gerente (10 ou 11 dígitos numéricos, com DDD válido)
+ *           description: Telefone do tratador (10 ou 11 dígitos numéricos, com DDD válido)
  *           pattern: '^\d{10,11}$'
  *           example: "11987654321"
  *         email:
  *           type: string
  *           format: email
- *           description: Email do gerente (formato válido)
+ *           description: Email do tratador (formato válido)
  *           example: "joao.atualizado@exemplo.com"
+ *         foto:
+ *           type: string
+ *           description: URL da foto do tratador
  *       example:
  *         nome: João Atualizado
  *         sobrenome: Silva Santos
  *         telefone: "11999999999"
  *         email: joao.atualizado@exemplo.com
+ *         foto: "https://exemplo.com/nova-foto.jpg"
  *
- *     GerenteResponse:
+ *     TratadorResponse:
  *       type: object
  *       properties:
  *         ID:
  *           type: integer
- *           description: ID do gerente
+ *           description: ID do tratador
  *         nome:
  *           type: string
- *           description: Nome do gerente
+ *           description: Nome do tratador
  *         sobrenome:
  *           type: string
- *           description: Sobrenome do gerente
+ *           description: Sobrenome do tratador
  *         cpf:
  *           type: string
- *           description: CPF do gerente
+ *           description: CPF do tratador
  *         data_nascimento:
  *           type: string
  *           format: date
- *           description: Data de nascimento do gerente
+ *           description: Data de nascimento do tratador
  *         telefone:
  *           type: string
- *           description: Telefone do gerente
+ *           description: Telefone do tratador
  *         email:
  *           type: string
- *           description: Email do gerente
+ *           description: Email do tratador
  *         fk_haras_id:
  *           type: integer
- *           description: ID do haras ao qual o gerente está vinculado
+ *           description: ID do haras ao qual o tratador está vinculado
  *         haras_nome:
  *           type: string
- *           description: Nome do haras ao qual o gerente está vinculado
+ *           description: Nome do haras ao qual o tratador está vinculado
  *       example:
  *         ID: 1
  *         nome: João
@@ -141,7 +149,7 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  *         fk_haras_id: 1
  *         haras_nome: Haras Bela Vista
  *
- *     CreateGerenteResponse:
+ *     CreateTratadorResponse:
  *       type: object
  *       properties:
  *         message:
@@ -149,19 +157,19 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  *           description: Mensagem de sucesso
  *         id:
  *           type: integer
- *           description: ID do gerente cadastrado
+ *           description: ID do tratador cadastrado
  *       example:
- *         message: Gerente cadastrado com sucesso!
+ *         message: Tratador cadastrado com sucesso!
  *         id: 1
  *
- *     UpdateGerenteResponse:
+ *     UpdateTratadorResponse:
  *       type: object
  *       properties:
  *         message:
  *           type: string
  *           description: Mensagem de sucesso
  *       example:
- *         message: Gerente atualizado com sucesso!
+ *         message: Tratador atualizado com sucesso!
  *
  *     ErrorResponse:
  *       type: object
@@ -193,11 +201,11 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
 
 /**
  * @swagger
- * /api/criarGerente:
+ * /api/tratador:
  *   post:
- *     summary: Cria um novo gerente
- *     tags: [Gerentes]
- *     description: Cadastra um novo gerente no sistema
+ *     summary: Cria um novo tratador
+ *     tags: [Tratadores]
+ *     description: Cadastra um novo tratador no sistema
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -205,14 +213,14 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CreateGerenteRequest'
+ *             $ref: '#/components/schemas/CreateTratadorRequest'
  *     responses:
  *       201:
- *         description: Gerente cadastrado com sucesso
+ *         description: Tratador cadastrado com sucesso
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/CreateGerenteResponse'
+ *               $ref: '#/components/schemas/CreateTratadorResponse'
  *       400:
  *         description: Dados de requisição inválidos
  *         content:
@@ -244,10 +252,15 @@ const {validarCPF, validarEmail, validarTelefone} = require("../utils/validation
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/criarGerente", [extractUserID, requireProprietario], async (req, res) => {
+router.post("/tratador", [extractUserID, requireGerenteouProprietario], async (req, res) => {
     try {
-        const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, haras_id, foto} = req.body;
-
+        const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, foto} = req.body;
+        let {haras_id} = req.body;
+        // Verifica se o usuário logado é um gerente e se o haras_id foi fornecido
+        if (req.user.user === "gerente") {
+            haras_id = req.user.harasId; // Usa o haras_id do gerente logado
+        }
+        console.log(haras_id);
         if (!nome || !sobrenome || !senha || !cpf || !dataNascimento || !email || !telefone || !haras_id) {
             return res.status(400).json({error: "Todos os campos são obrigatórios."});
         }
@@ -264,37 +277,37 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
         if (!validarTelefone(telefone)) {
             return res.status(400).json({error: "Telefone inválido."});
         }
+        let verificaHarasResults;
+        if (req.user.user === "proprietario") {
+            // Verificar se o haras pertence ao proprietário logado
+            const queryVerificaHaras = "SELECT COUNT(*) as count FROM haras WHERE id = ? AND fk_Proprietario_ID = ?";
 
-        // Verificar se o haras pertence ao proprietário logado
-        const queryVerificaHaras = "SELECT COUNT(*) as count FROM haras WHERE id = ? AND fk_Proprietario_ID = ?";
+            [verificaHarasResults] = await connection.promise().query(queryVerificaHaras, [haras_id, req.user.id]);
 
-        const [verificaHarasResults] = await connection.promise().query(queryVerificaHaras, [haras_id, req.user.id]);
-        console.log(queryVerificaHaras, haras_id, req.user.id);
-        console.log(verificaHarasResults);
-
-        if (verificaHarasResults[0].count === 0) {
-            return res.status(403).json({error: "Você não tem permissão para adicionar gerentes a este haras."});
+            if (verificaHarasResults[0].count === 0) {
+                return res.status(403).json({error: "Você não tem permissão para adicionar tratadores a este haras."});
+            }
         }
 
         const saltRounds = parseInt(process.env.SALT);
         const senhaHash = await bcrypt.hash(senha, saltRounds);
         let results;
         if (foto) {
-            const queryGerente = `
-                INSERT INTO gerente (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_haras_id, foto)
+            const queryTratador = `
+                INSERT INTO tratador (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_haras_id, foto)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
-            [results] = await connection.promise().query(queryGerente, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id, foto]);
+            [results] = await connection.promise().query(queryTratador, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, crmv, haras_id, foto]);
         } else {
-            const queryGerente = `
-                INSERT INTO gerente (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_haras_id)
+            const queryTratador = `
+                INSERT INTO tratador (nome, sobrenome, senha, cpf, data_nascimento, telefone, email, fk_haras_id)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             `;
 
-            [results] = await connection.promise().query(queryGerente, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id]);
+            [results] = await connection.promise().query(queryTratador, [nome, sobrenome, senhaHash, cpf, dataNascimento, telefone, email, haras_id]);
         }
 
-        res.status(201).json({message: "Gerente cadastrado com sucesso!", id: results.insertId});
+        res.status(201).json({message: "Tratador cadastrado com sucesso!", id: results.insertId});
     } catch (err) {
         console.error(err);
         if (err.code === 'ER_DUP_ENTRY') {
@@ -312,11 +325,11 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
 
 /**
  * @swagger
- * /api/editarGerente/{id}:
+ * /api/tratador/{id}:
  *   put:
- *     summary: Atualiza um gerente existente
- *     tags: [Gerentes]
- *     description: Atualiza os dados de um gerente existente
+ *     summary: Atualiza um tratador existente
+ *     tags: [Tratadores]
+ *     description: Atualiza os dados de um tratador existente
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -325,20 +338,20 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID do gerente a ser atualizado
+ *         description: ID do tratador a ser atualizado
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UpdateGerenteRequest'
+ *             $ref: '#/components/schemas/UpdateTratadorRequest'
  *     responses:
  *       200:
- *         description: Gerente atualizado com sucesso
+ *         description: Tratador atualizado com sucesso
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UpdateGerenteResponse'
+ *               $ref: '#/components/schemas/UpdateTratadorResponse'
  *       400:
  *         description: Dados de requisição inválidos
  *         content:
@@ -358,7 +371,7 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
  *             schema:
  *               $ref: '#/components/schemas/ForbiddenError'
  *       404:
- *         description: Gerente não encontrado
+ *         description: Tratador não encontrado
  *         content:
  *           application/json:
  *             schema:
@@ -376,71 +389,11 @@ router.post("/criarGerente", [extractUserID, requireProprietario], async (req, r
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
-/**
- * @swagger
- * /api/editarGerente:
- *   put:
- *     summary: Atualiza os dados do gerente logado
- *     tags: [Gerentes]
- *     description: Permite que um gerente atualize seus próprios dados
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UpdateGerenteRequest'
- *     responses:
- *       200:
- *         description: Gerente atualizado com sucesso
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/UpdateGerenteResponse'
- *       400:
- *         description: Dados de requisição inválidos
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       401:
- *         description: Não autorizado
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/UnauthorizedError'
- *       403:
- *         description: Acesso negado
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ForbiddenError'
- *       404:
- *         description: Gerente não encontrado
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       409:
- *         description: Dados duplicados
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Erro interno do servidor
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- */
-router.put("/editarGerente/:id", [extractUserID, requireProprietario], async (req, res) => {
+router.put("/tratador/:id", [extractUserID, requireGerenteouProprietario], async (req, res) => {
     try {
         const userType = req.user.user;
         const userId = req.user.id; // ID do usuário logado
-        const gerenteId = req.params.id;
+        const tratadorId = req.params.id;
 
         const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, foto} = req.body;
 
@@ -462,29 +415,35 @@ router.put("/editarGerente/:id", [extractUserID, requireProprietario], async (re
             return res.status(400).json({error: "Telefone inválido."});
         }
 
-        // Verificar se o gerente existe
-        const queryVerificaGerente = `
-            SELECT gerente.*, haras.fk_Proprietario_ID
-            FROM gerente
-                     JOIN haras ON gerente.fk_haras_id = haras.ID
-            WHERE gerente.ID = ?
+        // Verificar se o Tratador existe
+        const queryVerificaTratador = `
+            SELECT tratador.*, haras.fk_Proprietario_ID
+            FROM tratador
+                     JOIN haras ON tratador.fk_haras_id = haras.ID
+            WHERE tratador.ID = ?
         `;
-        const [gerenteResults] = await connection.promise().query(queryVerificaGerente, [gerenteId]);
-        if (gerenteResults.length === 0) {
-            return res.status(404).json({error: "Gerente não encontrado."});
+        const [tratadorResults] = await connection.promise().query(queryVerificaTratador, [tratadorId]);
+        if (tratadorResults.length === 0) {
+            return res.status(404).json({error: "Tratador não encontrado."});
         }
-
-        const gerente = gerenteResults[0];
-        // Proprietário só pode editar gerentes de seus próprios haras
-        const harasId = gerente.fk_Haras_ID;
-        const queryVerificaHaras = `SELECT COUNT(*) as count
+        const tratador = tratadorResults[0];
+        if (userType === "proprietario") {
+            // Proprietário só pode editar tratadores de seus próprios haras
+            const harasId = tratador.fk_Haras_ID;
+            const queryVerificaHaras = `SELECT COUNT(*) as count
                                     FROM haras
                                     WHERE id = ?
                                       AND fk_Proprietario_ID = ?`;
-        const [verificaHarasResults] = await connection.promise().query(queryVerificaHaras, [harasId, userId]);
-        console.log(queryVerificaHaras, harasId, userId);
-        if (verificaHarasResults[0].count === 0) {
-            return res.status(403).json({error: "Você não tem permissão para editar gerentes deste haras."});
+            const [verificaHarasResults] = await connection.promise().query(queryVerificaHaras, [harasId, userId]);
+            console.log(queryVerificaHaras, harasId, userId);
+            if (verificaHarasResults[0].count === 0) {
+                return res.status(403).json({error: "Você não tem permissão para editar tratadores deste haras."});
+            }
+        }
+        if (userType === "gerente") {
+            if (tratador.fk_Haras_ID !== req.user.haras_id) {
+                return res.status(403).json({error: "Você não tem permissão para editar tratadores de outros haras."});
+            }
         }
 
         // Construir a query de atualização
@@ -533,20 +492,20 @@ router.put("/editarGerente/:id", [extractUserID, requireProprietario], async (re
             queryParams.push(foto);
         }
 
-        // Adicionar o ID do gerente ao final dos parâmetros
-        queryParams.push(gerenteId);
+        // Adicionar o ID do tratador ao final dos parâmetros
+        queryParams.push(tratadorId);
 
-        const queryUpdateGerente = `
-            UPDATE gerente
+        const queryUpdateTratador = `
+            UPDATE tratador
             SET ${updateFields.join(", ")}
             WHERE ID = ?
         `;
 
-        await connection.promise().query(queryUpdateGerente, queryParams);
+        await connection.promise().query(queryUpdateTratador, queryParams);
 
-        res.status(200).json({message: "Gerente atualizado com sucesso!"});
+        res.status(200).json({message: "Tratador atualizado com sucesso!"});
     } catch (err) {
-        console.error("Erro ao atualizar gerente:", err);
+        console.error("Erro ao atualizar tratador:", err);
         if (err.code === 'ER_DUP_ENTRY') {
             return res.status(409).json({error: "Dados duplicados."});
         }
@@ -554,7 +513,7 @@ router.put("/editarGerente/:id", [extractUserID, requireProprietario], async (re
     }
 });
 
-router.put("/editarGerente/", [extractUserID, requireGerente], async (req, res) => {
+router.put("/tratador/", [extractUserID, requireTratador], async (req, res) => {
     try {
         const userType = req.user.user;
         const userId = req.user.id; // ID do usuário logado
@@ -579,19 +538,19 @@ router.put("/editarGerente/", [extractUserID, requireGerente], async (req, res) 
             return res.status(400).json({error: "Telefone inválido."});
         }
 
-        // Verificar se o gerente existe
-        const queryVerificaGerente = `
-            SELECT gerente.*, haras.fk_Proprietario_ID
-            FROM gerente
-                     JOIN haras ON gerente.fk_haras_id = haras.ID
-            WHERE gerente.ID = ?
+        // Verificar se o tratador existe
+        const queryVerificaTratador = `
+            SELECT tratador.*, haras.fk_Proprietario_ID
+            FROM tratador
+                     JOIN haras ON tratador.fk_haras_id = haras.ID
+            WHERE tratador.ID = ?
         `;
-        const [gerenteResults] = await connection.promise().query(queryVerificaGerente, [userId]);
-        if (gerenteResults.length === 0) {
-            return res.status(404).json({error: "Gerente não encontrado."});
+        const [tratadorResults] = await connection.promise().query(queryVerificaTratador, [userId]);
+        if (tratadorResults.length === 0) {
+            return res.status(404).json({error: "Tratador não encontrado."});
         }
 
-        const gerente = gerenteResults[0];
+        const tratador = tratadorResults[0];
 
         // Construir a query de atualização
         let updateFields = [];
@@ -639,20 +598,20 @@ router.put("/editarGerente/", [extractUserID, requireGerente], async (req, res) 
             queryParams.push(foto);
         }
 
-        // Adicionar o ID do gerente ao final dos parâmetros
+        // Adicionar o ID do tratador ao final dos parâmetros
         queryParams.push(userId);
 
-        const queryUpdateGerente = `
-            UPDATE gerente
+        const queryUpdateTratador = `
+            UPDATE tratador
             SET ${updateFields.join(", ")}
             WHERE ID = ?
         `;
 
-        await connection.promise().query(queryUpdateGerente, queryParams);
+        await connection.promise().query(queryUpdateTratador, queryParams);
 
-        res.status(200).json({message: "Gerente atualizado com sucesso!"});
+        res.status(200).json({message: "Tratador atualizado com sucesso!"});
     } catch (err) {
-        console.error("Erro ao atualizar gerente:", err);
+        console.error("Erro ao atualizar veterinário:", err);
         if (err.code === 'ER_DUP_ENTRY') {
             return res.status(409).json({error: "Dados duplicados."});
         }
@@ -662,11 +621,11 @@ router.put("/editarGerente/", [extractUserID, requireGerente], async (req, res) 
 
 /**
  * @swagger
- * /api/gerentes/haras/{harasId}:
+ * /api/tratadores/haras/{harasId}:
  *   get:
- *     summary: Lista todos os gerentes de um haras
- *     tags: [Gerentes]
- *     description: Retorna uma lista de todos os gerentes de um haras específico
+ *     summary: Lista todos os tratadores de um haras
+ *     tags: [Tratadores]
+ *     description: Retorna uma lista de todos os tratadores de um haras específico
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -677,39 +636,19 @@ router.put("/editarGerente/", [extractUserID, requireGerente], async (req, res) 
  *           type: integer
  *         description: ID do haras
  *       - in: query
- *         name: nome
+ *         name: pesquisa
  *         schema:
  *           type: string
- *         description: Filtrar por nome do gerente
- *       - in: query
- *         name: sobrenome
- *         schema:
- *           type: string
- *         description: Filtrar por sobrenome do gerente
- *       - in: query
- *         name: email
- *         schema:
- *           type: string
- *         description: Filtrar por email do gerente
- *       - in: query
- *         name: telefone
- *         schema:
- *           type: string
- *         description: Filtrar por telefone do gerente
- *       - in: query
- *         name: cpf
- *         schema:
- *           type: string
- *         description: Filtrar por CPF do gerente
+ *         description: Termo de pesquisa para filtrar tratadores
  *     responses:
  *       200:
- *         description: Lista de gerentes retornada com sucesso
+ *         description: Lista de tratadores retornada com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/GerenteResponse'
+ *                 $ref: '#/components/schemas/TratadorResponse'
  *       401:
  *         description: Não autorizado
  *         content:
@@ -729,8 +668,8 @@ router.put("/editarGerente/", [extractUserID, requireGerente], async (req, res) 
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-// Rota para obter todos os gerentes de um haras (com filtros)
-router.get("/gerentes/haras/:harasId", [extractUserID, requireProprietario], async (req, res) => {
+// Rota para obter todos os tratadores de um haras (com filtros)
+router.get("/tratadores/haras/:harasId", [extractUserID, requireProprietario], async (req, res) => {
     try {
         const userType = req.user.user;
         const harasId = req.params.harasId;
@@ -739,7 +678,7 @@ router.get("/gerentes/haras/:harasId", [extractUserID, requireProprietario], asy
         const [verificaHarasResults] = await connection.promise().query(queryVerificaHaras, [harasId, req.user.id]);
 
         if (verificaHarasResults[0].count === 0) {
-            return res.status(403).json({error: "Você não tem permissão para listar gerentes deste haras."});
+            return res.status(403).json({error: "Você não tem permissão para listar tratadores deste haras."});
         }
 
         // Filtros de pesquisa
@@ -758,7 +697,7 @@ router.get("/gerentes/haras/:harasId", [extractUserID, requireProprietario], asy
         params.push(`%${pesquisa ? pesquisa : ""}%`);
         whereClauses.push("cpf LIKE ?");
         params.push(`%${pesquisa ? pesquisa : ""}%`);
-        const queryGerentes = `
+        const queryTratadores = `
             SELECT ID,
                    nome,
                    sobrenome,
@@ -767,27 +706,67 @@ router.get("/gerentes/haras/:harasId", [extractUserID, requireProprietario], asy
                    telefone,
                    email,
                    fk_haras_id
-            FROM gerente
+            FROM tratador
             WHERE fk_haras_id = ? AND (${whereClauses.join(" OR ")})
         `;
 
 
-        const [gerentes] = await connection.promise().query(queryGerentes, params);
-        console.log(gerentes);
-        res.status(200).json(gerentes);
+        const [tratadores] = await connection.promise().query(queryTratadores, params);
+        console.log(tratadores);
+        res.status(200).json(tratadores);
     } catch (err) {
-        console.error("Erro ao listar gerentes:", err);
+        console.error("Erro ao listar tratadores:", err);
+        return res.status(500).json({error: "Erro ao processar a solicitação."});
+    }
+});
+
+// Rota para obter todos os tratadores de um haras (com filtros)
+router.get("/tratadores/haras/", [extractUserID, requireGerente], async (req, res) => {
+    try {
+        const harasId = req.user.haras_id
+        // Filtros de pesquisa
+        const {pesquisa} = req.query;
+        let whereClauses = [];
+        let params = [harasId];
+
+        whereClauses.push("nome LIKE ?");
+
+        params.push(`%${pesquisa ? pesquisa : ""}%`);
+        whereClauses.push("sobrenome LIKE ?");
+        params.push(`%${pesquisa ? pesquisa : ""}%`);
+        whereClauses.push("email LIKE ?");
+        params.push(`%${pesquisa ? pesquisa : ""}%`);
+        whereClauses.push("telefone LIKE ?");
+        params.push(`%${pesquisa ? pesquisa : ""}%`);
+        whereClauses.push("cpf LIKE ?");
+        params.push(`%${pesquisa ? pesquisa : ""}%`);
+        const queryTratadores = `
+            SELECT ID,
+                   nome,
+                   sobrenome,
+                   cpf,
+                   data_nascimento,
+                   telefone,
+                   email,
+                   fk_haras_id
+            FROM tratador
+            WHERE fk_haras_id = ? AND (${whereClauses.join(" OR ")})
+        `;
+        const [tratadores] = await connection.promise().query(queryTratadores, params);
+        res.status(200).json(tratadores);
+    } catch (err) {
+        console.error("Erro ao listar tratadores:", err);
         return res.status(500).json({error: "Erro ao processar a solicitação."});
     }
 });
 
 /**
  * @swagger
- * /api/gerente/{id}:
+ * /api/tratador/{id}:
  *   get:
- *     summary: Obtém um gerente pelo ID
- *     tags: [Gerentes]
- *     description: Retorna os dados de um gerente específico
+ *     summary: Obtém um tratador pelo ID
+ *     tags: [Tratadores]
+ *     description: Retorna os dados de um tratador específico
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -796,14 +775,14 @@ router.get("/gerentes/haras/:harasId", [extractUserID, requireProprietario], asy
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID do gerente
+ *         description: ID do tratador
  *     responses:
  *       200:
- *         description: Dados do gerente retornados com sucesso
+ *         description: Dados do tratador retornados com sucesso
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/GerenteResponse'
+ *               $ref: '#/components/schemas/TratadorResponse'
  *       401:
  *         description: Não autorizado
  *         content:
@@ -817,7 +796,7 @@ router.get("/gerentes/haras/:harasId", [extractUserID, requireProprietario], asy
  *             schema:
  *               $ref: '#/components/schemas/ForbiddenError'
  *       404:
- *         description: Gerente não encontrado
+ *         description: Tratador não encontrado
  *         content:
  *           application/json:
  *             schema:
@@ -829,55 +808,52 @@ router.get("/gerentes/haras/:harasId", [extractUserID, requireProprietario], asy
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-// Rota para obter um gerente pelo ID
-router.get("/gerente/:id", extractUserID, async (req, res) => {
+// Rota para obter um tratador pelo ID
+router.get("/tratador/:id", extractUserID, async (req, res) => {
     try {
         const userType = req.user.user;
-        const gerenteId = req.params.id;
+        const tratadorId = req.params.id;
 
-        // Verificar se o gerente existe
-        const queryVerificaGerente = `
-            SELECT gerente.ID,
-                   gerente.nome,
-                   gerente.sobrenome,
-                   gerente.cpf,
-                   gerente.data_nascimento,
-                   gerente.telefone,
-                   gerente.email,
-                   gerente.fk_haras_id,
+        // Verificar se o tratador existe
+        const queryVerificaTratador = `
+            SELECT tratador.ID,
+                   tratador.nome,
+                   tratador.sobrenome,
+                   tratador.cpf,
+                   tratador.data_nascimento,
+                   tratador.telefone,
+                   tratador.email,
+                   tratador.fk_haras_id,
                    haras.fk_Proprietario_ID,
                    haras.Nome as haras_nome
-            FROM gerente
-                     JOIN haras ON gerente.fk_haras_id = haras.ID
-            WHERE gerente.ID = ?
+            FROM tratador
+                     JOIN haras ON tratador.fk_haras_id = haras.ID
+            WHERE tratador.ID = ?
         `;
-        const [gerenteResults] = await connection.promise().query(queryVerificaGerente, [gerenteId]);
+        const [tratadorResults] = await connection.promise().query(queryVerificaTratador, [tratadorId]);
 
-        if (gerenteResults.length === 0) {
-            return res.status(404).json({error: "Gerente não encontrado."});
+        if (tratadorResults.length === 0) {
+            return res.status(404).json({error: "Tratador não encontrado."});
         }
-
         // Verificar permissões
         if (userType === "proprietario") {
-            // Proprietário só pode ver gerentes de seus próprios haras
-            if (gerenteResults[0].fk_Proprietario_ID !== req.user.id) {
-                return res.status(403).json({error: "Você não tem permissão para visualizar este gerente."});
+            // Proprietário só pode ver veterinários de seus próprios haras
+            if (tratadorResults[0].fk_Proprietario_ID !== req.user.id) {
+                return res.status(403).json({error: "Você não tem permissão para visualizar este tratador."});
             }
-        } else{
-            if (gerenteResults[0].fk_Haras_ID !== req.user.haras_id) {
-                return res.status(403).json({error: "Você não tem permissão para visualizar este gerente."});
+        } else {
+            if (tratadorResults[0].fk_Haras_ID !== req.user.haras_id) {
+                return res.status(403).json({error: "Você não tem permissão para visualizar este tratador."});
             }
         }
-
         // Remover campos sensíveis
-        delete gerenteResults[0].fk_Proprietario_ID;
+        delete tratadorResults[0].fk_Proprietario_ID;
 
-        res.status(200).json(gerenteResults[0]);
+        res.status(200).json(tratadorResults[0]);
     } catch (err) {
-        console.error("Erro ao buscar gerente:", err);
+        console.error("Erro ao buscar tratador:", err);
         return res.status(500).json({error: "Erro ao processar a solicitação."});
     }
 });
 
 module.exports = router;
-

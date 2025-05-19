@@ -1,6 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const {requireGerente, requireProprietario, extractUserID} = require("../middleware/auth");
+const {requireGerente, requireProprietario, extractUserID, requireGerenteouProprietario} = require("../middleware/auth");
 const router = express.Router();
 
 /**
@@ -147,7 +147,7 @@ router.get("/requerProprietario", [extractUserID, requireProprietario], (req, re
         message: "Acesso permitido."
     });
 })
-router.get("/requerGerenteProprietario", [extractUserID, requireGerente], (req, res) => {
+router.get("/requerGerenteProprietario", [extractUserID, requireGerenteouProprietario], (req, res) => {
     res.json({
         message: "Acesso permitido.",
         user: req.user.user

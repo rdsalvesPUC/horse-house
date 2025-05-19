@@ -17,8 +17,12 @@ const jwt = require("jsonwebtoken");
  *         error:
  *           type: string
  *           description: Mensagem de erro
+ *         login:
+ *           type: boolean
+ *           description: Indica se o usuário precisa fazer login
  *       example:
  *         error: "Token não fornecido."
+ *         login: true
  *     
  *     ForbiddenError:
  *       type: object
@@ -26,8 +30,48 @@ const jwt = require("jsonwebtoken");
  *         error:
  *           type: string
  *           description: Mensagem de erro
+ *         login:
+ *           type: boolean
+ *           description: Indica se o usuário precisa fazer login
  *       example:
  *         error: "Token inválido ou expirado."
+ *         login: true
+ * 
+ *   security:
+ *     - bearerAuth: []
+ * 
+ *   responses:
+ *     UnauthorizedError:
+ *       description: Não autorizado
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UnauthorizedError'
+ *     
+ *     ForbiddenError:
+ *       description: Acesso negado
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ForbiddenError'
+ * 
+ *   x-codeSamples:
+ *     - lang: JavaScript
+ *       source: |
+ *         // Exemplo de uso do middleware requireVeterinario
+ *         router.get('/veterinario/perfil', [extractUserID, requireVeterinario], (req, res) => {
+ *           // Apenas veterinários podem acessar
+ *         });
+ *         
+ *         // Exemplo de uso do middleware requireTreinador
+ *         router.get('/treinador/perfil', [extractUserID, requireTreinador], (req, res) => {
+ *           // Apenas treinadores podem acessar
+ *         });
+ *         
+ *         // Exemplo de uso do middleware requireTratador
+ *         router.get('/tratador/perfil', [extractUserID, requireTratador], (req, res) => {
+ *           // Apenas tratadores podem acessar
+ *         });
  */
 
 /**
@@ -36,6 +80,15 @@ const jwt = require("jsonwebtoken");
  * @param {Object} res - Objeto da resposta
  * @param {Function} next - Função para continuar o fluxo
  * @returns {void}
+ * 
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *       description: JWT token obtido após o login
  */
 const extractUserID = (req, res, next) => {
     const authHeader = req.headers["authorization"];
@@ -157,9 +210,102 @@ const requireGerenteouProprietario = (req, res, next) => {
     next();
 };
 
+/**
+ * Middleware para verificar se o usuário tem permissão de veterinário
+ * @param {Object} req - Objeto da requisição
+ * @param {Object} res - Objeto da resposta
+ * @param {Function} next - Função para continuar o fluxo
+ * @returns {void}
+ * 
+ * @swagger
+ * components:
+ *   responses:
+ *     VeterinarioForbiddenError:
+ *       description: Acesso negado - Apenas veterinários
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               error:
+ *                 type: string
+ *                 example: "Acesso negado. Apenas veterinários podem acessar este recurso."
+ */
+const requireVeterinario = (req, res, next) => {
+    if (!req.user || req.user.user !== "veterinario") {
+        return res.status(403).json({
+            error: "Acesso negado. Apenas veterinários podem acessar este recurso."
+        });
+    }
+    next();
+}
+
+/**
+ * Middleware para verificar se o usuário tem permissão de treinador
+ * @param {Object} req - Objeto da requisição
+ * @param {Object} res - Objeto da resposta
+ * @param {Function} next - Função para continuar o fluxo
+ * @returns {void}
+ * 
+ * @swagger
+ * components:
+ *   responses:
+ *     TreinadorForbiddenError:
+ *       description: Acesso negado - Apenas treinadores
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               error:
+ *                 type: string
+ *                 example: "Acesso negado. Apenas treinadores podem acessar este recurso."
+ */
+const requireTreinador = (req, res, next) => {
+    if (!req.user || req.user.user !== "treinador") {
+        return res.status(403).json({
+            error: "Acesso negado. Apenas treinadores podem acessar este recurso."
+        });
+    }
+    next();
+}
+
+/**
+ * Middleware para verificar se o usuário tem permissão de tratador
+ * @param {Object} req - Objeto da requisição
+ * @param {Object} res - Objeto da resposta
+ * @param {Function} next - Função para continuar o fluxo
+ * @returns {void}
+ * 
+ * @swagger
+ * components:
+ *   responses:
+ *     TratadorForbiddenError:
+ *       description: Acesso negado - Apenas tratadores
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               error:
+ *                 type: string
+ *                 example: "Acesso negado. Apenas tratadores podem acessar este recurso."
+ */
+const requireTratador = (req, res, next) => {
+    if (!req.user || req.user.user !== "tratador") {
+        return res.status(403).json({
+            error: "Acesso negado. Apenas tratadores podem acessar este recurso."
+        });
+    }
+    next();
+}
+
 module.exports = {
     extractUserID,
     requireProprietario,
     requireGerente,
-    requireGerenteouProprietario
+    requireGerenteouProprietario,
+    requireVeterinario,
+    requireTreinador,
+    requireTratador
 }; 

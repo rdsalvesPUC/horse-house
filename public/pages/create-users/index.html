@@ -123,33 +123,47 @@
 			const selectHaras = document.getElementById("select-haras");
 			const campoCrmv = document.getElementById("campo-crmv");
 			const botaoCadastrar = document.getElementById("botao-cadastrar-user");
+			const userLogado = await acessoControle()
 
 			// Mostrar / ocultar campos de acordo com tipo de usuário
 			tipoUsuarioSelect.addEventListener("change", function () {
 				if (this.value === "Veterinario") {
 					campoCrmv.classList.remove("hidden");
-					containerHaras.classList.add("hidden");
-				} else if (this.value === "Gerente") {
-					campoCrmv.classList.add("hidden");
-					containerHaras.classList.remove("hidden");
-					carregarHaras();
 				} else {
 					campoCrmv.classList.add("hidden");
-					containerHaras.classList.add("hidden");
 				}
 			});
 
 			async function acessoControle() {
-				const r = await fetch("/api/requerProprietario", {
+				const r = await fetch("/api/requerGerenteProprietario", {
 					headers: { Authorization: `Bearer ${TOKEN}` },
 				});
 				if (!r.ok) {
 					const result = await r.json();
 					window.location.href = result.login ? "/login" : "/home";
 				}
-			}
+				else{
+					const result = await r.json();
+					if (result.user === "proprietario") {
+						containerHaras.classList.remove("hidden");
+						await carregarHaras();
+						return result.user;
+					} else {
+						containerHaras.classList.add("hidden");
+						//deletar a opção de Escolher o gerente
+						const options = tipoUsuarioSelect.options
+						for (let i = 0; i < options.length; i++) {
+							if (options[i].value === "Gerente") {
+								options[i].remove();
+								break;
+							}
+						}
+						selectHaras.value = ""
+						return result.user;
+					}
+				}
 
-			acessoControle();
+			}
 
 			async function carregarHaras() {
 				try {
@@ -413,10 +427,16 @@
 				} else if (tipoUsuario === "Treinador") {
 					endpoint = "criarTreinador";
 				} else if (tipoUsuario === "Tratador") {
-					endpoint = "criarTratador";
+					endpoint = "tratador";
+					if (harasId !== "" && harasId !== undefined) {
+						dados.haras_id = harasId;
+					}
 				} else if (tipoUsuario === "Veterinario") {
-					endpoint = "criarVeterinario";
+					endpoint = "veterinario";
 					dados.crmv = crmv;
+					if (harasId !== "" && harasId !== undefined) {
+						dados.haras_id = harasId;
+					}
 				}
 
 				try {
