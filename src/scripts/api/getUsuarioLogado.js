@@ -192,6 +192,7 @@ router.get("/", extractUserID, async (req, res) => {
                                 estado.UF         as UF,
                                 cidade.nome       as Cidade,
                                 CEP,
+                                CPF,
                                 Bairro,
                                 Rua,
                                 Numero,
