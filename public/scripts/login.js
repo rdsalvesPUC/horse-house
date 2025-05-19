@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		// sucesso: guarda token e redireciona
 		localStorage.setItem("token", data.token);
 		localStorage.setItem("userType", data.userType);
-		window.location.href = "/create-users";
+		window.location.href = "/dashboard";
 	  } catch (err) {
 		modal.show("Email ou senha incorretos.");
 		console.error(err);
