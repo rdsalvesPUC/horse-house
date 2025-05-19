@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Gerentes – R U D</title>
+
+		<link rel="stylesheet" href="/styles/output.css" />
+	</head>
+	<body class="bg-primary min-h-screen flex flex-col">
+		<main class="flex-grow p-6 space-y-6">
+			<!-- seletor de Haras para filtrar -->
+			<div id="container-haras" class="flex items-center justify-between mb-6">
+				<select id="select-haras" class="bg-tertiary w-55 p-3 rounded-md border border-secondary"></select>
+				<a href="/create-users" class="bg-secondary font-heebo text-base font-bold text-tertiary px-5 py-2 rounded-md transition hover:bg-tertiary hover:text-secondary"> Adicionar Novo Gerente </a>
+			</div>
+
+			<form id="pesquisa" class="max-w-3xl mx-auto text-base font-medium">
+				<div class="flex">
+					<label for="search" class="sr-only">Pesquisar</label>
+					<div class="relative w-full flex">
+						<input type="search" id="search" class="h-full block p-2.5 w-full z-20 rounded-lg focus:outline-none focus:ring-1 focus:ring-tertiary shadow-lg bg-secondary text-tertiary" placeholder="Pesquisar..." />
+						<!--                <button-->
+						<!--                        type="submit"-->
+						<!--                        class="p-2.5 h-full rounded-r-lg bg-secondary text-tertiary border-l-tertiary border-l-2"-->
+						<!--                >-->
+						<!--                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>-->
+						<!--                    <span class="sr-only">Pesquisar</span>-->
+						<!--                </button>-->
+					</div>
+				</div>
+			</form>
+
+			<!-- tabela -->
+			<div class="overflow-x-auto bg-tertiary rounded-lg shadow-lg">
+				<table class="w-full border-collapse text-sm">
+					<thead class="bg-secondary text-tertiary">
+						<tr>
+							<th class="p-3 text-left">Nome</th>
+							<th class="p-3 text-left">Sobrenome</th>
+							<th class="p-3 text-left">Email</th>
+							<th class="p-3 text-left">Telefone</th>
+							<th class="p-3 text-left">CPF</th>
+							<th class="p-3 text-left">Nascimento</th>
+							<th class="p-3 text-center">Ações</th>
+						</tr>
+					</thead>
+					<tbody id="tbody-gerentes"></tbody>
+				</table>
+			</div>
+		</main>
+
+		<!-- modal edição -->
+		<div id="modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center">
+			<div class="bg-white p-6 rounded-lg max-w-md w-full space-y-4">
+				<h2 class="text-xl font-semibold">Editar gerente</h2>
+
+				<input id="edit-nome" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Nome" />
+				<input id="edit-sobrenome" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Sobrenome" />
+				<input id="edit-email" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Email" />
+				<input id="edit-telefone" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Telefone" />
+				<input id="edit-cpf" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="CPF" />
+				<input id="edit-data" class="w-full p-3 border rounded-md text-sm border-secondary" type="date" />
+
+				<div class="flex justify-end gap-3">
+					<button id="btn-cancelar" class="px-4 py-2 rounded-md bg-gray-300">Cancelar</button>
+					<button id="btn-salvar" class="px-4 py-2 rounded-md bg-secondary text-tertiary">Salvar</button>
+				</div>
+			</div>
+		</div>
+	</body>
+	<!-- <script src="/scripts/usuarios.js" defer type="module"></script> -->
+</html>

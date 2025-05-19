@@ -184,19 +184,20 @@ router.get("/", extractUserID, async (req, res) => {
 
         switch (userType) {
             case "proprietario":
-                query = `SELECT proprietario.nome as nome,
-                                sobrenome,
-                                email,
-                                telefone,
-                                estado.Nome       as estado,
-                                estado.UF         as uf,
-                                cidade.nome       as cidade,
-                                cep,
+                query = `SELECT proprietario.nome as Nome,
+                                Sobrenome,
+                                Email,
+                                Telefone,
+                                estado.Nome       as Estado,
+                                estado.UF         as UF,
+                                cidade.nome       as Cidade,
+                                CEP,
                                 Bairro,
                                 Rua,
                                 Numero,
                                 Data_Nascimento,
-                                Complemento
+                                Complemento,
+                                Foto
                          FROM Proprietario
                                   JOIN horse_house.cep cep on cep.CEP = Proprietario.fk_CEP_CEP
                                   JOIN horse_house.cidade cidade on cidade.ID = cep.FK_Cidade_ID
@@ -210,7 +211,8 @@ router.get("/", extractUserID, async (req, res) => {
                                 CPF,
                                 Data_Nascimento,
                                 Telefone,
-                                Email
+                                Email,
+                                Foto
                          from gerente
                          WHERE gerente.ID = ?`;
                 userId = req.user.id;
@@ -222,7 +224,8 @@ router.get("/", extractUserID, async (req, res) => {
                                 Telefone,
                                 Email,
                                 Senha,
-                                Data_Nascimento
+                                Data_Nascimento,
+                                Foto
                          from treinador
                          where treinador.ID = ?`;
                 userId = req.user.id;
@@ -234,7 +237,8 @@ router.get("/", extractUserID, async (req, res) => {
                                 Data_Nascimento,
                                 CPF,
                                 Sobrenome,
-                                CRMV
+                                CRMV,
+                                Foto
                          from veterinario
                          WHERE veterinario.ID = ?`;
                 userId = req.user.id;
@@ -245,7 +249,8 @@ router.get("/", extractUserID, async (req, res) => {
                                 CPF,
                                 Data_Nascimento,
                                 Telefone,
-                                Email
+                                Email,
+                                Foto
                          from tratador
                          WHERE tratador.ID = ?`;
                 userId = req.user.id;
@@ -255,6 +260,12 @@ router.get("/", extractUserID, async (req, res) => {
         }
 
         const [results] = await connection.promise().query(query, [userId]);
+
+        //converter foto de array buffer para base64
+        if (results.length > 0 && results[0].Foto) {
+            const buffer = Buffer.from(results[0].Foto);
+            results[0].Foto = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+        }
 
         if (results.length === 0) {
             return res.status(404).json({error: `${userType.charAt(0).toUpperCase() + userType.slice(1)} não encontrado.`});
