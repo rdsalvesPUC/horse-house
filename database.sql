@@ -94,7 +94,7 @@ CREATE TABLE Cavalo
     Status             VARCHAR(50),
     Registro           VARCHAR(20) NOT NULL,
     CERT               VARCHAR(20) NOT NULL,
-    IMP                VARCHAR(20) NOT NULL,
+    IMP                BOOLEAN NOT NULL,
     Foto            BLOB,
     fk_Proprietario_ID INT,
     fk_Haras_ID INT
@@ -297,3 +297,4 @@ ALTER TABLE Treina
             ON DELETE CASCADE;
 INSERT INTO Pais (Nome) VALUES
 ('Brasil');
+
