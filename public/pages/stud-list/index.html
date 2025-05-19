@@ -370,15 +370,15 @@
 	/* update ----------------------------------------------------------------*/
 	btnSalvar.addEventListener("click", async () => {
 		if (!validarNome()) {
-			modalAlert.show("Nome inválido");
+			await modalAlert.show("Nome inválido");
 			return;
 		}
 		if (!validarCNPJ()) {
-			modalAlert.show("CNPJ inválido");
+			await modalAlert.show("CNPJ inválido");
 			return;
 		}
 		if (!await buscarEndereco()) {
-			modalAlert.show("CEP inválido");
+			await modalAlert.show("CEP inválido");
 			return;
 		}
 
@@ -390,7 +390,7 @@
 		const numero = edNumero.value.trim();
 		const complemento = edComplemento.value.trim();
 		if (!nome || !cnpj || !cep || !bairo || !logradouro || !numero) {
-			modalAlert.show("Preencha todos os campos obrigatórios.");
+			await modalAlert.show("Preencha todos os campos obrigatórios.");
 			return;
 		}
 		const dados = {

@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		localStorage.setItem("userType", data.userType);
 		window.location.href = "/dashboard";
 	  } catch (err) {
-		modal.show("Email ou senha incorretos.");
+		await modal.show("Email ou senha incorretos.");
 		console.error(err);
 	  }
 	});

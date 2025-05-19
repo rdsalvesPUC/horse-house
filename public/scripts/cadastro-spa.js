@@ -1,3 +1,6 @@
+import Modal from "/scripts/load-modal.js";
+
+const modal = new Modal();
 acessoControle();
 /* acesso controle */
 async function acessoControle() {
@@ -679,7 +682,7 @@ async function enviarCadastro(event) {
     });
     const result = await response.json();
     console.log("Resposta do servidor:", result);
-    alert("Cadastrado com sucesso!");
+    await modal.show("Cadastrado com sucesso!");
     window.location.href = "/home";
   } catch (error) {
     console.error("Erro ao cadastrar", error);
