@@ -676,6 +676,31 @@ router.put("/editarGerente/", [extractUserID, requireGerente], async (req, res) 
  *         schema:
  *           type: integer
  *         description: ID do haras
+ *       - in: query
+ *         name: nome
+ *         schema:
+ *           type: string
+ *         description: Filtrar por nome do gerente
+ *       - in: query
+ *         name: sobrenome
+ *         schema:
+ *           type: string
+ *         description: Filtrar por sobrenome do gerente
+ *       - in: query
+ *         name: email
+ *         schema:
+ *           type: string
+ *         description: Filtrar por email do gerente
+ *       - in: query
+ *         name: telefone
+ *         schema:
+ *           type: string
+ *         description: Filtrar por telefone do gerente
+ *       - in: query
+ *         name: cpf
+ *         schema:
+ *           type: string
+ *         description: Filtrar por CPF do gerente
  *     responses:
  *       200:
  *         description: Lista de gerentes retornada com sucesso
@@ -704,18 +729,12 @@ router.put("/editarGerente/", [extractUserID, requireGerente], async (req, res) 
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-// Rota para obter todos os gerentes de um haras
-router.get("/gerentes/haras/:harasId", extractUserID, async (req, res) => {
+// Rota para obter todos os gerentes de um haras (com filtros)
+router.get("/gerentes/haras/:harasId", [extractUserID, requireProprietario], async (req, res) => {
     try {
         const userType = req.user.user;
         const harasId = req.params.harasId;
 
-        // Verificar se o usuário é um proprietário
-        if (userType !== "proprietario") {
-            return res.status(403).json({error: "Acesso negado. Somente proprietários podem listar gerentes."});
-        }
-
-        // Verificar se o haras pertence ao proprietário logado
         const queryVerificaHaras = "SELECT COUNT(*) as count FROM haras WHERE id = ? AND fk_Proprietario_ID = ?";
         const [verificaHarasResults] = await connection.promise().query(queryVerificaHaras, [harasId, req.user.id]);
 
@@ -723,7 +742,22 @@ router.get("/gerentes/haras/:harasId", extractUserID, async (req, res) => {
             return res.status(403).json({error: "Você não tem permissão para listar gerentes deste haras."});
         }
 
-        // Buscar todos os gerentes do haras
+        // Filtros de pesquisa
+        const {pesquisa} = req.query;
+        let whereClauses = [];
+        let params = [harasId];
+
+        whereClauses.push("nome LIKE ?");
+
+        params.push(`%${pesquisa ? pesquisa : ""}%`);
+        whereClauses.push("sobrenome LIKE ?");
+        params.push(`%${pesquisa ? pesquisa : ""}%`);
+        whereClauses.push("email LIKE ?");
+        params.push(`%${pesquisa ? pesquisa : ""}%`);
+        whereClauses.push("telefone LIKE ?");
+        params.push(`%${pesquisa ? pesquisa : ""}%`);
+        whereClauses.push("cpf LIKE ?");
+        params.push(`%${pesquisa ? pesquisa : ""}%`);
         const queryGerentes = `
             SELECT ID,
                    nome,
@@ -734,10 +768,12 @@ router.get("/gerentes/haras/:harasId", extractUserID, async (req, res) => {
                    email,
                    fk_haras_id
             FROM gerente
-            WHERE fk_haras_id = ?
+            WHERE fk_haras_id = ? AND (${whereClauses.join(" OR ")})
         `;
-        const [gerentes] = await connection.promise().query(queryGerentes, [harasId]);
 
+
+        const [gerentes] = await connection.promise().query(queryGerentes, params);
+        console.log(gerentes);
         res.status(200).json(gerentes);
     } catch (err) {
         console.error("Erro ao listar gerentes:", err);

@@ -21,93 +21,23 @@
         <a href="/create-users" class="bg-secondary font-heebo text-base font-bold text-tertiary px-5 py-2 rounded-md transition hover:bg-tertiary hover:text-secondary"> Adicionar Novo Gerente </a>
     </div>
 
-    <form class="max-w-3xl mx-auto text-base font-medium">
+    <form id="pesquisa" class="max-w-3xl mx-auto text-base font-medium">
         <div class="flex">
-            <label for="search-dropdown" class="sr-only">Pesquisar</label>
-            <button id="dropdown-button"
-                    aria-expanded="false"
-                    class="w-50 z-10 inline-flex justify-between items-center py-2.5 px-4 rounded-l-lg shadow-lg bg-secondary text-tertiary"
-                    type="button">
-                Todas
-                <svg class="w-2.5 h-2.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/></svg>
-            </button>
+            <label for="search" class="sr-only">Pesquisar</label>
             <div class="relative w-full flex">
                 <input
                         type="search"
-                        id="search-dropdown"
-                        class="h-full block p-2.5 w-full z-20 focus:outline-none focus:ring-1 focus:ring-tertiary border-l-tertiary border-l-2 shadow-lg bg-secondary text-tertiary"
-                        placeholder="Pesquisar..."
-                        required/>
-                <button
-                        type="submit"
-                        class="p-2.5 h-full rounded-r-lg bg-secondary text-tertiary border-l-tertiary border-l-2"
-                >
-                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
-                    <span class="sr-only">Pesquisar</span>
-                </button>
+                        id="search"
+                        class="h-full block p-2.5 w-full z-20 rounded-lg focus:outline-none focus:ring-1 focus:ring-tertiary  shadow-lg bg-secondary text-tertiary"
+                        placeholder="Pesquisar..."/>
+<!--                <button-->
+<!--                        type="submit"-->
+<!--                        class="p-2.5 h-full rounded-r-lg bg-secondary text-tertiary border-l-tertiary border-l-2"-->
+<!--                >-->
+<!--                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>-->
+<!--                    <span class="sr-only">Pesquisar</span>-->
+<!--                </button>-->
             </div>
-        </div>
-        <div
-                id="dropdown"
-                class="w-fit min-w-42 z-10 mt-2 hidden rounded-lg bg-secondary text-tertiary"
-                role="menu"
-        >
-            <ul>
-                <li>
-                    <button
-                            type="button"
-                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
-                            role="menuitem"
-                    >
-                        Todas
-                    </button>
-                </li>
-                <li>
-                    <button
-                            type="button"
-                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
-                            role="menuitem"
-                    >
-                        Nome
-                    </button>
-                </li>
-                <li>
-                    <button
-                            type="button"
-                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
-                            role="menuitem"
-                    >
-                        Sobrenome
-                    </button>
-                </li>
-                <li>
-                    <button
-                            type="button"
-                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
-                            role="menuitem"
-                    >
-                        Email
-                    </button>
-                </li>
-                <li>
-                    <button
-                            type="button"
-                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
-                            role="menuitem"
-                    >
-                        Telefone
-                    </button>
-                </li>
-                <li>
-                    <button
-                            type="button"
-                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
-                            role="menuitem"
-                    >
-                        CPF
-                    </button>
-                </li>
-            </ul>
         </div>
     </form>
 
@@ -216,13 +146,21 @@
 
     /* listar --------------------------------------------------------------- */
     async function listarGerentes(harasId) {
+        if (!harasId) {
+            tbody.innerHTML = "";
+            return;
+        }
         tbody.innerHTML = '<tr><td class="p-3" colspan="6">Carregando...</td></tr>';
 
-        const r = await fetch(`http://localhost:3000/api/gerentes/haras/${harasId}`, {
+        let url = `http://localhost:3000/api/gerentes/haras/${harasId}`;
+        const params = new URLSearchParams();
+        params.append("pesquisa", document.getElementById("search").value.trim());
+        if (params.toString()) url += "?" + params.toString();
+
+        const r = await fetch(url, {
             headers: {Authorization: `Bearer ${TOKEN}`},
         });
         const gerentes = await r.json();
-        console.log(gerentes);
 
         if (!Array.isArray(gerentes) || gerentes.length === 0) {
             tbody.innerHTML = '<tr><td class="p-3" colspan="6">Nenhum gerente encontrado.</td></tr>';
@@ -236,8 +174,8 @@
           <td class="p-3">${g.nome}</td>
           <td class="p-3">${g.sobrenome}</td>
           <td class="p-3">${g.email}</td>
-          <td class="p-3">${g.telefone ?? ""}</td>
-          <td class="p-3">${g.cpf}</td>
+          <td class="p-3 telefone">${g.telefone ?? ""}</td>
+          <td class="p-3 cpf">${g.cpf}</td>
           <td class="p-3">${g.data_nascimento?.split("T")[0] ?? ""}</td>
           <td class="p-3 text-center space-x-2">
             <button data-id="${g.ID}" class="edit text-blue-600 hover:underline">Editar</button>
@@ -257,6 +195,15 @@
                 openModal(await r2.json());
             })
         );
+        tbody.querySelectorAll(".cpf").forEach((cpf) =>
+            cpf.textContent = cpf.textContent.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
+        )
+        tbody.querySelectorAll(".telefone").forEach((telefone) =>
+                telefone.textContent.length === 11 ?
+                    telefone.textContent = telefone.textContent.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3") :
+                    telefone.textContent = telefone.textContent.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3")
+        )
+
 
         tbody.querySelectorAll(".del").forEach((btn) => btn.addEventListener("click", () => removerGerente(btn.dataset.id)));
     }
@@ -302,19 +249,9 @@
             else tbody.innerHTML = "";
         });
     });
-    document.addEventListener("DOMContentLoaded", () => {
-        const dropdownButton = document.getElementById("dropdown-button");
-        const dropdown = document.getElementById("dropdown");
 
-        dropdownButton.addEventListener("click", () => {
-            dropdown.classList.toggle("hidden");
-        });
-
-        document.addEventListener("click", (event) => {
-            if (!dropdown.contains(event.target) && !dropdownButton.contains(event.target)) {
-                dropdown.classList.add("hidden");
-            }
-        });
+    document.getElementById("pesquisa").addEventListener("input", (e) => {
+        listarGerentes(selectHaras.value);
     });
 </script>
 </body>
