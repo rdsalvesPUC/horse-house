@@ -265,7 +265,7 @@ router.post("/cavalos/criar", [extractUserID, requireGerenteouProprietario], asy
 router.get("/cavalos/haras/:harasID", [extractUserID], async (req, res) => {
     const {harasID} = req.params;
     if (req.user.user === "proprietario") {
-        const query = `SELECT Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto
+        const query = `SELECT Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto, ID
                        FROM cavalo
                        WHERE fk_Proprietario_ID = ?
                          AND fk_Haras_ID = ?`;
@@ -339,7 +339,7 @@ router.get("/cavalos/haras/:harasID", [extractUserID], async (req, res) => {
 router.get("/cavalos/id/:id", extractUserID, async (req, res) => {
     const {id} = req.params;
     if (req.user.user === "proprietario") {
-        const query = `SELECT Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto
+        const query = `SELECT Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto, ID
                        FROM cavalo
                        WHERE ID = ?
                          AND fk_Proprietario_ID = ?`;
