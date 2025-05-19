@@ -2,7 +2,7 @@
   let userId = null;
 
   async function acessoControle() {
-    const res = await fetch("/api/requerProprietario", {
+    const res = await fetch("/api/loginExpirado", {
       headers: { Authorization: `Bearer ${TOKEN}` }
     });
 
@@ -17,15 +17,15 @@
 
   async function carregarPerfil() {
     try {
-      const res = await fetch(`/api/proprietario/${userId}`, {
+      const res = await fetch(`/api/getUsuarioLogado/`, {
         headers: { Authorization: `Bearer ${TOKEN}` }
       });
 
       if (!res.ok) throw new Error("Erro ao carregar dados");
 
       const p = await res.json();
-
-      document.getElementById("cpf").value = p.Cpf;
+      console.log(p)
+      document.getElementById("cpf").value = p.CPF;
       document.getElementById("firstName").value = p.Nome;
       document.getElementById("lastName").value = p.Sobrenome;
       document.getElementById("phone").value = p.Telefone ?? "";
@@ -33,7 +33,7 @@
       document.getElementById("email").value = p.Email;
       document.getElementById("cep").value = p.CEP;
       document.getElementById("state").value = p.UF;
-      document.getElementById("city").value = p.nome;
+      document.getElementById("city").value = p.Cidade;
       document.getElementById("neighborhood").value = p.Bairro;
       document.getElementById("street").value = p.Rua;
       document.getElementById("number").value = p.Numero;
