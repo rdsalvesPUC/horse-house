@@ -1,146 +1,237 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Gerentes – R U D</title>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Gerentes – R U D</title>
 
-		<link rel="stylesheet" href="/styles/output.css" />
-	</head>
-	<body class="bg-primary min-h-screen flex flex-col">
-		<!-- cabeçalho fixo -->
-		<header class="w-full bg-primary p-2 flex items-center">
-			<img src="/assets/images/logo-h-whitebg.svg" class="h-10" />
-			<h1 class="text-tertiary ml-4 text-xl font-semibold">Gerentes – listar / editar / excluir</h1>
-		</header>
+    <link rel="stylesheet" href="/styles/output.css"/>
+</head>
+<body class="bg-primary min-h-screen flex flex-col">
+<!-- cabeçalho fixo -->
+<header class="w-full bg-primary p-2 flex items-center">
+    <img src="/assets/images/logo-h-whitebg.svg" class="h-10"/>
+    <h1 class="text-tertiary ml-4 text-xl font-semibold">Gerentes – listar / editar / excluir</h1>
+</header>
 
-		<main class="flex-grow p-6 space-y-6">
-			<!-- seletor de Haras para filtrar -->
-			<div id="container-haras" class="flex items-center justify-between mb-6">
-				<select id="select-haras" class="bg-tertiary w-55 p-3 rounded-md border border-secondary"></select>
-				<a href="/create-users" class="bg-secondary font-heebo text-base font-bold text-tertiary px-5 py-2 rounded-md transition hover:bg-tertiary hover:text-secondary"> Adicionar Novo Gerente </a>
-			</div>
+<main class="flex-grow p-6 space-y-6">
+    <!-- seletor de Haras para filtrar -->
+    <div id="container-haras" class="flex items-center justify-between mb-6">
+        <select id="select-haras" class="bg-tertiary w-55 p-3 rounded-md border border-secondary"></select>
+        <a href="/create-users" class="bg-secondary font-heebo text-base font-bold text-tertiary px-5 py-2 rounded-md transition hover:bg-tertiary hover:text-secondary"> Adicionar Novo Gerente </a>
+    </div>
 
-			<!-- tabela -->
-			<div class="overflow-x-auto bg-tertiary rounded-lg shadow-lg">
-				<table class="w-full border-collapse text-sm">
-					<thead class="bg-secondary text-tertiary">
-						<tr>
-							<th class="p-3 text-left">Nome</th>
-							<th class="p-3 text-left">Sobrenome</th>
-							<th class="p-3 text-left">Email</th>
-							<th class="p-3 text-left">Telefone</th>
-							<th class="p-3 text-left">CPF</th>
-							<th class="p-3 text-left">Nascimento</th>
-							<th class="p-3 text-center">Ações</th>
-						</tr>
-					</thead>
-					<tbody id="tbody-gerentes"></tbody>
-				</table>
-			</div>
-		</main>
+    <form class="max-w-3xl mx-auto text-base font-medium">
+        <div class="flex">
+            <label for="search-dropdown" class="sr-only">Pesquisar</label>
+            <button id="dropdown-button"
+                    aria-expanded="false"
+                    class="w-50 z-10 inline-flex justify-between items-center py-2.5 px-4 rounded-l-lg shadow-lg bg-secondary text-tertiary"
+                    type="button">
+                Todas
+                <svg class="w-2.5 h-2.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/></svg>
+            </button>
+            <div class="relative w-full flex">
+                <input
+                        type="search"
+                        id="search-dropdown"
+                        class="h-full block p-2.5 w-full z-20 focus:outline-none focus:ring-1 focus:ring-tertiary border-l-tertiary border-l-2 shadow-lg bg-secondary text-tertiary"
+                        placeholder="Pesquisar..."
+                        required/>
+                <button
+                        type="submit"
+                        class="p-2.5 h-full rounded-r-lg bg-secondary text-tertiary border-l-tertiary border-l-2"
+                >
+                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
+                    <span class="sr-only">Pesquisar</span>
+                </button>
+            </div>
+        </div>
+        <div
+                id="dropdown"
+                class="w-fit min-w-42 z-10 mt-2 hidden rounded-lg bg-secondary text-tertiary"
+                role="menu"
+        >
+            <ul>
+                <li>
+                    <button
+                            type="button"
+                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
+                            role="menuitem"
+                    >
+                        Todas
+                    </button>
+                </li>
+                <li>
+                    <button
+                            type="button"
+                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
+                            role="menuitem"
+                    >
+                        Nome
+                    </button>
+                </li>
+                <li>
+                    <button
+                            type="button"
+                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
+                            role="menuitem"
+                    >
+                        Sobrenome
+                    </button>
+                </li>
+                <li>
+                    <button
+                            type="button"
+                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
+                            role="menuitem"
+                    >
+                        Email
+                    </button>
+                </li>
+                <li>
+                    <button
+                            type="button"
+                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
+                            role="menuitem"
+                    >
+                        Telefone
+                    </button>
+                </li>
+                <li>
+                    <button
+                            type="button"
+                            class="inline-flex w-full px-4 py-2 hover:ring-1 hover:ring-tertiary rounded-lg"
+                            role="menuitem"
+                    >
+                        CPF
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </form>
 
-		<!-- modal edição -->
-		<div id="modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center">
-			<div class="bg-white p-6 rounded-lg max-w-md w-full space-y-4">
-				<h2 class="text-xl font-semibold">Editar gerente</h2>
+    <!-- tabela -->
+    <div class="overflow-x-auto bg-tertiary rounded-lg shadow-lg">
+        <table class="w-full border-collapse text-sm">
+            <thead class="bg-secondary text-tertiary">
+            <tr>
+                <th class="p-3 text-left">Nome</th>
+                <th class="p-3 text-left">Sobrenome</th>
+                <th class="p-3 text-left">Email</th>
+                <th class="p-3 text-left">Telefone</th>
+                <th class="p-3 text-left">CPF</th>
+                <th class="p-3 text-left">Nascimento</th>
+                <th class="p-3 text-center">Ações</th>
+            </tr>
+            </thead>
+            <tbody id="tbody-gerentes"></tbody>
+        </table>
+    </div>
+</main>
 
-				<input id="edit-nome" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Nome" />
-				<input id="edit-sobrenome" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Sobrenome" />
-				<input id="edit-email" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Email" />
-				<input id="edit-telefone" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Telefone" />
-				<input id="edit-cpf" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="CPF" />
-				<input id="edit-data" class="w-full p-3 border rounded-md text-sm border-secondary" type="date" />
+<!-- modal edição -->
+<div id="modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center">
+    <div class="bg-white p-6 rounded-lg max-w-md w-full space-y-4">
+        <h2 class="text-xl font-semibold">Editar gerente</h2>
 
-				<div class="flex justify-end gap-3">
-					<button id="btn-cancelar" class="px-4 py-2 rounded-md bg-gray-300">Cancelar</button>
-					<button id="btn-salvar" class="px-4 py-2 rounded-md bg-secondary text-tertiary">Salvar</button>
-				</div>
-			</div>
-		</div>
+        <input id="edit-nome" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Nome"/>
+        <input id="edit-sobrenome" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Sobrenome"/>
+        <input id="edit-email" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Email"/>
+        <input id="edit-telefone" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="Telefone"/>
+        <input id="edit-cpf" class="w-full p-3 border rounded-md text-sm border-secondary" placeholder="CPF"/>
+        <input id="edit-data" class="w-full p-3 border rounded-md text-sm border-secondary" type="date"/>
 
-		<script>
-			/* eslint-disable no-alert */
-			const TOKEN = localStorage.getItem("token");
-			acessoControle();
-			/* elementos */
-			const selectHaras = document.getElementById("select-haras");
-			const tbody = document.getElementById("tbody-gerentes");
+        <div class="flex justify-end gap-3">
+            <button id="btn-cancelar" class="px-4 py-2 rounded-md bg-gray-300">Cancelar</button>
+            <button id="btn-salvar" class="px-4 py-2 rounded-md bg-secondary text-tertiary">Salvar</button>
+        </div>
+    </div>
+</div>
 
-			const modal = document.getElementById("modal");
-			const btnCancel = document.getElementById("btn-cancelar");
-			const btnSalvar = document.getElementById("btn-salvar");
+<script>
+    /* eslint-disable no-alert */
+    const TOKEN = localStorage.getItem("token");
+    acessoControle();
+    /* elementos */
+    const selectHaras = document.getElementById("select-haras");
+    const tbody = document.getElementById("tbody-gerentes");
 
-			const edNome = document.getElementById("edit-nome");
-			const edSobrenome = document.getElementById("edit-sobrenome");
-			const edEmail = document.getElementById("edit-email");
-			const edTel = document.getElementById("edit-telefone");
-			const edCpf = document.getElementById("edit-cpf");
-			const edData = document.getElementById("edit-data");
+    const modal = document.getElementById("modal");
+    const btnCancel = document.getElementById("btn-cancelar");
+    const btnSalvar = document.getElementById("btn-salvar");
 
-			let idEdicao = null;
+    const edNome = document.getElementById("edit-nome");
+    const edSobrenome = document.getElementById("edit-sobrenome");
+    const edEmail = document.getElementById("edit-email");
+    const edTel = document.getElementById("edit-telefone");
+    const edCpf = document.getElementById("edit-cpf");
+    const edData = document.getElementById("edit-data");
 
-			/* helpers -------------------------------------------------------------- */
-			function openModal(g) {
-				idEdicao = g.ID;
-				edNome.value = g.nome;
-				edSobrenome.value = g.sobrenome;
-				edEmail.value = g.email;
-				edTel.value = g.telefone ?? "";
-				edCpf.value = g.cpf;
-				edData.value = g.data_nascimento?.split("T")[0] || "";
-				modal.classList.remove("hidden");
-				modal.classList.add("flex");
-			}
-			function closeModal() {
-				modal.classList.add("hidden");
-				modal.classList.remove("flex");
-				idEdicao = null;
-			}
+    let idEdicao = null;
 
-			/* acesso controle */
-			async function acessoControle() {
-				const r = await fetch("/api/requerProprietario", {
-					headers: { Authorization: `Bearer ${TOKEN}` },
-				});
-				if (!r.ok) {
-					const result = await r.json();
-					if (result.login){
-						window.location.href = "/login";
-					}
-					else{
-						window.location.href = "/home";
-					}
+    /* helpers -------------------------------------------------------------- */
+    function openModal(g) {
+        idEdicao = g.ID;
+        edNome.value = g.nome;
+        edSobrenome.value = g.sobrenome;
+        edEmail.value = g.email;
+        edTel.value = g.telefone ?? "";
+        edCpf.value = g.cpf;
+        edData.value = g.data_nascimento?.split("T")[0] || "";
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+    }
 
-				}
-			}
+    function closeModal() {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        idEdicao = null;
+    }
 
-			/* carregar haras ------------------------------------------------------- */
-			async function carregarHaras() {
-				const r = await fetch("http://localhost:3000/api/getAllHaras", {
-					headers: { Authorization: `Bearer ${TOKEN}` },
-				});
-				const lista = await r.json();
-				selectHaras.innerHTML = '<option value="">Selecione o Haras</option>' + lista.map((h) => `<option value="${h.ID}">${h.Nome}</option>`).join("");
-			}
-			/* listar --------------------------------------------------------------- */
-			async function listarGerentes(harasId) {
-				tbody.innerHTML = '<tr><td class="p-3" colspan="6">Carregando...</td></tr>';
+    /* acesso controle */
+    async function acessoControle() {
+        const r = await fetch("/api/requerProprietario", {
+            headers: {Authorization: `Bearer ${TOKEN}`},
+        });
+        if (!r.ok) {
+            const result = await r.json();
+            if (result.login) {
+                window.location.href = "/login";
+            } else {
+                window.location.href = "/home";
+            }
 
-				const r = await fetch(`http://localhost:3000/api/gerentes/haras/${harasId}`, {
-					headers: { Authorization: `Bearer ${TOKEN}` },
-				});
-				const gerentes = await r.json();
-				console.log(gerentes);
+        }
+    }
 
-				if (!Array.isArray(gerentes) || gerentes.length === 0) {
-					tbody.innerHTML = '<tr><td class="p-3" colspan="6">Nenhum gerente encontrado.</td></tr>';
-					return;
-				}
+    /* carregar haras ------------------------------------------------------- */
+    async function carregarHaras() {
+        const r = await fetch("http://localhost:3000/api/getAllHaras", {
+            headers: {Authorization: `Bearer ${TOKEN}`},
+        });
+        const lista = await r.json();
+        selectHaras.innerHTML = '<option value="">Selecione o Haras</option>' + lista.map((h) => `<option value="${h.ID}">${h.Nome}</option>`).join("");
+    }
 
-				tbody.innerHTML = gerentes
-					.map(
-						(g) => `
+    /* listar --------------------------------------------------------------- */
+    async function listarGerentes(harasId) {
+        tbody.innerHTML = '<tr><td class="p-3" colspan="6">Carregando...</td></tr>';
+
+        const r = await fetch(`http://localhost:3000/api/gerentes/haras/${harasId}`, {
+            headers: {Authorization: `Bearer ${TOKEN}`},
+        });
+        const gerentes = await r.json();
+        console.log(gerentes);
+
+        if (!Array.isArray(gerentes) || gerentes.length === 0) {
+            tbody.innerHTML = '<tr><td class="p-3" colspan="6">Nenhum gerente encontrado.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = gerentes
+            .map(
+                (g) => `
         <tr class="odd:bg-white even:bg-gray-50">
           <td class="p-3">${g.nome}</td>
           <td class="p-3">${g.sobrenome}</td>
@@ -154,63 +245,77 @@
           </td>
         </tr>
       `
-					)
-					.join("");
+            )
+            .join("");
 
-				/* eventos */
-				tbody.querySelectorAll(".edit").forEach((btn) =>
-					btn.addEventListener("click", async () => {
-						const r2 = await fetch(`http://localhost:3000/api/gerente/${btn.dataset.id}`, {
-							headers: { Authorization: `Bearer ${TOKEN}` },
-						});
-						openModal(await r2.json());
-					})
-				);
+        /* eventos */
+        tbody.querySelectorAll(".edit").forEach((btn) =>
+            btn.addEventListener("click", async () => {
+                const r2 = await fetch(`http://localhost:3000/api/gerente/${btn.dataset.id}`, {
+                    headers: {Authorization: `Bearer ${TOKEN}`},
+                });
+                openModal(await r2.json());
+            })
+        );
 
-				tbody.querySelectorAll(".del").forEach((btn) => btn.addEventListener("click", () => removerGerente(btn.dataset.id)));
-			}
+        tbody.querySelectorAll(".del").forEach((btn) => btn.addEventListener("click", () => removerGerente(btn.dataset.id)));
+    }
 
-			/* delete --------------------------------------------------------------- */
-			async function removerGerente(id) {
-				if (!confirm("Confirma excluir o gerente?")) return;
-				await fetch(`http://localhost:3000/api/deletarFuncionario/gerente/${id}`, {
-					method: "DELETE",
-					headers: { Authorization: `Bearer ${TOKEN}` },
-				});
-				console.log(`http://localhost:3000/api/gerente/${id}`);
-				listarGerentes(selectHaras.value);
-			}
+    /* delete --------------------------------------------------------------- */
+    async function removerGerente(id) {
+        if (!confirm("Confirma excluir o gerente?")) return;
+        await fetch(`http://localhost:3000/api/deletarFuncionario/gerente/${id}`, {
+            method: "DELETE",
+            headers: {Authorization: `Bearer ${TOKEN}`},
+        });
+        console.log(`http://localhost:3000/api/gerente/${id}`);
+        listarGerentes(selectHaras.value);
+    }
 
-			/* update ----------------------------------------------------------------*/
-			btnSalvar.addEventListener("click", async () => {
-				const dados = {
-					nome: edNome.value.trim(),
-					sobrenome: edSobrenome.value.trim(),
-					email: edEmail.value.trim(),
-					telefone: edTel.value.trim(),
-					cpf: edCpf.value.trim().replace(/\D/g, ""),
-					dataNascimento: edData.value,
-				};
-				await fetch(`http://localhost:3000/api/editarGerente/${idEdicao}`, {
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${TOKEN}`,
-					},
-					body: JSON.stringify(dados),
-				});
-				closeModal();
-				listarGerentes(selectHaras.value);
-			});
-			btnCancel.addEventListener("click", closeModal);
+    /* update ----------------------------------------------------------------*/
+    btnSalvar.addEventListener("click", async () => {
+        const dados = {
+            nome: edNome.value.trim(),
+            sobrenome: edSobrenome.value.trim(),
+            email: edEmail.value.trim(),
+            telefone: edTel.value.trim(),
+            cpf: edCpf.value.trim().replace(/\D/g, ""),
+            dataNascimento: edData.value,
+        };
+        await fetch(`http://localhost:3000/api/editarGerente/${idEdicao}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${TOKEN}`,
+            },
+            body: JSON.stringify(dados),
+        });
+        closeModal();
+        listarGerentes(selectHaras.value);
+    });
+    btnCancel.addEventListener("click", closeModal);
 
-			/* init ------------------------------------------------------------------*/
-			carregarHaras().then(() => {
-				selectHaras.addEventListener("change", (e) => {
-					if (e.target.value) listarGerentes(e.target.value);
-					else tbody.innerHTML = "";
-				});
-			});
-		</script>
-	</body>
+    /* init ------------------------------------------------------------------*/
+    carregarHaras().then(() => {
+        selectHaras.addEventListener("change", (e) => {
+            if (e.target.value) listarGerentes(e.target.value);
+            else tbody.innerHTML = "";
+        });
+    });
+    document.addEventListener("DOMContentLoaded", () => {
+        const dropdownButton = document.getElementById("dropdown-button");
+        const dropdown = document.getElementById("dropdown");
+
+        dropdownButton.addEventListener("click", () => {
+            dropdown.classList.toggle("hidden");
+        });
+
+        document.addEventListener("click", (event) => {
+            if (!dropdown.contains(event.target) && !dropdownButton.contains(event.target)) {
+                dropdown.classList.add("hidden");
+            }
+        });
+    });
+</script>
+</body>
 </html>
