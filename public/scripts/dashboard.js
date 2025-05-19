@@ -20,7 +20,49 @@ function getViewFromPath() {
   return parts[2] || 'visao-geral';
 }
 
-export function initUserMenuToggle() {
+async function carregarDadosUsuario() {
+    const TOKEN = localStorage.getItem('token');
+    const response = await fetch(`/api/getUsuarioLogado`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${TOKEN}`,
+        }
+    });
+    const userData = await response.json();
+    const nome = document.getElementById('nome');
+    const cargo = document.getElementById('cargo');
+    const foto = document.getElementById('foto');
+    switch (userData.userType) {
+        case "gerente":
+            cargo.innerHTML = "Gerente";
+            break;
+        case "treinador":
+            cargo.innerHTML = "Treinador";
+            break;
+        case "veterinario":
+            cargo.innerHTML = "Veterinário";
+            break;
+        case "tratador":
+            cargo.innerHTML = "Tratador";
+            break;
+        case "proprietario":
+            cargo.innerHTML = "Proprietário";
+            break;
+        default:
+            cargo.innerHTML = "Usuário Desconhecido";
+    }
+    nome.innerHTML = `${userData.nome} ${userData.sobrenome}`;
+    if (userData.Foto) {
+        foto.src = userData.Foto;
+    }
+    else {
+        foto.src = "/assets/images/user.png";
+    }
+
+}
+
+export async function initUserMenuToggle() {
   const btn  = document.getElementById('userMenuBtn');
   const menu = document.getElementById('userMenu');
   if (!btn || !menu) return;
@@ -37,6 +79,7 @@ export function initUserMenuToggle() {
       menu.classList.add('hidden');
     }
   });
+    await carregarDadosUsuario();
 }
 
 // Passo inicial: carregar a view correta conforme a URL
