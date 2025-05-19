@@ -33,33 +33,63 @@ async function carregarDadosUsuario() {
     const nome = document.getElementById('nome');
     const cargo = document.getElementById('cargo');
     const foto = document.getElementById('foto');
+    const select = document.getElementById('container-haras');
     switch (userData.userType) {
         case "gerente":
             cargo.innerHTML = "Gerente";
+            select.classList.add('hidden');
             break;
         case "treinador":
             cargo.innerHTML = "Treinador";
+            select.classList.add('hidden');
             break;
         case "veterinario":
             cargo.innerHTML = "Veterinário";
+            select.classList.add('hidden');
             break;
         case "tratador":
             cargo.innerHTML = "Tratador";
+            select.classList.add('hidden');
             break;
         case "proprietario":
             cargo.innerHTML = "Proprietário";
+            carregarHaras();
             break;
         default:
             cargo.innerHTML = "Usuário Desconhecido";
     }
-    nome.innerHTML = `${userData.nome} ${userData.sobrenome}`;
+    nome.innerHTML = `${userData.Nome} ${userData.Sobrenome}`;
     if (userData.Foto) {
         foto.src = userData.Foto;
     }
     else {
         foto.src = "/assets/images/user.png";
     }
-
+}
+async function carregarHaras() {
+    const TOKEN = localStorage.getItem('token');
+    const response = await fetch(`/api/getAllHaras`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${TOKEN}`,
+        }
+    });
+    const haras = await response.json();
+    const select = document.getElementById('select-haras');
+    if (select) {
+        select.innerHTML = "";
+        const option = document.createElement('option');
+        option.value = "";
+        option.innerHTML = "Selecione um Haras";
+        select.appendChild(option);
+        haras.forEach(h => {
+            const option = document.createElement('option');
+            option.value = h.ID;
+            option.innerHTML = h.Nome;
+            select.appendChild(option);
+        });
+    }
 }
 
 export async function initUserMenuToggle() {

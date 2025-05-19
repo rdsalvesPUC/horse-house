@@ -184,14 +184,14 @@ router.get("/", extractUserID, async (req, res) => {
 
         switch (userType) {
             case "proprietario":
-                query = `SELECT proprietario.nome as nome,
-                                sobrenome,
-                                email,
-                                telefone,
-                                estado.Nome       as estado,
-                                estado.UF         as uf,
-                                cidade.nome       as cidade,
-                                cep,
+                query = `SELECT proprietario.nome as Nome,
+                                Sobrenome,
+                                Email,
+                                Telefone,
+                                estado.Nome       as Estado,
+                                estado.UF         as UF,
+                                cidade.nome       as Cidade,
+                                CEP,
                                 Bairro,
                                 Rua,
                                 Numero,
