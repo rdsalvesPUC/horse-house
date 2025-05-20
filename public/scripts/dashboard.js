@@ -1,26 +1,30 @@
 async function loadView(view) {
-	const container = document.getElementById("views");
-	try {
-		const resp = await fetch(`/dashboard/views/${view}.html`);
-		if (!resp.ok) throw new Error(`View "${view}" não encontrada (HTTP ${resp.status})`);
-		const html = await resp.text();
-		container.innerHTML = html;
-		try {
-			const module = await import(`/scripts/${view}.js`);
-			if (typeof module.init === "function") {
-				module.init(container);
-			}
-		} catch (e) {
-			console.info(`Nenhum script específico para a view "${view}"`);
-		}
-	} catch (err) {
-		console.error(err);
-		container.innerHTML = `
+  const container = document.getElementById("views");
+  try {
+    const resp = await fetch(`/dashboard/views/${view}.html`);
+    if (!resp.ok) throw new Error(`View "${view}" não encontrada (HTTP ${resp.status})`);
+    const html = await resp.text();
+    container.innerHTML = html;
+
+    // Tenta importar o módulo específico da view em /scripts/views/
+    try {
+      const module = await import(`/scripts/${view}.js`);
+      if (typeof module.init === "function") {
+        // Garante que o init seja executado a cada navegação interna
+        await module.init(container);
+      }
+    } catch (e) {
+      console.info(`Nenhum script específico para a view "${view}"`, e);
+    }
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = `
       <div class="p-6 text-red-500">
         Erro ao carregar a página “${view}”. Tente novamente.
       </div>
     `;
-	}
+  }
 }
 
 async function acessoControle() {
