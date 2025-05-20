@@ -156,23 +156,21 @@ const {extractUserID, requireProprietario, requireGerenteouProprietario} = requi
  *                 error: Erro ao criar o cavalo.
  */
 router.post("/cavalos/criar", [extractUserID, requireGerenteouProprietario], async (req, res) => {
-    const {nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, foto} = req.body;
+    const {nome, dataNascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, foto} = req.body;
     let proprietario_id;
-    let {haras_id} = req.body;
-    if (!nome || !data_nascimento || !peso || !sexo || !pelagem || !sangue || !registro || !cert || !imp || !situacao || !status) {
+    let {harasId} = req.body;
+    if (!nome || !dataNascimento || !peso || !sexo || !pelagem || !sangue || !registro || !cert || !imp) {
         return res.status(400).json({error: "Todos os campos são obrigatórios."});
     }
     if (req.user.user === "proprietario") {
-        if (!haras_id) {
+        if (!harasId) {
             return res.status(400).json({error: "ID do haras é obrigatório."});
         }
         proprietario_id = req.user.id;
     } else if (req.user.user === "gerente") {
-        haras_id = req.user.harasId;
-        const query = `SELECT fk_Proprietario_ID
-                 FROM haras
-                 WHERE ID = ?`;
-        const [results] = await connection.promise().query(query, [haras_id]);
+        harasId = req.user.harasId;
+        const query = `SELECT fk_Proprietario_ID FROM haras WHERE ID = ?`;
+        const [results] = await connection.promise().query(query, [harasId]);
         if (results.length === 0) {
             return res.status(404).json({error: "Haras não encontrado."});
         }
@@ -180,24 +178,74 @@ router.post("/cavalos/criar", [extractUserID, requireGerenteouProprietario], asy
     } else {
         return res.status(403).json({error: "Acesso não autorizado."});
     }
-    if (foto) {
-        try {
-            const query = `INSERT INTO cavalo (Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, Foto, fk_Proprietario_ID, fk_Haras_ID)
-                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-            const [results] = await connection.promise().query(query, [nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, foto, proprietario_id, haras_id])
-            return res.status(201).json({message: "Cavalo cadastrado com sucesso!", id: results.insertId});
-        } catch (err) {
-            console.error("Erro ao inserir o cavalo:", err);
-            if (err.code === 'ER_DUP_ENTRY') {
-                return res.status(409).json({error: "Cavalo já cadastrado."});
-            }
-            return res.status(500).json({error: "Erro ao criar o cavalo."});
-        }
+
+    let campos = [];
+    let queryParams = [];
+    let placeholders = [];
+
+    campos.push("Nome");
+    queryParams.push(nome);
+    placeholders.push("?");
+
+    campos.push("Data_Nascimento");
+    queryParams.push(dataNascimento);
+    placeholders.push("?");
+
+    campos.push("Peso");
+    queryParams.push(peso);
+    placeholders.push("?");
+
+    campos.push("Sexo");
+    queryParams.push(sexo);
+    placeholders.push("?");
+
+    campos.push("Pelagem");
+    queryParams.push(pelagem);
+    placeholders.push("?");
+
+    campos.push("Sangue");
+    queryParams.push(sangue);
+    placeholders.push("?");
+
+    if (situacao) {
+        campos.push("Situacao");
+        queryParams.push(situacao || "Ativo");
+        placeholders.push("?");
     }
+    if (status) {
+        campos.push("Status");
+        queryParams.push(status || "Em treinamento");
+        placeholders.push("?");
+    }
+    campos.push("Registro");
+    queryParams.push(registro);
+    placeholders.push("?");
+
+    campos.push("CERT");
+    queryParams.push(cert);
+    placeholders.push("?");
+
+    campos.push("IMP");
+    queryParams.push(imp);
+    placeholders.push("?");
+
+    if (foto) {
+        campos.push("Foto");
+        queryParams.push(foto);
+        placeholders.push("?");
+    }
+
+    campos.push("fk_Proprietario_ID");
+    queryParams.push(proprietario_id);
+    placeholders.push("?");
+
+    campos.push("fk_Haras_ID");
+    queryParams.push(harasId);
+    placeholders.push("?");
+
     try {
-        const query = `INSERT INTO cavalo (Nome, Data_Nascimento, Peso, Sexo, Pelagem, Sangue, Situacao, Status, Registro, CERT, IMP, fk_Proprietario_ID, fk_Haras_ID)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        const [results] = await connection.promise().query(query, [nome, data_nascimento, peso, sexo, pelagem, sangue, situacao, status, registro, cert, imp, proprietario_id, haras_id])
+        const queryCompleta = `INSERT INTO cavalo (${campos.join(", ")}) VALUES (${placeholders.join(", ")})`;
+        const [results] = await connection.promise().query(queryCompleta, queryParams);
         return res.status(201).json({message: "Cavalo cadastrado com sucesso!", id: results.insertId});
     } catch (err) {
         console.log("Erro ao inserir o cavalo:", err);
