@@ -436,7 +436,7 @@
 					}
 
 					await modal.show(`${tipoUsuario} cadastrado com sucesso!`);
-					window.location.reload();
+					window.location.href = "/dashboard/usuarios";
 				} catch (error) {
 					await modal.show("Erro ao cadastrar: " + error.message);
 				}

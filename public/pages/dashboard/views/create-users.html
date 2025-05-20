@@ -146,7 +146,7 @@
 				});
 				if (!r.ok) {
 					const result = await r.json();
-					window.location.href = result.login ? "/login" : "/home";
+					window.location.href = result.login ? "/login" : "/dashboard";
 				}
 			}
 
