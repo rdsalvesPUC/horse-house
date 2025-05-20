@@ -30,6 +30,13 @@ class Modal {
         this.messageEl.textContent = message;
 
         document.body.appendChild(this.modal);
+
+        return new Promise(resolve => {
+            this.okButton.addEventListener('click', () => {
+                this.hide();
+                resolve();
+            }, { once: true });
+        })
     }
 
     hide() {

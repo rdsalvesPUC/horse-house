@@ -39,6 +39,8 @@
 
 			/* acesso controle */
 			async function acessoControle() {
+				const TOKEN = localStorage.getItem("token");
+				const TOKEN = localStorage.getItem("token");
 				const r = await fetch("/api/requerProprietario", {
 					headers: { Authorization: `Bearer ${TOKEN}` },
 				});
