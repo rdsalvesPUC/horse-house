@@ -26,7 +26,7 @@
       const p = await res.json();
       console.log(p)
       document.getElementById("cpf").value = p.CPF;
-      document.getElementById("nome").value = p.Nome;
+      document.getElementById("nomee").value = p.Nome;
       document.getElementById("sobrenome").value = p.Sobrenome;
       document.getElementById("telefone").value = p.Telefone ?? "";
       document.getElementById("data-nascimento").value = p.Data_Nascimento?.split("T")[0] ?? "";
@@ -46,16 +46,39 @@
   }
 
   document.querySelector("form").addEventListener("submit", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+
+    let valido = true;
+    if (!validarCampoTexto("nomee")) valido = false;
+    if (!validarCampoTexto("sobrenome")) valido = false;
+    if (!validarTelefone()) valido = false;
+    if (!validarDataNascimento()) valido = false;
+    if (!validarEmail()) valido = false;
+    if (!await buscarEndereco()) valido = false;
+    if (!validarNumero()) valido = false;
+
+    const obrigatorios = ["cep", "logradouro", "bairro", "cidade", "estado"];
+    obrigatorios.forEach(id => {
+      const input = document.getElementById(id);
+      const erro = document.getElementById(`${id}-erro`);
+      if (!input.value.trim()) {
+        erro?.classList.remove("hidden");
+        valido = false;
+      } else {
+        erro?.classList.add("hidden");
+      }
+    });
+
+    if (!valido) return;
 
     const dados = {
-      nome: document.getElementById("nome").value.trim(),
+      nome: document.getElementById("nomee").value.trim(),
       sobrenome: document.getElementById("sobrenome").value.trim(),
-      telefone: document.getElementById("telefone").value.trim(),
+      telefone: document.getElementById("telefone").value.replace(/\D/g, ""),
       dataNascimento: document.getElementById("data-nascimento").value,
       email: document.getElementById("email").value.trim(),
-      cep: document.getElementById("cep").value.trim(),
-      rua: document.getElementById("rua").value.trim(),
+      cep: document.getElementById("cep").value.replace(/\D/g, ""),
+      logradouro: document.getElementById("logradouro").value.trim(),
       numero: document.getElementById("numero").value.trim(),
       bairro: document.getElementById("bairro").value.trim(),
       complemento: document.getElementById("complemento").value.trim()
@@ -72,7 +95,6 @@
       });
 
       const result = await res.json();
-
       if (!res.ok) throw new Error(result.error || "Erro ao atualizar");
 
       alert("Dados atualizados com sucesso!");
@@ -82,6 +104,172 @@
       alert("Erro ao atualizar: " + error.message);
     }
   });
+
+  // --------- MÁSCARAS E EVENTOS ---------
+  document.getElementById("cpf").addEventListener("input", function () {
+    let value = this.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    let formatted;
+    if (value.length > 9) formatted = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    else if (value.length > 6) formatted = value.replace(/(\d{3})(\d{3})(\d{1,3})/, "$1.$2.$3");
+    else if (value.length > 3) formatted = value.replace(/(\d{3})(\d{1,3})/, "$1.$2");
+    else formatted = value;
+    this.value = formatted;
+  });
+
+  document.getElementById("telefone").addEventListener("input", function (e) {
+    let value = this.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    if (value.length > 2) value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+    if (value.length > 10) value = `${value.slice(0, 10)}-${value.slice(10)}`;
+    this.value = value;
+  });
+
+  document.getElementById("cep").addEventListener("input", function () {
+    let cep = this.value.replace(/\D/g, "").slice(0, 8);
+    if (cep.length > 5) cep = cep.replace(/(\d{5})(\d{1,3})/, "$1-$2");
+    this.value = cep;
+    document.getElementById("cep-erro")?.classList.add("hidden");
+    if (!cep) limparCamposEndereco();
+  });
+
+  document.getElementById("cep").addEventListener("input", buscarEndereco);
+  function limparCamposEndereco() {
+	["logradouro", "bairro", "cidade", "estado", "numero"].forEach((id) => {
+		const campo = document.getElementById(id);
+		if (campo) {
+			campo.value = "";
+			campo.removeAttribute("readonly");
+		}
+	});
+}
+
+function bloquearCampo(id, valor) {
+	const campo = document.getElementById(id);
+	if (campo) {
+		campo.value = valor;
+		campo.setAttribute("readonly", "true");
+	}
+}
+
+async function buscarEndereco() {
+	const cepInput = document.getElementById("cep");
+	const cepInvalido = document.getElementById("cep-invalido");
+	let cep = cepInput.value.replace(/\D/g, "");
+
+	if (!/^\d{8}$/.test(cep)) {
+		cepInvalido?.classList.remove("hidden");
+		limparCamposEndereco();
+		return false;
+	}
+
+	try {
+		const response = await fetch(`/api/getCep/${cep}`);
+		if (!response.ok) {
+			if (response.status === 404) return await buscarViaCEP(cep);
+			throw new Error("Erro na API");
+		}
+		const data = await response.json();
+		bloquearCampo("logradouro", data.logradouro || "");
+		bloquearCampo("bairro", data.bairro || "");
+		bloquearCampo("cidade", data.Cidade);
+		bloquearCampo("estado", data.UF);
+		cepInvalido?.classList.add("hidden");
+		return true;
+	} catch (error) {
+		return await buscarViaCEP(cep);
+	}
+}
+
+async function buscarViaCEP(cep) {
+	const cepInvalido = document.getElementById("cep-invalido");
+	try {
+		const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+		const data = await response.json();
+		if (data.erro) throw new Error("CEP não encontrado");
+		bloquearCampo("logradouro", data.logradouro);
+		bloquearCampo("bairro", data.bairro);
+		bloquearCampo("cidade", data.localidade);
+		bloquearCampo("estado", data.uf);
+		cepInvalido?.classList.add("hidden");
+		return true;
+	} catch (error) {
+		cepInvalido?.classList.remove("hidden");
+		limparCamposEndereco();
+		return false;
+	}
+}
+
+function validarCampoTexto(id, min = 3) {
+	const input = document.getElementById(id);
+	const erro = document.getElementById(`${id}-erro`);
+	if (!input.value.trim() || input.value.length < min) {
+		erro?.classList.remove("hidden");
+		return false;
+	}
+	erro?.classList.add("hidden");
+	return true;
+}
+
+function validarTelefone() {
+	const tel = document.getElementById("telefone").value.replace(/\D/g, "");
+	const erro = document.getElementById("telefone-invalido");
+	if (tel.length < 10 || tel.length > 11) {
+		erro?.classList.remove("hidden");
+		return false;
+	}
+	erro?.classList.add("hidden");
+	return true;
+}
+
+function validarEmail() {
+	const input = document.getElementById("email");
+	const erro = document.getElementById("email-invalido");
+	const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	if (!regex.test(input.value.trim())) {
+		erro?.classList.remove("hidden");
+		return false;
+	}
+	erro?.classList.add("hidden");
+	return true;
+}
+
+function validarDataNascimento() {
+	const input = document.getElementById("data-nascimento");
+	const valor = input.value.trim();
+	const erroObrig = document.getElementById("data-nascimento-erro");
+	const erroInval = document.getElementById("data-nascimento-invalida");
+
+	if (!valor) {
+		erroObrig?.classList.remove("hidden");
+		erroInval?.classList.add("hidden");
+		return false;
+	}
+	erroObrig?.classList.add("hidden");
+
+	const data = new Date(valor);
+	const hoje = new Date();
+	const min = new Date();
+	min.setFullYear(min.getFullYear() - 120);
+
+	if (data > hoje || data < min) {
+		erroInval?.classList.remove("hidden");
+		return false;
+	}
+	erroInval?.classList.add("hidden");
+	return true;
+}
+
+function validarNumero() {
+	const input = document.getElementById("numero");
+	const erro = document.getElementById("numero-erro");
+	if (!input.value.trim()) {
+		erro?.classList.remove("hidden");
+		return false;
+	}
+	erro?.classList.add("hidden");
+	return true;
+}
 
   // Executa ao carregar a página
   acessoControle().then(carregarPerfil);
