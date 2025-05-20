@@ -1,165 +1,180 @@
-/* eslint-disable no-alert */
-			const TOKEN = localStorage.getItem("token");
-			acessoControle();
-			/* elementos */
-			const selectHaras = document.getElementById("select-haras");
-			const tbody = document.getElementById("tbody-gerentes");
+// public/scripts/views/usuarios.js
 
-			const modal = document.getElementById("modal");
-			const btnCancel = document.getElementById("btn-cancelar");
-			const btnSalvar = document.getElementById("btn-salvar");
+const TOKEN = localStorage.getItem("token");
 
-			const edNome = document.getElementById("edit-nome");
-			const edSobrenome = document.getElementById("edit-sobrenome");
-			const edEmail = document.getElementById("edit-email");
-			const edTel = document.getElementById("edit-telefone");
-			const edCpf = document.getElementById("edit-cpf");
-			const edData = document.getElementById("edit-data");
+/* helpers DOM */
+const selectHarasEl = () => document.getElementById("select-haras");
+const tbodyEl       = () => document.getElementById("tbody-gerentes");
+const modalEl       = () => document.getElementById("modal");
+const btnCancelEl   = () => document.getElementById("btn-cancelar");
+const btnSalvarEl   = () => document.getElementById("btn-salvar");
+const edNome        = () => document.getElementById("edit-nome");
+const edSobrenome   = () => document.getElementById("edit-sobrenome");
+const edEmail       = () => document.getElementById("edit-email");
+const edTel         = () => document.getElementById("edit-telefone");
+const edCpf         = () => document.getElementById("edit-cpf");
+const edData        = () => document.getElementById("edit-data");
+const inputSearch   = () => document.getElementById("search");
 
-			let idEdicao = null;
+/* Abre o modal com dados para edição */
+function openModal(g) {
+  // Armazena o ID para edição
+  modalEl().dataset.idEdicao = g.ID;
 
-			/* helpers -------------------------------------------------------------- */
-			function openModal(g) {
-				idEdicao = g.ID;
-				edNome.value = g.nome;
-				edSobrenome.value = g.sobrenome;
-				edEmail.value = g.email;
-				edTel.value = g.telefone ?? "";
-				edCpf.value = g.cpf;
-				edData.value = g.data_nascimento?.split("T")[0] || "";
-				modal.classList.remove("hidden");
-				modal.classList.add("flex");
-			}
+  edNome().value       = g.nome;
+  edSobrenome().value  = g.sobrenome;
+  edEmail().value      = g.email;
+  edTel().value        = g.telefone ?? "";
+  edCpf().value        = g.cpf;
+  edData().value       = g.data_nascimento?.split("T")[0] || "";
+  modalEl().classList.remove("hidden");
+  modalEl().classList.add("flex");
+}
 
-			function closeModal() {
-				modal.classList.add("hidden");
-				modal.classList.remove("flex");
-				idEdicao = null;
-			}
+/* Fecha o modal */
+function closeModal() {
+  modalEl().classList.add("hidden");
+  modalEl().classList.remove("flex");
+}
 
-			/* acesso controle */
-			async function acessoControle() {
-				const r = await fetch("/api/requerProprietario", {
-					headers: { Authorization: `Bearer ${TOKEN}` },
-				});
-				if (!r.ok) {
-					const result = await r.json();
-					if (result.login) {
-						window.location.href = "/login";
-					} else {
-						window.location.href = "/home";
-					}
-				}
-			}
+/* Verifica permissão */
+async function acessoControle() {
+  const r = await fetch("/api/requerProprietario", {
+    headers: { Authorization: `Bearer ${TOKEN}` },
+  });
+  if (!r.ok) {
+    const result = await r.json();
+    window.location.href = result.login ? "/login" : "/home";
+  }
+}
 
-			/* carregar haras ------------------------------------------------------- */
-			async function carregarHaras() {
-				const r = await fetch("http://localhost:3000/api/getAllHaras", {
-					headers: { Authorization: `Bearer ${TOKEN}` },
-				});
-				const lista = await r.json();
-				selectHaras.innerHTML = '<option value="">Selecione o Haras</option>' + lista.map((h) => `<option value="${h.ID}">${h.Nome}</option>`).join("");
-			}
+/* Carrega lista de Haras no <select> */
+async function carregarHaras() {
+  const r = await fetch("/api/getAllHaras", {
+    headers: { Authorization: `Bearer ${TOKEN}` },
+  });
+  const lista = await r.json();
+  const select = selectHarasEl();
+  select.innerHTML =
+    '<option value="">Selecione o Haras</option>' +
+    lista
+      .map((h) => `<option value="${h.ID}">${h.Nome}</option>`)
+      .join("");
+}
 
-			/* listar --------------------------------------------------------------- */
-			async function listarGerentes(harasId) {
-				if (!harasId) {
-					tbody.innerHTML = "";
-					return;
-				}
-				tbody.innerHTML = '<tr><td class="p-3" colspan="6">Carregando...</td></tr>';
+/* Exibe na tabela os gerentes do Haras selecionado */
+async function listarGerentes(harasId) {
+  const tbody = tbodyEl();
+  if (!harasId) {
+    tbody.innerHTML = "";
+    return;
+  }
+  tbody.innerHTML = '<tr><td class="p-3" colspan="7">Carregando...</td></tr>';
+  const url = `/api/gerentes/haras/${harasId}`;
 
-				let url = `http://localhost:3000/api/gerentes/haras/${harasId}`;
-				const params = new URLSearchParams();
-				params.append("pesquisa", document.getElementById("search").value.trim());
-				if (params.toString()) url += "?" + params.toString();
+  const r = await fetch(url, {
+    headers: { Authorization: `Bearer ${TOKEN}` },
+  });
+  const gerentes = await r.json();
 
-				const r = await fetch(url, {
-					headers: { Authorization: `Bearer ${TOKEN}` },
-				});
-				const gerentes = await r.json();
+  if (!Array.isArray(gerentes) || gerentes.length === 0) {
+    tbody.innerHTML = '<tr><td class="p-3" colspan="7">Nenhum gerente encontrado.</td></tr>';
+    return;
+  }
 
-				if (!Array.isArray(gerentes) || gerentes.length === 0) {
-					tbody.innerHTML = '<tr><td class="p-3" colspan="6">Nenhum gerente encontrado.</td></tr>';
-					return;
-				}
+  tbody.innerHTML = gerentes
+    .map(
+      (g) => `
+      <tr class="odd:bg-white even:bg-gray-50">
+        <td class="p-3">${g.nome}</td>
+        <td class="p-3">${g.sobrenome}</td>
+        <td class="p-3">${g.email}</td>
+        <td class="p-3 telefone">${g.telefone ?? ""}</td>
+        <td class="p-3 cpf">${g.cpf}</td>
+        <td class="p-3">${g.data_nascimento?.split("T")[0] ?? ""}</td>
+        <td class="p-3 text-center space-x-2">
+          <button data-id="${g.ID}" class="edit text-blue-600 hover:underline">Editar</button>
+          <button data-id="${g.ID}" class="del text-red-600 hover:underline">Excluir</button>
+        </td>
+      </tr>`
+    )
+    .join("");
 
-				tbody.innerHTML = gerentes
-					.map(
-						(g) => `
-        <tr class="odd:bg-white even:bg-gray-50">
-          <td class="p-3">${g.nome}</td>
-          <td class="p-3">${g.sobrenome}</td>
-          <td class="p-3">${g.email}</td>
-          <td class="p-3 telefone">${g.telefone ?? ""}</td>
-          <td class="p-3 cpf">${g.cpf}</td>
-          <td class="p-3">${g.data_nascimento?.split("T")[0] ?? ""}</td>
-          <td class="p-3 text-center space-x-2">
-            <button data-id="${g.ID}" class="edit text-blue-600 hover:underline">Editar</button>
-            <button data-id="${g.ID}" class="del  text-red-600  hover:underline">Excluir</button>
-          </td>
-        </tr>
-      `
-					)
-					.join("");
+  // bind eventos de editar e excluir
+  tbody.querySelectorAll(".edit").forEach((btn) =>
+    btn.addEventListener("click", async () => {
+      const r2 = await fetch(`/api/gerente/${btn.dataset.id}`, {
+        headers: { Authorization: `Bearer ${TOKEN}` },
+      });
+      openModal(await r2.json());
+    })
+  );
+  tbody.querySelectorAll(".del").forEach((btn) =>
+    btn.addEventListener("click", () => removerGerente(btn.dataset.id))
+  );
+  // formatação de texto
+  tbody.querySelectorAll(".cpf").forEach((cpfEl) =>
+    (cpfEl.textContent = cpfEl.textContent.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"))
+  );
+  tbody.querySelectorAll(".telefone").forEach((telEl) =>
+    (telEl.textContent = telEl.textContent.replace(
+      telEl.textContent.length === 11
+        ? /(\d{2})(\d{5})(\d{4})/
+        : /(\d{2})(\d{4})(\d{4})/,
+      "($1) $2-$3"
+    ))
+  );
+}
 
-				/* eventos */
-				tbody.querySelectorAll(".edit").forEach((btn) =>
-					btn.addEventListener("click", async () => {
-						const r2 = await fetch(`http://localhost:3000/api/gerente/${btn.dataset.id}`, {
-							headers: { Authorization: `Bearer ${TOKEN}` },
-						});
-						openModal(await r2.json());
-					})
-				);
-				tbody.querySelectorAll(".cpf").forEach((cpf) => (cpf.textContent = cpf.textContent.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")));
-				tbody.querySelectorAll(".telefone").forEach((telefone) => (telefone.textContent.length === 11 ? (telefone.textContent = telefone.textContent.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3")) : (telefone.textContent = telefone.textContent.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3"))));
+/* Exclui gerente e recarrega tabela */
+async function removerGerente(id) {
+  if (!confirm("Confirma excluir o gerente?")) return;
+  await fetch(`/api/deletarFuncionario/gerente/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${TOKEN}` },
+  });
+  listarGerentes(selectHarasEl().value);
+}
 
-				tbody.querySelectorAll(".del").forEach((btn) => btn.addEventListener("click", () => removerGerente(btn.dataset.id)));
-			}
+/* Salva edição e recarrega */
+function initModalListeners() {
+  btnSalvarEl().addEventListener("click", async () => {
+    const idEdicao = modalEl().dataset.idEdicao;
+    console.log("Salvando gerente com ID:", idEdicao);
+    const dados = {
+      nome: edNome().value.trim(),
+      sobrenome: edSobrenome().value.trim(),
+      email: edEmail().value.trim(),
+      telefone: edTel().value.trim(),
+      cpf: edCpf().value.trim().replace(/\D/g, ""),
+      dataNascimento: edData().value,
+    };
+    await fetch(`/api/editarGerente/${idEdicao}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      body: JSON.stringify(dados),
+    });
+    closeModal();
+    listarGerentes(selectHarasEl().value);
+  });
+  btnCancelEl().addEventListener("click", closeModal);
+}
 
-			/* delete --------------------------------------------------------------- */
-			async function removerGerente(id) {
-				if (!confirm("Confirma excluir o gerente?")) return;
-				await fetch(`http://localhost:3000/api/deletarFuncionario/gerente/${id}`, {
-					method: "DELETE",
-					headers: { Authorization: `Bearer ${TOKEN}` },
-				});
-				console.log(`http://localhost:3000/api/gerente/${id}`);
-				listarGerentes(selectHaras.value);
-			}
+/**
+ * Função de inicialização exportada.
+ * Deve ser chamada **sempre** depois de injetar o HTML de usuarios.html.
+ */
+export async function init(container) {
+  await acessoControle();
+  await carregarHaras();
 
-			/* update ----------------------------------------------------------------*/
-			btnSalvar.addEventListener("click", async () => {
-				const dados = {
-					nome: edNome.value.trim(),
-					sobrenome: edSobrenome.value.trim(),
-					email: edEmail.value.trim(),
-					telefone: edTel.value.trim(),
-					cpf: edCpf.value.trim().replace(/\D/g, ""),
-					dataNascimento: edData.value,
-				};
-				await fetch(`http://localhost:3000/api/editarGerente/${idEdicao}`, {
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${TOKEN}`,
-					},
-					body: JSON.stringify(dados),
-				});
-				closeModal();
-				listarGerentes(selectHaras.value);
-			});
-			btnCancel.addEventListener("click", closeModal);
+  // Quando mudar o select, lista
+  selectHarasEl().addEventListener("change", () => {
+    listarGerentes(selectHarasEl().value);
+  });
 
-			/* init ------------------------------------------------------------------*/
-			carregarHaras().then(() => {
-				selectHaras.addEventListener("change", (e) => {
-					if (e.target.value) listarGerentes(e.target.value);
-					else tbody.innerHTML = "";
-				});
-			});
-
-			document.getElementById("pesquisa").addEventListener("input", (e) => {
-				listarGerentes(selectHaras.value);
-			});
+  initModalListeners();
+}
