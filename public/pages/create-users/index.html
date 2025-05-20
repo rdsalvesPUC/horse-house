@@ -140,6 +140,7 @@
 			});
 
 			async function acessoControle() {
+				const TOKEN = localStorage.getItem("token");
 				const r = await fetch("/api/requerProprietario", {
 					headers: { Authorization: `Bearer ${TOKEN}` },
 				});
@@ -434,10 +435,10 @@
 						throw new Error(result.error || "Erro ao cadastrar.");
 					}
 
-					modal.show(`${tipoUsuario} cadastrado com sucesso!`);
+					await modal.show(`${tipoUsuario} cadastrado com sucesso!`);
 					window.location.reload();
 				} catch (error) {
-					modal.show("Erro ao cadastrar: " + error.message);
+					await modal.show("Erro ao cadastrar: " + error.message);
 				}
 			});
 		</script>

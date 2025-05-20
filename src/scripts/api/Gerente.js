@@ -635,8 +635,9 @@ router.put("/editarGerente/", [extractUserID, requireGerente], async (req, res) 
         }
 
         if (foto) {
+            const bufferFoto = Buffer.from(foto, 'base64');
             updateFields.push("foto = ?");
-            queryParams.push(foto);
+            queryParams.push(bufferFoto);
         }
 
         // Adicionar o ID do gerente ao final dos parâmetros

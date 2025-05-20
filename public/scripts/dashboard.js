@@ -27,6 +27,17 @@ async function loadView(view) {
   }
 }
 
+async function acessoControle() {
+    const TOKEN = localStorage.getItem("token");
+    const res = await fetch("/api/loginExpirado", {
+        headers: {Authorization: `Bearer ${TOKEN}`}
+    });
+
+    if (!res.ok) {
+        const data = await res.json();
+        window.location.href = data.login ? "/login" : "/home";
+    }
+}
 
 function getViewFromPath() {
 	const parts = location.pathname.split("/");
@@ -34,6 +45,7 @@ function getViewFromPath() {
 }
 
 async function carregarDadosUsuario() {
+    await acessoControle();
     const TOKEN = localStorage.getItem('token');
     const response = await fetch(`/api/getUsuarioLogado`, {
         method: "GET",
@@ -47,6 +59,11 @@ async function carregarDadosUsuario() {
     const cargo = document.getElementById('cargo');
     const foto = document.getElementById('foto');
     const select = document.getElementById('container-haras');
+    const logoutBtn = document.getElementById('logout');
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = "/login";
+    })
     switch (userData.userType) {
         case "gerente":
             cargo.innerHTML = "Gerente";

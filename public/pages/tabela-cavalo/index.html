@@ -62,7 +62,7 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
     const TOKEN = localStorage.getItem("token");
     const selectHaras = document.getElementById("select-haras");
     const tbody = document.getElementById("tbody-cavalos");
@@ -108,6 +108,7 @@
     }
 
     async function acessoControle() {
+      const TOKEN = localStorage.getItem("token");
       const r = await fetch("/api/requerProprietario", {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });

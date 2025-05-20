@@ -10,7 +10,7 @@ async function acessoControle() {
 		headers: { Authorization: `Bearer ${TOKEN}` },
 	});
 	if (r.ok) {
-		//window.location.href = "/redirecionarParaAMainLogada";
+		window.location.href = "/dashboard";
 	}
 }
 document.addEventListener("DOMContentLoaded", () => {
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		localStorage.setItem("userType", data.userType);
 		window.location.href = "/dashboard";
 	  } catch (err) {
-		modal.show("Email ou senha incorretos.");
+		await modal.show("Email ou senha incorretos.");
 		console.error(err);
 	  }
 	});
