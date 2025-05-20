@@ -1,0 +1,108 @@
+<div class="container max-w-4xl mx-auto py-6 px-6 space-y-6">
+	<div class="flex flex-row flex-1 justify-between">
+		<div class="mb-6">
+			<h1 class="text-3xl font-bold tracking-tight">Cadastro de Usuários</h1>
+			<p class="text-muted-foreground mt-2">Cadastre todos os tipos de funcionários no seu Haras</p>
+		</div>
+		<div>
+			<button type="button" data-view="usuarios" class="btn-form-previous">Voltar</button>
+		</div>
+	</div>
+	<div class="bg-white rounded-lg shadow p-6">
+		<form id="form-cadastro">
+			<div class="flex flex-col gap-8">
+				<!-- NOME -->
+				<div class="flex flex-col gap-2">
+					<label for="nome" class="font-medium">Nome<span class="text-error"> *</span></label>
+					<input id="nome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu nome" />
+					<p id="nome-erro" class="text-error text-sm mt-1 hidden">O Nome é obrigatório.</p>
+				</div>
+
+				<!-- SOBRENOME -->
+				<div class="flex flex-col gap-2">
+					<label for="sobrenome" class="font-medium">Sobrenome<span class="text-error"> *</span></label>
+					<input id="sobrenome" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu sobrenome" />
+					<p id="sobrenome-erro" class="text-error text-sm mt-1 hidden">O Sobrenome é obrigatório.</p>
+				</div>
+
+				<!-- EMAIL -->
+				<div class="flex flex-col gap-2">
+					<label for="email" class="font-medium">E-mail<span class="text-error"> *</span></label>
+					<input id="email" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu e-mail" />
+					<p id="email-erro" class="text-error text-sm mt-1 hidden">O E-mail é obrigatório.</p>
+					<span id="email-invalido" class="text-error text-sm hidden">Insira um e-mail válido.</span>
+				</div>
+
+				<!-- SENHA -->
+				<div class="flex flex-col gap-2">
+					<label for="senha" class="font-medium">Senha<span class="text-error"> *</span></label>
+					<input id="senha" type="password" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite sua senha" />
+					<p id="senha-erro" class="text-error text-sm mt-1 hidden">A Senha é obrigatória.</p>
+					<div class="text-sm text-gray-600 mt-2">
+						<div id="senha-requisitos" class="font-medium">A senha deve conter:</div>
+						<ul class="list-disc list-inside">
+							<li id="req-maiuscula" class="text-error">Pelo menos uma letra maiúscula</li>
+							<li id="req-numero" class="text-error">Pelo menos um número</li>
+							<li id="req-especial" class="text-error">Pelo menos um caractere especial</li>
+							<li id="req-tamanho" class="text-error">Mínimo de 6 caracteres</li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- TELEFONE -->
+				<div class="flex flex-col gap-2">
+					<label for="telefone" class="font-medium">Telefone<span class="text-error"> *</span></label>
+					<input id="telefone" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu telefone" />
+					<p id="telefone-erro" class="text-error text-sm mt-1 hidden">O Telefone é obrigatório.</p>
+					<span id="telefone-invalido" class="text-error text-sm hidden">Insira um telefone válido (10 a 11 dígitos).</span>
+				</div>
+
+				<!-- CPF -->
+				<div class="flex flex-col gap-2">
+					<label for="cpf" class="font-medium">CPF<span class="text-error"> *</span></label>
+					<input id="cpf" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite seu CPF" />
+					<p id="cpf-erro" class="text-error text-sm mt-1 hidden">O CPF é obrigatório.</p>
+					<span id="cpf-invalido" class="text-error text-sm hidden">CPF inválido! Digite um CPF válido.</span>
+				</div>
+
+				<!-- DATA DE NASCIMENTO -->
+				<div class="flex flex-col gap-2">
+					<label for="dataNascimento" class="font-medium">Data de Nascimento<span class="text-error"> *</span></label>
+					<input id="dataNascimento" type="date" class="rounded-md p-3 text-sm border border-secondary" />
+					<p id="data-nascimento-erro" class="text-error text-sm mt-1 hidden">A Data de Nascimento é obrigatória.</p>
+					<p id="data-nascimento-invalida" class="text-error text-sm mt-1 hidden">Insira uma data de nascimento válida.</p>
+				</div>
+
+				<div class="flex flex-col gap-2">
+					<label for="tipoUsuario" class="font-medium">Tipo de Usuário</label>
+					<select id="tipoUsuario" class="rounded-md p-3 text-sm border border-secondary">
+						<option value="">Selecione</option>
+						<option value="Gerente">Gerente</option>
+						<option value="Treinador">Treinador</option>
+						<option value="Tratador">Tratador</option>
+						<option value="Veterinario">Veterinário</option>
+					</select>
+					<span id="erro-tipoUsuario" class="text-xs text-red-500 hidden">Selecione um tipo de usuário</span>
+				</div>
+
+				<!-- NOVO CAMPO (já estava no GitHub, vamos usar corretamente agora) -->
+				<div id="container-haras" class="hidden flex flex-col gap-2">
+					<label for="select-haras" class="font-medium">Selecione o Haras</label>
+					<select id="select-haras" class="rounded-md p-3 text-sm border border-secondary">
+						<option value="">Selecione o Haras</option>
+					</select>
+					<span id="erro-haras" class="text-xs text-red-500 hidden">Selecione um Haras</span>
+				</div>
+
+				<!-- Campos CRMV só para Veterinário -->
+				<div id="campo-crmv" class="hidden flex flex-col gap-2">
+					<label for="crmv" class="font-medium">CRMV</label>
+					<input id="crmv" type="text" class="rounded-md p-3 text-sm border border-secondary" placeholder="Digite o CRMV" />
+					<span id="erro-crmv" class="text-xs text-red-500 hidden">CRMV inválido</span>
+				</div>
+
+				<button type="submit" class="bg-secondary text-tertiary p-3 rounded-md hover:bg-primary transition-all">Cadastrar</button>
+			</div>
+		</form>
+	</div>
+</div>
