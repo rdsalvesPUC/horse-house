@@ -599,8 +599,8 @@ router.delete("/proprietario/", [extractUserID, requireProprietario], async (req
 router.put("/proprietario/editar", [extractUserID, requireProprietario], async (req, res) => {
     const proprietarioId = req.user.id;
     const {nome, sobrenome, senha, cpf, dataNascimento, telefone, email, cep, rua, numero, bairro, complemento, foto} = req.body;
-
-    if (!nome && !sobrenome && !senha && !cpf && !dataNascimento && !telefone && !email && !cep && !rua && !numero && !bairro) {
+    console.log(req.body)
+    if (!nome && !sobrenome && !senha && !cpf && !dataNascimento && !telefone && !email && !cep && !rua && !numero && !bairro && !complemento && !foto) {
         return res.status(400).json({error: "Pelo menos um campo deve ser fornecido para atualização."});
     }
     // Validações adicionais para campos fornecidos
@@ -681,8 +681,9 @@ router.put("/proprietario/editar", [extractUserID, requireProprietario], async (
         queryParams.push(complemento);
     }
     if (foto) {
+        const bufferFoto = Buffer.from(foto, 'base64');
         updateFields.push("Foto = ?");
-        queryParams.push(foto);
+        queryParams.push(bufferFoto);
     }
     queryParams.push(proprietarioId);
     const query = `
