@@ -1,4 +1,9 @@
-  const TOKEN = localStorage.getItem("token");
+import Modal from "/scripts/load-modal.js";
+
+const modal = new Modal();
+
+
+const TOKEN = localStorage.getItem("token");
   let userId = null;
 
   async function acessoControle() {
@@ -25,6 +30,7 @@
 
       const p = await res.json();
       console.log(p)
+      document.getElementById("avatar").src = p.Foto;
       document.getElementById("cpf").value = p.CPF;
       document.getElementById("nomee").value = p.Nome;
       document.getElementById("sobrenome").value = p.Sobrenome;
@@ -38,12 +44,48 @@
       document.getElementById("logradouro").value = p.Rua;
       document.getElementById("numero").value = p.Numero;
       document.getElementById("complemento").value = p.Complemento ?? "";
-
     } catch (error) {
       console.error("Erro ao carregar perfil:", error);
-      alert("Erro ao carregar perfil.");
+      await modal.show("Erro ao carregar perfil.");
     }
   }
+
+  document.getElementById("avatar-upload").addEventListener('input', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64String = reader.result.split(',')[1]; // remove o "data:image/..;base64,"
+
+      const formData = {
+        foto: base64String
+      };
+
+      try {
+        const res = await fetch(`/api/proprietario/editar`, {
+          method: 'PUT',
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${TOKEN}`
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (!res.ok) throw new Error("Erro ao fazer upload do avatar");
+
+        const data = await res.json();
+        await modal.show("Avatar atualizado com sucesso!");
+        document.getElementById("avatar").src = `data:image/jpeg;base64,${base64String}`;
+        document.getElementById("foto").src = `data:image/jpeg;base64,${base64String}`;
+      } catch (error) {
+        console.error("Erro ao fazer upload do avatar:", error);
+        await modal.show("Erro ao fazer upload do avatar.");
+      }
+    };
+
+    reader.readAsDataURL(file); // dispara a conversão
+  });
 
   document.querySelector("form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -97,11 +139,11 @@
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || "Erro ao atualizar");
 
-      alert("Dados atualizados com sucesso!");
+      await modal.show("Dados atualizados com sucesso!");
       location.reload();
 
     } catch (error) {
-      alert("Erro ao atualizar: " + error.message);
+      await modal.show("Erro ao atualizar: " + error.message);
     }
   });
 
