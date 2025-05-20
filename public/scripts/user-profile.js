@@ -8,6 +8,7 @@ let userId = null;
 let userType = null;
 
 async function acessoControle() {
+    const TOKEN = localStorage.getItem("token");
     const res = await fetch("/api/loginExpirado", {
         headers: {Authorization: `Bearer ${TOKEN}`}
     });
