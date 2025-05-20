@@ -137,6 +137,7 @@
         tbody.innerHTML = '<tr><td class="p-3" colspan="12">Nenhum cavalo encontrado.</td></tr>';
         return;
       }
+      console.log(cavalos[0].situacao);
       tbody.innerHTML = cavalos.map(c => `
         <tr class="odd:bg-white even:bg-gray-50">
           <td class="p-3">${c.Nome}</td>
@@ -158,7 +159,7 @@
 
       tbody.querySelectorAll(".edit").forEach(btn => {
         btn.addEventListener("click", async () => {
-            const r2 = await fetch(`/api/cavalos/id/${btn.dataset.id}`, {            
+            const r2 = await fetch(`/api/cavalos/id/${btn.dataset.id}`, {
             headers: { Authorization: `Bearer ${TOKEN}` },
           });
           console.log(r2);
