@@ -239,8 +239,6 @@ async function buscarEndereco() {
             throw new Error("Erro na API");
         }
         const data = await response.json();
-        bloquearCampo("logradouro", data.logradouro || "");
-        bloquearCampo("bairro", data.bairro || "");
         bloquearCampo("cidade", data.Cidade);
         bloquearCampo("estado", data.UF);
         cepInvalido?.classList.add("hidden");

@@ -1,3 +1,6 @@
+import Modal from "/scripts/load-modal.js";
+
+const modal = new Modal();
 /* acesso controle */
 async function acessoControle() {
     const TOKEN = localStorage.getItem("token");
@@ -252,12 +255,13 @@ document.getElementById('form-haras').addEventListener('submit', async function 
                 if (data.error) {
                     throw new Error("Erro ao cadastrar");
                 }
-                window.location.href = "/stud-list";
+                modal.show("Haras cadastrado com sucesso!");
+                window.location.href = "/dashboard/haras";
             })
             .catch(error => {
+                modal.show("Eroo ao cadastrar haras.")
                 console.error("Erro ao cadastrar", error);
             });
-
         this.submit();
     }
 });
