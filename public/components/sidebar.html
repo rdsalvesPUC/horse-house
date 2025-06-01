@@ -1,22 +1,24 @@
 <!-- components/sidebar.html -->
-<div class="bg-primary h-screen w-[250px] flex flex-col relative">
+<div class="bg-primary h-screen flex flex-col relative">
 	<!-- Logo/Título -->
-	<div class="h-16 p-2 flex items-center justify-center">
+	<div class="h-16 py-4 px-6 flex items-center">
 		<a href="">
 			<img src="/assets/images/logo-h-whitebg.svg" alt="Horse House Logo" class="object-contain md:w-[150px] lg:w-[180px]" />
+			<img src="/assets/images/brasao-secondary.svg" alt="Horse House Brasão" class="object-contain h-[39.8px] hidden" />
 		</a>
 	</div>
 
 	<!-- Navegação -->
 	<div class="py-4 px-4 flex-1 overflow-auto">
 		<nav class="flex flex-col space-y-1">
-			<a href="/dashboard" data-view="visao-geral" class="flex items-center py-3 px-3 rounded-md hover:bg-[#2D3A3B] text-secondary transition-colors duration-200">
+			<a href="/dashboard" data-view="visao-geral" class="flex items-center py-3 px-3 rounded-md text-tertiary hover:bg-[#2D3A3B] hover:text-secondary transition-colors duration-200">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house mr-3 h-5 w-5">
 					<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
 					<path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
 				</svg>
 				<span class="font-heebo text-base font-medium">Dashboard</span>
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-auto h-4 w-4 text-secondary"><path d="m9 18 6-6-6-6"></path></svg>
+				<div id="tooltip-visao-geral" class="absolute left-15 w-max bg-white border border-gray-200 rounded-md shadow-lg px-3 py-1 text-sm font-semibold text-gray-700 transition-all duration-200 hidden">Dashboard</div>
 			</a>
 
 			<a href="/dashboard/usuarios" data-view="usuarios" class="flex items-center py-3 px-3 rounded-md text-tertiary hover:bg-[#2D3A3B] hover:text-secondary transition-colors duration-200">
@@ -28,6 +30,7 @@
 				</svg>
 				<span class="font-heebo text-base font-medium">Usuários</span>
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-auto h-4 w-4 text-secondary"><path d="m9 18 6-6-6-6"></path></svg>
+				<div id="tooltip-usuarios" class="absolute left-15 w-max bg-white border border-gray-200 rounded-md shadow-lg px-3 py-1 text-sm font-semibold text-gray-700 transition-all duration-200 hidden">Usuários</div>
 			</a>
 
 			<a href="/dashboard/haras" data-view="haras" class="flex items-center py-3 px-3 rounded-md text-tertiary hover:bg-[#2D3A3B] hover:text-secondary transition-colors duration-200">
@@ -42,6 +45,7 @@
 				</svg>
 				<span class="font-heebo text-base font-medium">Haras</span>
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-auto h-4 w-4 text-secondary"><path d="m9 18 6-6-6-6"></path></svg>
+				<div id="tooltip-haras" class="absolute left-15 w-max bg-white border border-gray-200 rounded-md shadow-lg px-3 py-1 text-sm font-semibold text-gray-700 transition-all duration-200 hidden">Haras</div>
 			</a>
 
 			<a href="/dashboard/cavalos" data-view="cavalos" class="flex items-center py-3 px-3 rounded-md text-tertiary hover:bg-[#2D3A3B] hover:text-secondary transition-colors duration-200">
@@ -50,12 +54,14 @@
 				</svg>
 				<span class="font-heebo text-base font-medium">Cavalos</span>
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-auto h-4 w-4 text-secondary"><path d="m9 18 6-6-6-6"></path></svg>
+				<div id="tooltip-cavalos" class="absolute left-15 w-max bg-white border border-gray-200 rounded-md shadow-lg px-3 py-1 text-sm font-semibold text-gray-700 transition-all duration-200 hidden">Cavalos</div>
 			</a>
 		</nav>
 	</div>
 
 	<!-- Botão de colapso/expansão -->
-	<button id="toggleSidebar" class="absolute -right-3 top-20 bg-tertiary rounded-full p-1 border border-secondary shadow-md hover:bg-[#2D3A3B] transition-colors" aria-label="Colapsar/Expandir sidebar">
+	<button id="toggleSidebar" class="absolute -right-3 top-13 bg-tertiary rounded-full p-1 border border-secondary shadow-md hover:bg-secondary transition-colors" aria-label="Colapsar/Expandir sidebar">
 		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"></path></svg>
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right hidden"><path d="m9 18 6-6-6-6"></path></svg>
 	</button>
 </div>
