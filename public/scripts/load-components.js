@@ -1,5 +1,5 @@
 import { initDrawer } from "/scripts/mobile-menu.js";
-import { initUserMenuToggle } from "/scripts/dashboard.js";
+import { initUserMenuToggle } from "/scripts/topbar.js";
 
 document.addEventListener('DOMContentLoaded', () => {    
     fetch("/components/header.html")
