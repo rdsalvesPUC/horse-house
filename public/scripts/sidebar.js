@@ -1,10 +1,14 @@
 export function initSidebar() {
     const sidebar = document.getElementById("sidebar");
     if (!sidebar) return;
-    
+
+    // Obtém o container interno da sidebar (a DIV inserida via sidebar.html)
+    const sidebarContainer = sidebar.firstElementChild;
+    if (!sidebarContainer) return;
+
     // Variável global para o estado da sidebar
     let collapsed = false;
-    
+
     // Aplica o estado ativo aos links (apenas aos itens de navegação)
     function updateActiveState(clickedLink) {
         const navLinks = sidebar.querySelectorAll("nav a[data-view]");
@@ -21,12 +25,12 @@ export function initSidebar() {
         clickedLink.classList.remove("text-tertiary");
         clickedLink.classList.add("text-secondary");
         const chevron = clickedLink.querySelector("svg.lucide-chevron-right");
-        // Só exibe o chevron se o sidebar NÃO estiver colapsado
+        // Só exibe o chevron se a sidebar NÃO estiver colapsada
         if (chevron && !collapsed) {
             chevron.classList.remove("hidden");
         }
     }
-    
+
     // Esconde os ícones chevron de todos os itens de navegação
     function hideAllChevrons() {
         const navLinks = sidebar.querySelectorAll("nav a[data-view]");
@@ -62,16 +66,16 @@ export function initSidebar() {
             collapsed = !collapsed;
             if (collapsed) {
                 // COLAPSAR:
-                // 1. Alterar a largura da sidebar (valor manual, ajuste conforme seu layout)
-                sidebar.classList.add("w-[80px]");
-                sidebar.classList.remove("w-[250px]");
+                // Alternar a largura do container interno (não do <aside>)
+                sidebarContainer.classList.add("w-[80px]");
+                sidebarContainer.classList.remove("w-[260px]");
 
-                // 2. Ocultar os textos dos links dos itens de navegação
+                // Ocultar os textos dos links dos itens de navegação
                 sidebar.querySelectorAll("nav a[data-view] span").forEach((span) => {
                     span.classList.add("hidden");
                 });
 
-                // Remove a classe mr-3 dos ícones principais dos itens de navegação (exceto dos chevron-right)
+                // Remove a classe mr-3 dos ícones principais (exceto os chevron-right)
                 sidebar.querySelectorAll("nav a[data-view] svg.mr-3").forEach((icon) => {
                     icon.classList.remove("mr-3");
                 });
@@ -81,41 +85,41 @@ export function initSidebar() {
                     chevron.classList.add("hidden");
                 });
 
-                // 3. Alternar logos: oculta a logo expandida e exibe a logo colapsada
+                // Alternar logos: oculta a expandida e exibe a colapsada
                 const logoExpanded = sidebar.querySelector('a img[src="/assets/images/logo-h-whitebg.svg"]');
                 const logoCollapsed = sidebar.querySelector('a img[src="/assets/images/brasao-secondary.svg"]');
                 if (logoExpanded) logoExpanded.classList.add("hidden");
                 if (logoCollapsed) logoCollapsed.classList.remove("hidden");
 
-                // 4. Atualizar os ícones do toggle button
+                // Atualiza os ícones do toggle button
                 const chevronLeft = toggleButton.querySelector("svg.lucide-chevron-left");
                 const chevronRight = toggleButton.querySelector("svg.lucide-chevron-right");
                 if (chevronLeft) chevronLeft.classList.add("hidden");
                 if (chevronRight) chevronRight.classList.remove("hidden");
             } else {
                 // EXPANDIR:
-                sidebar.classList.add("w-[250px]");
-                sidebar.classList.remove("w-[80px]");
+                sidebarContainer.classList.add("w-[260px]");
+                sidebarContainer.classList.remove("w-[80px]");
 
                 // Mostrar os textos dos links dos itens de navegação
                 sidebar.querySelectorAll("nav a[data-view] span").forEach((span) => {
                     span.classList.remove("hidden");
                 });
 
-                // Re-adiciona a classe mr-3 para os ícones principais (exceto os chevron-right) nos itens de navegação
+                // Re-adiciona a classe mr-3 para os ícones (exceto os chevron-right)
                 sidebar.querySelectorAll("nav a[data-view] svg:not(.lucide-chevron-right)").forEach((icon) => {
                     if (!icon.classList.contains("mr-3")) {
                         icon.classList.add("mr-3");
                     }
                 });
 
-                // Alternar logos: exibe a logo expandida e oculta a logo colapsada
+                // Alternar logos: exibe a logo expandida e oculta a colapsada
                 const logoExpanded = sidebar.querySelector('a img[src="/assets/images/logo-h-whitebg.svg"]');
                 const logoCollapsed = sidebar.querySelector('a img[src="/assets/images/brasao-secondary.svg"]');
                 if (logoExpanded) logoExpanded.classList.remove("hidden");
                 if (logoCollapsed) logoCollapsed.classList.add("hidden");
 
-                // Atualizar os ícones do toggle button
+                // Atualiza os ícones do toggle button
                 const chevronLeft = toggleButton.querySelector("svg.lucide-chevron-left");
                 const chevronRight = toggleButton.querySelector("svg.lucide-chevron-right");
                 if (chevronLeft) chevronLeft.classList.remove("hidden");
@@ -130,11 +134,11 @@ export function initSidebar() {
         });
     }
 
-    // Adiciona os event listeners de hover aos itens do menu
+    // Adiciona os event listeners de hover aos itens do menu para exibir tooltips (quando colapsada)
     sidebar.querySelectorAll("nav a[data-view]").forEach((link) => {
         link.addEventListener("mouseenter", () => {
             if (collapsed) {
-                const tooltipId = "tooltip-" + link.getAttribute("data-view"); // Ex: "tooltip-visao-geral"
+                const tooltipId = "tooltip-" + link.getAttribute("data-view");
                 const tooltip = document.getElementById(tooltipId);
                 if (tooltip) {
                     tooltip.classList.remove("hidden");
