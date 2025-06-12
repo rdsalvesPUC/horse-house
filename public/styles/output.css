@@ -7,8 +7,10 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-100: oklch(93.6% 0.032 17.717);
     --color-red-500: oklch(63.7% 0.237 25.331);
     --color-red-600: oklch(57.7% 0.245 27.325);
+    --color-blue-100: oklch(93.2% 0.032 255.585);
     --color-blue-500: oklch(62.3% 0.214 259.815);
     --color-blue-600: oklch(54.6% 0.245 262.881);
     --color-gray-50: oklch(98.5% 0.002 247.839);
@@ -443,6 +445,9 @@
   .h-10 {
     height: calc(var(--spacing) * 10);
   }
+  .h-12 {
+    height: calc(var(--spacing) * 12);
+  }
   .h-16 {
     height: calc(var(--spacing) * 16);
   }
@@ -454,6 +459,9 @@
   }
   .h-\[39\.8px\] {
     height: 39.8px;
+  }
+  .h-auto {
+    height: auto;
   }
   .h-full {
     height: 100%;
@@ -479,6 +487,9 @@
   .min-h-\[919px\] {
     min-height: 919px;
   }
+  .min-h-full {
+    min-height: 100%;
+  }
   .min-h-screen {
     min-height: 100vh;
   }
@@ -491,11 +502,26 @@
   .w-2 {
     width: calc(var(--spacing) * 2);
   }
+  .w-2\/5 {
+    width: calc(2/5 * 100%);
+  }
+  .w-2\/6 {
+    width: calc(2/6 * 100%);
+  }
+  .w-3 {
+    width: calc(var(--spacing) * 3);
+  }
+  .w-3\/5 {
+    width: calc(3/5 * 100%);
+  }
   .w-4 {
     width: calc(var(--spacing) * 4);
   }
   .w-4\/5 {
     width: calc(4/5 * 100%);
+  }
+  .w-4\/6 {
+    width: calc(4/6 * 100%);
   }
   .w-5 {
     width: calc(var(--spacing) * 5);
@@ -517,9 +543,6 @@
   }
   .w-64 {
     width: calc(var(--spacing) * 64);
-  }
-  .w-100 {
-    width: calc(var(--spacing) * 100);
   }
   .w-\[80px\] {
     width: 80px;
@@ -781,8 +804,14 @@
       margin-inline-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-x-reverse)));
     }
   }
+  .self-auto {
+    align-self: auto;
+  }
   .self-center {
     align-self: center;
+  }
+  .self-start {
+    align-self: flex-start;
   }
   .self-stretch {
     align-self: stretch;
@@ -849,6 +878,12 @@
   .border-gray-200 {
     border-color: var(--color-gray-200);
   }
+  .border-gray-300 {
+    border-color: var(--color-gray-300);
+  }
+  .border-gray-400 {
+    border-color: var(--color-gray-400);
+  }
   .border-secondary {
     border-color: var(--color-secondary);
   }
@@ -891,6 +926,9 @@
       background-color: color-mix(in oklab, var(--color-black) 60%, transparent);
     }
   }
+  .bg-blue-100 {
+    background-color: var(--color-blue-100);
+  }
   .bg-blue-500 {
     background-color: var(--color-blue-500);
   }
@@ -902,6 +940,9 @@
   }
   .bg-primary {
     background-color: var(--color-primary);
+  }
+  .bg-red-100 {
+    background-color: var(--color-red-100);
   }
   .bg-red-500 {
     background-color: var(--color-red-500);
@@ -947,6 +988,9 @@
   }
   .p-3 {
     padding: calc(var(--spacing) * 3);
+  }
+  .p-4 {
+    padding: calc(var(--spacing) * 4);
   }
   .p-6 {
     padding: calc(var(--spacing) * 6);
@@ -1020,6 +1064,12 @@
   .pr-8 {
     padding-right: calc(var(--spacing) * 8);
   }
+  .pb-4 {
+    padding-bottom: calc(var(--spacing) * 4);
+  }
+  .pb-6 {
+    padding-bottom: calc(var(--spacing) * 6);
+  }
   .pb-\[38px\] {
     padding-bottom: 38px;
   }
@@ -1040,6 +1090,9 @@
   }
   .text-right {
     text-align: right;
+  }
+  .align-middle {
+    vertical-align: middle;
   }
   .font-heebo {
     font-family: var(--font-heebo);
@@ -1518,34 +1571,14 @@
       width: calc(1/2 * 100%);
     }
   }
-  .xl\:w-5\/6 {
-    @media (width >= 80rem) {
-      width: calc(5/6 * 100%);
-    }
-  }
-  .xl\:w-full {
-    @media (width >= 80rem) {
-      width: 100%;
-    }
-  }
-  .xl\:max-w-4xl {
-    @media (width >= 80rem) {
-      max-width: var(--container-4xl);
-    }
-  }
-  .xl\:max-w-6xl {
-    @media (width >= 80rem) {
-      max-width: var(--container-6xl);
-    }
-  }
   .xl\:max-w-\[80\%\] {
     @media (width >= 80rem) {
       max-width: 80%;
     }
   }
-  .xl\:flex-row {
+  .xl\:max-w-\[90\%\] {
     @media (width >= 80rem) {
-      flex-direction: row;
+      max-width: 90%;
     }
   }
   .xl\:px-8 {
@@ -1561,6 +1594,11 @@
   .\32 xl\:flex-row {
     @media (width >= 96rem) {
       flex-direction: row;
+    }
+  }
+  .\[\&\:has\(\[role\=checkbox\]\)\]\:pr-0 {
+    &:has([role=checkbox]) {
+      padding-right: calc(var(--spacing) * 0);
     }
   }
 }
